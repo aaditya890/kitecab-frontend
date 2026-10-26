@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-label="KiteCab">
+  <defs>
+    <clipPath id="kc-inner"><circle cx="32" cy="32" r="25.6"/></clipPath>
+  </defs>
+  <circle cx="32" cy="32" r="31.5" fill="#FCB924"/>
+  <circle cx="32" cy="32" r="29.4" fill="#075869"/>
+  <circle cx="32" cy="32" r="25.6" fill="#050607"/>
+  <g clip-path="url(#kc-inner)">
+    <path d="M29.6 40 H34.4 L46 64 H18 Z" fill="#2B3036"/>
+    <path d="M24.6 64 L30.4 40" stroke="#E9ECEF" stroke-width="0.9"/>
+    <path d="M39.4 64 L33.6 40" stroke="#E9ECEF" stroke-width="0.9"/>
+    <path d="M32 42 V44.4 M32 47 V50 M32 53.2 V57.4" stroke="#E9ECEF" stroke-width="0.9" stroke-linecap="round"/>
+    <rect x="29.3" y="50.6" width="5.4" height="7.4" rx="1.6" fill="#FCB924"/>
+    <rect x="30.1" y="52" width="3.8" height="1.6" rx="0.5" fill="#5B4300"/>
+  </g>
+  <g fill="#FCB924">
+    <path d="M12.5 15.5 H18.2 V25.4 L26 15.5 H32.6 L23.9 26.4 L33 38.5 H26.2 L18.2 27.8 V38.5 H12.5 Z"/>
+    <path d="M53.1 21.75 A10.5 10.5 0 1 0 53.1 32.25 L48.59 29.65 A5.3 5.3 0 1 1 48.59 24.35 Z"/>
+  </g>
+</svg>
