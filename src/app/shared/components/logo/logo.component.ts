@@ -13,7 +13,7 @@ let nextId = 0;
 @Component({
   selector: 'kc-logo',
   template: `
-    <span class="inline-flex items-center gap-2.5" [attr.aria-label]="wordmark() ? null : 'KiteCab'">
+    <span class="inline-flex items-center gap-2.5 text-left" [attr.aria-label]="wordmark() ? null : 'KiteCab'">
       <svg
         viewBox="0 0 64 64"
         [attr.width]="size()"

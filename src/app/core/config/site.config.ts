@@ -1,31 +1,41 @@
 /**
- * Everything about the business in ONE place.
- * Change a phone number, address or tracking ID here — never inside components.
+ * Business details in ONE place.
+ *
+ * These are the DEFAULTS. Phone, WhatsApp, email and address can also be changed
+ * from Admin → Settings without a new deploy (see SiteSettingsService); the
+ * website then shows the admin's values.
+ *
+ * Secrets (payment, WhatsApp API keys) are NEVER here — they live in kitecab-backend.
  */
 export const SITE = {
   name: 'KiteCab',
   legalName: 'KiteCab Taxi Service',
   url: 'https://kitecab.com',
-  tagline: 'Cab service in Chhattisgarh',
+  tagline: 'Taxi service in Chhattisgarh',
+  locale: 'en_IN',
 
   contact: {
     phone: '+919009611602',
     phoneDisplay: '+91 90096 11602',
     whatsapp: '919009611602',
     email: 'kitecabtaxiservice@gmail.com',
+    address: {
+      line: 'Kandul Road, Sejbahar, Kamal Vihar',
+      city: 'Raipur',
+      region: 'Chhattisgarh',
+      postalCode: '',
+      country: 'IN',
+    },
   },
 
-  address: {
-    street: 'Kandul Road, Sejbahar, Kamal Vihar',
-    city: 'Raipur',
-    region: 'Chhattisgarh',
-    regionCode: 'CG',
-    postalCode: '',
-    country: 'IN',
-  },
+  /** Default WhatsApp chat message. */
+  whatsappGreeting: 'Hi KiteCab, I want to book a cab.',
 
   /** Areas we rank for (SEO): Chhattisgarh first, Nagpur as the border city. */
   serviceArea: ['Chhattisgarh', 'Nagpur'],
+
+  /** Main cities named across the site (SEO). Order = importance. */
+  keyCities: ['Raipur', 'Bilaspur', 'Durg', 'Bhilai', 'Raigarh', 'Korba', 'Ambikapur', 'Jagdalpur', 'Rajnandgaon', 'Nagpur'],
 
   images: {
     /** Vector mark (any size). Raster badge for places that need PNG (invoice, social). */

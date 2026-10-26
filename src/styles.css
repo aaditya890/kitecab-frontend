@@ -28,3 +28,28 @@
     @apply outline-2 outline-offset-2 outline-kc-teal-light;
   }
 }
+
+/* Long-form text (policy pages, route and city content). */
+@layer components {
+  .kc-prose {
+    @apply leading-relaxed text-kc-ink;
+  }
+  .kc-prose h2 {
+    @apply mt-10 mb-3 text-xl font-semibold text-kc-ink;
+  }
+  .kc-prose h3 {
+    @apply mt-6 mb-2 text-lg font-semibold;
+  }
+  .kc-prose p {
+    @apply my-3;
+  }
+  .kc-prose ul {
+    @apply my-3 list-disc space-y-2 pl-6;
+  }
+  .kc-prose a {
+    @apply font-medium text-kc-teal underline underline-offset-2 hover:text-kc-teal-dark;
+  }
+  .kc-prose strong {
+    @apply font-semibold;
+  }
+}
