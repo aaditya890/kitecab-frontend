@@ -1,0 +1,28 @@
+@import 'tailwindcss';
+
+/* KiteCab brand — colors taken from the logo. Use as bg-kc-yellow, text-kc-teal … */
+@theme {
+  --font-sans: 'Poppins', ui-sans-serif, system-ui, sans-serif;
+
+  --color-kc-yellow: #f5b800;
+  --color-kc-yellow-dark: #d9a300;
+  --color-kc-teal: #0b3b3c;
+  --color-kc-teal-light: #0b6e6e;
+  --color-kc-night: #0f1a1a;
+  --color-kc-ink: #17201f;
+  --color-kc-muted: #5a6665;
+  --color-kc-surface: #f6f6f3;
+  --color-kc-line: #e4e7e5;
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+  body {
+    @apply bg-kc-surface font-sans text-kc-ink antialiased;
+  }
+  :focus-visible {
+    @apply outline-2 outline-offset-2 outline-kc-teal-light;
+  }
+}

@@ -1,27 +1,48 @@
-# KitecabFrontend
+# KiteCab frontend
 
-This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 18.2.21.
+Website (prerendered for SEO) and admin panel for [kitecab.com](https://kitecab.com).
+Angular 21 · zoneless · Tailwind CSS 4 · Angular Material (date picker, dialogs, autocomplete only).
 
-## Development server
+## Run
 
-Run `ng serve` for a dev server. Navigate to `http://localhost:4200/`. The application will automatically reload if you change any of the source files.
+```bash
+npm install
+npm start          # http://localhost:4200
+npm test           # unit tests (Vitest)
+npm run build      # static site in dist/kitecab-frontend/browser
+```
 
-## Code scaffolding
+Node 22.12 or newer.
 
-Run `ng generate component component-name` to generate a new component. You can also use `ng generate directive|pipe|service|class|guard|interface|enum|module`.
+## Folders
 
-## Build
+```
+src/
+  environments/        public settings (API URL, Supabase public key). No secrets here.
+  styles.css           Tailwind + KiteCab brand colors (bg-kc-yellow, text-kc-teal …)
+  material-theme.scss  Angular Material theme
+  app/
+    core/config/       site.config.ts — phone, address, social links, tracking IDs (one place)
+    core/services/     API, Supabase, SEO, analytics
+    core/guards/       admin login check
+    core/interceptors/ HTTP error handling
+    models/            TypeScript types shared with the database
+    shared/            reusable components and pipes
+    layout/            header, footer, admin sidebar
+    features/          one folder per page area (home, booking, routes, cities, policies, admin …)
+public/                files copied as-is (favicon, robots.txt, assets/)
+```
 
-Run `ng build` to build the project. The build artifacts will be stored in the `dist/` directory.
+## How pages are built
 
-## Running unit tests
+- `outputMode: static` — every public page is prerendered to HTML at build time, so Google
+  sees the full content. The output is plain files for S3 + CloudFront; no server needed.
+- `src/app/app.routes.server.ts` decides prerender (public pages) vs client-only (admin).
+- `dist/kitecab-frontend/browser/index.csr.html` is the fallback for pages that are not
+  prerendered (CloudFront serves it for unknown paths).
 
-Run `ng test` to execute the unit tests via [Karma](https://karma-runner.github.io).
+## Rules
 
-## Running end-to-end tests
-
-Run `ng e2e` to execute the end-to-end tests via a platform of your choice. To use this command, you need to first add a package that implements end-to-end testing capabilities.
-
-## Further help
-
-To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI Overview and Command Reference](https://angular.dev/tools/cli) page.
+- Google tags in `src/index.html` are copied unchanged from the live site — do not edit.
+- New components: `ng g c features/<area>/<name>` (OnPush + SCSS by default).
+- Business details (phone, address, IDs) only in `core/config/site.config.ts`.
