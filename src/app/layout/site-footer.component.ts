@@ -14,7 +14,7 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
   imports: [RouterLink, LogoComponent, IconComponent],
   template: `
     <footer class="bg-kc-night text-white/80">
-      <div class="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-5">
+      <div class="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-[1.4fr_1fr_1fr_1fr]">
         <section aria-labelledby="footer-about">
           <h2 id="footer-about" class="sr-only">About KiteCab</h2>
           <kc-logo tone="onDark" [size]="48" [tagline]="true" />
@@ -42,7 +42,7 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
             <a [href]="settings.whatsappHref()" target="_blank" rel="noopener" class="flex items-center gap-3 hover:text-kc-yellow">
               <kc-icon name="whatsapp" [size]="18" class="text-kc-yellow" /> WhatsApp us
             </a>
-            <a [href]="settings.mailHref()" class="flex items-center gap-3 break-all hover:text-kc-yellow">
+            <a [href]="settings.mailHref()" class="flex items-center gap-3 [overflow-wrap:anywhere] hover:text-kc-yellow">
               <kc-icon name="mail" [size]="18" class="text-kc-yellow" /> {{ settings.contact().email }}
             </a>
             <span class="flex items-start gap-3">

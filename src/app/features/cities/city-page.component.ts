@@ -48,7 +48,7 @@ const RENTALS = rentalsJson as RentalPackage[];
         }
 
         <section aria-labelledby="services-h">
-          <h2 id="services-h" class="text-2xl font-semibold">Cab services in {{ p.name }}</h2>
+          <h2 id="services-h" class="text-2xl font-semibold">Cab services {{ where() }}</h2>
           <ul class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
             <li class="rounded-2xl border border-kc-line bg-white p-5">
               <h3 class="font-semibold"><a routerLink="/one-way-taxi" class="hover:text-kc-teal">One way taxi</a></h3>
@@ -69,6 +69,7 @@ const RENTALS = rentalsJson as RentalPackage[];
           </ul>
         </section>
 
+        @if (!isAirport()) {
         <section aria-labelledby="rental-h">
           <h2 id="rental-h" class="text-2xl font-semibold">Local rental packages in {{ p.name }}</h2>
           <div class="mt-5 overflow-x-auto rounded-2xl border border-kc-line bg-white">
@@ -95,9 +96,10 @@ const RENTALS = rentalsJson as RentalPackage[];
             </table>
           </div>
         </section>
+        }
 
         <section aria-labelledby="places-h" class="kc-prose max-w-3xl">
-          <h2 id="places-h">Pickup and drop points in {{ p.name }}</h2>
+          <h2 id="places-h">Pickup and drop points {{ where() }}</h2>
           <p>{{ p.blurb }} We pick up and drop at any address, including:</p>
           <ul>
             @for (l of p.hub.landmarks; track l) {
@@ -115,8 +117,8 @@ const RENTALS = rentalsJson as RentalPackage[];
           </ul>
         </section>
 
-        <kc-faq [items]="faqs()" [heading]="'Taxi in ' + p.name + ' — questions'" />
-        <kc-cta-band [heading]="'Book a cab in ' + p.name" />
+        <kc-faq [items]="faqs()" [heading]="p.hub.heading + ' — questions'" />
+        <kc-cta-band [heading]="'Book a cab ' + where()" />
       </div>
     } @else {
       <kc-not-found />
@@ -135,6 +137,9 @@ export class CityPageComponent implements OnInit {
   protected readonly path = cityPath;
 
   protected readonly place = computed(() => HUB_BY_SLUG.get(this.city()) ?? null);
+  protected readonly isAirport = computed(() => this.city() === 'raipur-airport');
+  /** 'in Bilaspur' / 'at Raipur Airport' — reads naturally in headings and FAQs. */
+  protected readonly where = computed(() => (this.isAirport() ? 'at Raipur Airport' : `in ${this.place()?.name ?? ''}`));
   protected readonly routes = computed(() => routesFor(this.place()?.key ?? '', 12));
   protected readonly otherHubs = computed(() => HUBS.filter((h) => h.slug !== this.city()));
   protected readonly crumbs = computed<Crumb[]>(() => {
@@ -159,13 +164,24 @@ export class CityPageComponent implements OnInit {
       });
     }
     if (cheapest) {
-      items.push({ q: `How much does a taxi in ${p.name} cost?`, a: `Outstation one way fares from ${p.name} start at ${inr(cheapest)}. Local rental cabs start at ${inr(rental.hatchback)} for ${rentalDisplay(rental)}.` });
+      items.push({
+        q: `How much does a taxi ${this.where()} cost?`,
+        a: this.isAirport()
+          ? `Airport taxi fares start at ${inr(cheapest)}, depending on the city and car. See the routes above for every fare.`
+          : `Outstation one way fares from ${p.name} start at ${inr(cheapest)}. Local rental cabs start at ${inr(rental.hatchback)} for ${rentalDisplay(rental)}.`,
+      });
+    }
+    if (this.isAirport()) {
+      items.push({ q: 'What if my flight is delayed?', a: 'Share your flight number when you book. We plan the pickup around your actual arrival time.' });
+    } else {
+      items.push(
+        { q: `Can I hire a cab in ${p.name} by the hour?`, a: `Yes. Local rental packages start at ${rentalDisplay(rental)} for ${inr(rental.hatchback)} (Hatchback). Choose Local rental in the booking form.` },
+        { q: `Do you provide airport pickup and drop from ${p.name}?`, a: `Yes. We run cabs between ${p.name} and Swami Vivekananda Airport, Raipur, and plan pickup times around your flight.` },
+      );
     }
     items.push(
-      { q: `Can I hire a cab in ${p.name} by the hour?`, a: `Yes. Local rental packages start at ${rentalDisplay(rental)} for ${inr(rental.hatchback)} (Hatchback). Choose Local rental in the booking form.` },
-      { q: `Do you provide airport pickup and drop from ${p.name}?`, a: `Yes. We run cabs between ${p.name} and Swami Vivekananda Airport, Raipur, and plan pickup times around your flight.` },
-      { q: `Which cars are available in ${p.name}?`, a: `Hatchback (4 passengers), Sedan (4 passengers, more luggage space) and SUV (up to 6 passengers). All are AC cars with experienced drivers.` },
-      { q: `How do I book a taxi in ${p.name}?`, a: `Use the booking form on this page: enter pickup, drop and your mobile number to see fares, then confirm with a ${SITE.fares.advancePercent}% advance. You can also call or WhatsApp us.` },
+      { q: `Which cars are available ${this.where()}?`, a: `Hatchback (4 passengers), Sedan (4 passengers, more luggage space) and SUV (up to 6 passengers). All are AC cars with experienced drivers.` },
+      { q: `How do I book a taxi ${this.where()}?`, a: `Use the booking form on this page: enter pickup, drop and your mobile number to see fares, then confirm with a ${SITE.fares.advancePercent}% advance. You can also call or WhatsApp us.` },
     );
     return items;
   });

@@ -9,8 +9,34 @@ Angular 21 · zoneless · Tailwind CSS 4 · Angular Material (date picker, dialo
 npm install
 npm start          # http://localhost:4200
 npm test           # unit tests (Vitest)
-npm run build      # static site in dist/kitecab-frontend/browser
+npm run build      # static site + sitemap.xml in dist/kitecab-frontend/browser
 ```
+
+## Fare data
+
+Fares, locations and SEO routes come from the database. Until the website reads Supabase
+directly, refresh them from a fresh export of the live `kitecab` table:
+
+```bash
+npm run build:data -- path/to/kitecab_rows.csv
+```
+
+This writes `public/data/catalog.json` (booking form) and `src/app/data/*.json`
+(SEO route pages, rental and round-trip prices). Commit the result and rebuild.
+
+## Pages (all prerendered)
+
+| URL | What |
+|---|---|
+| `/` | Home with booking form |
+| `/taxi/<from>-to-<to>` | 60 most booked Chhattisgarh/Nagpur routes |
+| `/taxi-service/<city>` | City pages (`src/app/data/places.ts`) |
+| `/raipur-airport-taxi` | Airport page |
+| `/one-way-taxi`, `/round-trip-cab`, `/local-taxi-rental` | Service pages (`src/app/data/services.ts`) |
+| `/taxi-routes`, `/about-us`, `/contact-us`, policies, `/404` | Other pages |
+
+To add a city: add it to `places.ts` with a `hub` block. To change how many routes get pages:
+`SEO_ROUTE_COUNT` in `scripts/build-catalog.py`.
 
 Node 22.12 or newer.
 
