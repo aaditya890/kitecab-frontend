@@ -1,0 +1,143 @@
+<!-- Hero + booking -->
+<section class="relative overflow-hidden bg-kc-night text-white">
+  <div class="pointer-events-none absolute -top-40 -right-40 size-[520px] rounded-full bg-kc-teal/40 blur-3xl" aria-hidden="true"></div>
+  <div class="relative mx-auto grid max-w-6xl gap-10 px-4 py-10 lg:grid-cols-[1fr_460px] lg:items-center lg:py-16">
+    <div>
+      <p class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm text-kc-yellow">Raipur · Bilaspur · Durg · Bhilai · Korba · Raigarh</p>
+      <h1 class="mt-5 text-4xl leading-tight font-bold sm:text-5xl">
+        Taxi service in <span class="text-kc-yellow">Chhattisgarh</span>
+      </h1>
+      <p class="mt-5 max-w-xl text-lg leading-relaxed text-white/80">
+        One way, round trip, airport and local rental cabs across every city of Chhattisgarh and to Nagpur. See the fare
+        for Hatchback, Sedan and SUV before you book — pay only for your drop on one way trips.
+      </p>
+      <ul class="mt-7 grid max-w-xl grid-cols-2 gap-3 text-sm">
+        <li class="flex items-center gap-2"><span class="text-kc-yellow" aria-hidden="true">✓</span> Fares shown up front</li>
+        <li class="flex items-center gap-2"><span class="text-kc-yellow" aria-hidden="true">✓</span> No return fare on one way</li>
+        <li class="flex items-center gap-2"><span class="text-kc-yellow" aria-hidden="true">✓</span> Call or WhatsApp any time</li>
+        <li class="flex items-center gap-2"><span class="text-kc-yellow" aria-hidden="true">✓</span> Hatchback, Sedan and SUV</li>
+      </ul>
+    </div>
+    <div class="text-kc-ink">
+      <kc-booking-widget />
+    </div>
+  </div>
+</section>
+
+<div class="mx-auto max-w-6xl space-y-20 px-4 py-14">
+  <!-- Services -->
+  <section aria-labelledby="services-h">
+    <h2 id="services-h" class="text-3xl font-semibold">Cab services across Chhattisgarh</h2>
+    <p class="mt-2 max-w-2xl text-kc-muted">Whatever the trip, the fare is fixed before you travel.</p>
+    <ul class="mt-8 grid gap-5 sm:grid-cols-2 lg:grid-cols-4">
+      <li class="rounded-2xl border border-kc-line bg-white p-6">
+        <h3 class="text-lg font-semibold"><a routerLink="/one-way-taxi" class="hover:text-kc-teal">One way taxi</a></h3>
+        <p class="mt-2 text-sm leading-relaxed text-kc-muted">City to city drops from {{ inr(lowest) }}. Pay only for your drop, never the car’s return.</p>
+      </li>
+      <li class="rounded-2xl border border-kc-line bg-white p-6">
+        <h3 class="text-lg font-semibold"><a routerLink="/round-trip-cab" class="hover:text-kc-teal">Round trip cab</a></h3>
+        <p class="mt-2 text-sm leading-relaxed text-kc-muted">The car waits for you — a few hours or up to three days — and brings you home.</p>
+      </li>
+      <li class="rounded-2xl border border-kc-line bg-white p-6">
+        <h3 class="text-lg font-semibold"><a routerLink="/raipur-airport-taxi" class="hover:text-kc-teal">Raipur Airport taxi</a></h3>
+        <p class="mt-2 text-sm leading-relaxed text-kc-muted">Pickup and drop at Swami Vivekananda Airport for Raipur, Bhilai, Durg, Bilaspur and Korba.</p>
+      </li>
+      <li class="rounded-2xl border border-kc-line bg-white p-6">
+        <h3 class="text-lg font-semibold"><a routerLink="/local-taxi-rental" class="hover:text-kc-teal">Local rental</a></h3>
+        <p class="mt-2 text-sm leading-relaxed text-kc-muted">A cab with driver by the hour — {{ rentalText }}.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- Popular routes -->
+  <section aria-labelledby="routes-h">
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <h2 id="routes-h" class="text-3xl font-semibold">Popular taxi routes</h2>
+        <p class="mt-2 text-kc-muted">Our most booked one way trips and their starting fares.</p>
+      </div>
+      <a routerLink="/taxi-routes" class="font-medium text-kc-teal hover:underline">All routes →</a>
+    </div>
+    <div class="mt-8"><kc-route-links [routes]="popular" /></div>
+  </section>
+
+  <!-- Cities -->
+  <section aria-labelledby="cities-h">
+    <h2 id="cities-h" class="text-3xl font-semibold">Taxi service in your city</h2>
+    <ul class="mt-8 grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-4">
+      @for (c of cities; track c.slug) {
+        <li>
+          <a [routerLink]="cityPath(c.slug)" class="block h-full rounded-2xl border border-kc-line bg-white p-5 hover:border-kc-teal">
+            <span class="block text-lg font-semibold">{{ c.name }}</span>
+            <span class="block text-sm text-kc-muted" lang="hi">{{ c.hindi }}</span>
+            @if (c.from) {
+              <span class="mt-3 block text-sm">Cabs from <b class="text-kc-teal">{{ inr(c.from) }}</b></span>
+            }
+          </a>
+        </li>
+      }
+    </ul>
+  </section>
+
+  <!-- Cars -->
+  <section aria-labelledby="cars-h">
+    <h2 id="cars-h" class="text-3xl font-semibold">Choose your car</h2>
+    <ul class="mt-8 grid gap-5 sm:grid-cols-3">
+      <li class="rounded-2xl border border-kc-line bg-white p-6">
+        <h3 class="text-lg font-semibold">Hatchback</h3>
+        <p class="text-sm text-kc-muted">Up to {{ seats.Hatchback }} passengers</p>
+        <p class="mt-3 text-sm leading-relaxed">The lowest fare — ideal for one or two people with light bags, airport drops and city rentals.</p>
+      </li>
+      <li class="rounded-2xl border-2 border-kc-yellow bg-white p-6">
+        <h3 class="text-lg font-semibold">Sedan</h3>
+        <p class="text-sm text-kc-muted">Up to {{ seats.Sedan }} passengers</p>
+        <p class="mt-3 text-sm leading-relaxed">More legroom and boot space for longer trips like Raipur to Bilaspur, Raigarh or Jagdalpur.</p>
+      </li>
+      <li class="rounded-2xl border border-kc-line bg-white p-6">
+        <h3 class="text-lg font-semibold">SUV</h3>
+        <p class="text-sm text-kc-muted">Up to {{ seats.SUV }} passengers</p>
+        <p class="mt-3 text-sm leading-relaxed">For families and groups, weddings and long drives with lots of luggage.</p>
+      </li>
+    </ul>
+  </section>
+
+  <!-- How it works -->
+  <section aria-labelledby="how-h" class="rounded-3xl bg-white p-8 ring-1 ring-kc-line sm:p-10">
+    <h2 id="how-h" class="text-3xl font-semibold">Book in three steps</h2>
+    <ol class="mt-8 grid gap-6 sm:grid-cols-3">
+      <li>
+        <span class="inline-flex size-10 items-center justify-center rounded-full bg-kc-yellow font-bold text-kc-night">1</span>
+        <h3 class="mt-3 font-semibold">Check the price</h3>
+        <p class="mt-1 text-sm text-kc-muted">Enter pickup, drop and your mobile number to see fares for every car.</p>
+      </li>
+      <li>
+        <span class="inline-flex size-10 items-center justify-center rounded-full bg-kc-yellow font-bold text-kc-night">2</span>
+        <h3 class="mt-3 font-semibold">Confirm with {{ advance }}% advance</h3>
+        <p class="mt-1 text-sm text-kc-muted">Add your pickup address and time, then pay the advance securely online.</p>
+      </li>
+      <li>
+        <span class="inline-flex size-10 items-center justify-center rounded-full bg-kc-yellow font-bold text-kc-night">3</span>
+        <h3 class="mt-3 font-semibold">Ride and pay the rest</h3>
+        <p class="mt-1 text-sm text-kc-muted">Driver details come on WhatsApp. Pay the balance to the driver after the trip.</p>
+      </li>
+    </ol>
+  </section>
+
+  <!-- About text for SEO -->
+  <section aria-labelledby="why-h" class="kc-prose max-w-3xl">
+    <h2 id="why-h">Your local taxi service in Chhattisgarh</h2>
+    <p>
+      KiteCab is based in Raipur and drives across the whole state every day. Our busiest routes are Raipur to Bilaspur,
+      Raipur Airport to Bhilai and Durg, Bilaspur to Korba and Raigarh, and Raipur to Jagdalpur through Kanker and
+      Kondagaon. Because we work only in Chhattisgarh and nearby Nagpur, our drivers know the highways, the short cuts and
+      the right pickup points at railway stations and the airport.
+    </p>
+    <p>
+      Every fare on this website comes from our live price list, for each car type. Book online in a minute, or
+      <a routerLink="/contact-us">call or WhatsApp us</a> and we’ll arrange your cab.
+    </p>
+  </section>
+
+  <kc-faq [items]="faqs" />
+  <kc-cta-band />
+</div>

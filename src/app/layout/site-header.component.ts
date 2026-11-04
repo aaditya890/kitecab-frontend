@@ -17,12 +17,12 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
           <kc-logo [size]="40" />
         </a>
 
-        <nav aria-label="Main" class="hidden items-center gap-1 md:flex">
+        <nav aria-label="Main" class="hidden items-center gap-1 lg:flex">
           @for (link of nav; track link.path) {
             <a
               [routerLink]="link.path"
               routerLinkActive="bg-kc-surface text-kc-teal"
-              [routerLinkActiveOptions]="{ exact: link.path === '/' }"
+              
               class="rounded-lg px-3 py-2 text-sm font-medium text-kc-ink hover:bg-kc-surface"
               >{{ link.label }}</a
             >
@@ -35,7 +35,7 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
             target="_blank"
             rel="noopener"
             (click)="analytics.event('click_whatsapp', { location: 'header' })"
-            class="hidden h-11 items-center gap-2 rounded-xl border border-kc-line px-4 text-sm font-medium text-kc-ink hover:bg-kc-surface sm:inline-flex"
+            class="hidden h-11 items-center gap-2 rounded-xl border border-kc-line px-4 text-sm font-medium text-kc-ink hover:bg-kc-surface xl:inline-flex"
           >
             <kc-icon name="whatsapp" class="text-[#1c8a43]" /> WhatsApp
           </a>
@@ -51,7 +51,7 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
           @if (nav.length > 1) {
             <button
               type="button"
-              class="inline-flex size-11 items-center justify-center rounded-xl hover:bg-kc-surface md:hidden"
+              class="inline-flex size-11 items-center justify-center rounded-xl hover:bg-kc-surface lg:hidden"
               [attr.aria-expanded]="menuOpen()"
               aria-controls="kc-mobile-menu"
               [attr.aria-label]="menuOpen() ? 'Close menu' : 'Open menu'"
@@ -64,7 +64,7 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
       </div>
 
       @if (menuOpen()) {
-        <nav id="kc-mobile-menu" aria-label="Main" class="border-t border-kc-line bg-white px-4 py-2 md:hidden">
+        <nav id="kc-mobile-menu" aria-label="Main" class="border-t border-kc-line bg-white px-4 py-2 lg:hidden">
           @for (link of nav; track link.path) {
             <a
               [routerLink]="link.path"

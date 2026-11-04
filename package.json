@@ -4,9 +4,10 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve",
-    "build": "ng build",
+    "build": "ng build && node scripts/build-sitemap.mjs",
     "watch": "ng build --watch --configuration development",
-    "test": "ng test --watch=false"
+    "test": "ng test --watch=false",
+    "build:data": "python scripts/build-catalog.py"
   },
   "private": true,
   "dependencies": {

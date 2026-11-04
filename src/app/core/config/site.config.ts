@@ -28,6 +28,14 @@ export const SITE = {
     },
   },
 
+  /** Fare wording shown next to prices. Confirm with the owner before changing. */
+  fares: {
+    /** Default advance %; the real value comes from the backend with each booking. */
+    advancePercent: 20,
+    extrasNote: 'Toll tax, parking and state entry tax, if any, are paid as per actual.',
+    seats: { Hatchback: 4, Sedan: 4, SUV: 6 },
+  },
+
   /** Default WhatsApp chat message. */
   whatsappGreeting: 'Hi KiteCab, I want to book a cab.',
 

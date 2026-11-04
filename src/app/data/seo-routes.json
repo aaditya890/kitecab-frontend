@@ -1,0 +1,782 @@
+[
+ {
+  "slug": "raipur-to-bilaspur",
+  "from": "Raipur",
+  "to": "Bilaspur",
+  "fromName": "Raipur",
+  "toName": "Bilaspur",
+  "km": 125,
+  "fares": {
+   "Hatchback": 2100,
+   "Sedan": 2200,
+   "SUV": 2900
+  }
+ },
+ {
+  "slug": "raipur-airport-to-bilaspur",
+  "from": "Raipur Airport",
+  "to": "Bilaspur",
+  "fromName": "Raipur Airport",
+  "toName": "Bilaspur",
+  "km": 125,
+  "fares": {
+   "Hatchback": 2100,
+   "Sedan": 2200,
+   "SUV": 2900
+  }
+ },
+ {
+  "slug": "bilaspur-to-raipur",
+  "from": "Bilaspur",
+  "to": "Raipur",
+  "fromName": "Bilaspur",
+  "toName": "Raipur",
+  "km": 125,
+  "fares": {
+   "Hatchback": 2100,
+   "Sedan": 2200,
+   "SUV": 2900
+  }
+ },
+ {
+  "slug": "bilaspur-to-raipur-airport",
+  "from": "Bilaspur",
+  "to": "Raipur Airport",
+  "fromName": "Bilaspur",
+  "toName": "Raipur Airport",
+  "km": 125,
+  "fares": {
+   "Hatchback": 2100,
+   "Sedan": 2200,
+   "SUV": 2900
+  }
+ },
+ {
+  "slug": "bhilai-to-raipur-airport",
+  "from": "Bhilai",
+  "to": "Raipur Airport",
+  "fromName": "Bhilai",
+  "toName": "Raipur Airport",
+  "km": 50,
+  "fares": {
+   "Hatchback": 1100,
+   "Sedan": 1200,
+   "SUV": 1900
+  }
+ },
+ {
+  "slug": "raipur-airport-to-bhilai",
+  "from": "Raipur Airport",
+  "to": "Bhilai",
+  "fromName": "Raipur Airport",
+  "toName": "Bhilai",
+  "km": 50,
+  "fares": {
+   "Hatchback": 1100,
+   "Sedan": 1200,
+   "SUV": 1900
+  }
+ },
+ {
+  "slug": "bilaspur-to-korba",
+  "from": "Bilaspur",
+  "to": "Korba",
+  "fromName": "Bilaspur",
+  "toName": "Korba",
+  "km": 95,
+  "fares": {
+   "Hatchback": 2000,
+   "Sedan": 2100,
+   "SUV": 3000
+  }
+ },
+ {
+  "slug": "raipur-airport-to-durg",
+  "from": "Raipur Airport",
+  "to": "Durg",
+  "fromName": "Raipur Airport",
+  "toName": "Durg",
+  "km": 55,
+  "fares": {
+   "Hatchback": 1150,
+   "Sedan": 1250,
+   "SUV": 1950
+  }
+ },
+ {
+  "slug": "durg-to-raipur-airport",
+  "from": "Durg",
+  "to": "Raipur Airport",
+  "fromName": "Durg",
+  "toName": "Raipur Airport",
+  "km": 55,
+  "fares": {
+   "Hatchback": 1150,
+   "Sedan": 1250,
+   "SUV": 1950
+  }
+ },
+ {
+  "slug": "durg-to-raipur",
+  "from": "Durg",
+  "to": "Raipur",
+  "fromName": "Durg",
+  "toName": "Raipur",
+  "km": 45,
+  "fares": {
+   "Hatchback": 1100,
+   "Sedan": 1200,
+   "SUV": 1950
+  }
+ },
+ {
+  "slug": "raipur-to-bhilai",
+  "from": "Raipur",
+  "to": "Bhilai",
+  "fromName": "Raipur",
+  "toName": "Bhilai",
+  "km": 43,
+  "fares": {
+   "Hatchback": 1100,
+   "Sedan": 1200,
+   "SUV": 1900
+  }
+ },
+ {
+  "slug": "raipur-to-jagdalpur",
+  "from": "Raipur",
+  "to": "Jagdalpur",
+  "fromName": "Raipur",
+  "toName": "Jagdalpur",
+  "km": 305,
+  "fares": {
+   "Hatchback": 4500,
+   "Sedan": 4700,
+   "SUV": 6100
+  }
+ },
+ {
+  "slug": "bhilai-to-raipur",
+  "from": "Bhilai",
+  "to": "Raipur",
+  "fromName": "Bhilai",
+  "toName": "Raipur",
+  "km": 43,
+  "fares": {
+   "Hatchback": 1100,
+   "Sedan": 1200,
+   "SUV": 1900
+  }
+ },
+ {
+  "slug": "raipur-to-durg",
+  "from": "Raipur",
+  "to": "Durg",
+  "fromName": "Raipur",
+  "toName": "Durg",
+  "km": 45,
+  "fares": {
+   "Hatchback": 1100,
+   "Sedan": 1200,
+   "SUV": 1950
+  }
+ },
+ {
+  "slug": "raipur-to-rajnandgaon",
+  "from": "Raipur",
+  "to": "Rajnandgaon",
+  "fromName": "Raipur",
+  "toName": "Rajnandgaon",
+  "km": 80,
+  "fares": {
+   "Hatchback": 2000,
+   "Sedan": 2100,
+   "SUV": 3100
+  }
+ },
+ {
+  "slug": "raipur-to-bhatapara",
+  "from": "Raipur",
+  "to": "Bhatapara",
+  "fromName": "Raipur",
+  "toName": "Bhatapara",
+  "km": 85,
+  "fares": {
+   "Hatchback": 1900,
+   "Sedan": 2000,
+   "SUV": 2800
+  }
+ },
+ {
+  "slug": "raipur-to-kondagaon",
+  "from": "Raipur",
+  "to": "Kondagaon",
+  "fromName": "Raipur",
+  "toName": "Kondagaon",
+  "km": 235,
+  "fares": {
+   "Hatchback": 3900,
+   "Sedan": 4100,
+   "SUV": 5600
+  }
+ },
+ {
+  "slug": "raipur-to-korba",
+  "from": "Raipur",
+  "to": "Korba",
+  "fromName": "Raipur",
+  "toName": "Korba",
+  "km": 235,
+  "fares": {
+   "Hatchback": 3500,
+   "Sedan": 3600,
+   "SUV": 4900
+  }
+ },
+ {
+  "slug": "bilaspur-to-raigarh",
+  "from": "Bilaspur",
+  "to": "Raigarh",
+  "fromName": "Bilaspur",
+  "toName": "Raigarh",
+  "km": 152,
+  "fares": {
+   "Hatchback": 2700,
+   "Sedan": 2900,
+   "SUV": 3700
+  }
+ },
+ {
+  "slug": "raipur-to-raigarh",
+  "from": "Raipur",
+  "to": "Raigarh",
+  "fromName": "Raipur",
+  "toName": "Raigarh",
+  "km": 252,
+  "fares": {
+   "Hatchback": 3900,
+   "Sedan": 4000,
+   "SUV": 5200
+  }
+ },
+ {
+  "slug": "raipur-airport-to-korba",
+  "from": "Raipur Airport",
+  "to": "Korba",
+  "fromName": "Raipur Airport",
+  "toName": "Korba",
+  "km": 235,
+  "fares": {
+   "Hatchback": 3500,
+   "Sedan": 3600,
+   "SUV": 4900
+  }
+ },
+ {
+  "slug": "kondagaon-to-raipur",
+  "from": "Kondagaon",
+  "to": "Raipur",
+  "fromName": "Kondagaon",
+  "toName": "Raipur",
+  "km": 235,
+  "fares": {
+   "Hatchback": 3900,
+   "Sedan": 4100,
+   "SUV": 5600
+  }
+ },
+ {
+  "slug": "raigarh-to-bilaspur",
+  "from": "Raigarh",
+  "to": "Bilaspur",
+  "fromName": "Raigarh",
+  "toName": "Bilaspur",
+  "km": 152,
+  "fares": {
+   "Hatchback": 2700,
+   "Sedan": 2900,
+   "SUV": 3800
+  }
+ },
+ {
+  "slug": "raigarh-to-raipur",
+  "from": "Raigarh",
+  "to": "Raipur",
+  "fromName": "Raigarh",
+  "toName": "Raipur",
+  "km": 252,
+  "fares": {
+   "Hatchback": 3900,
+   "Sedan": 4000,
+   "SUV": 5200
+  }
+ },
+ {
+  "slug": "bilaspur-to-bhilai",
+  "from": "Bilaspur",
+  "to": "Bhilai",
+  "fromName": "Bilaspur",
+  "toName": "Bhilai",
+  "km": 149,
+  "fares": {
+   "Hatchback": 2600,
+   "Sedan": 2700,
+   "SUV": 3500
+  }
+ },
+ {
+  "slug": "bhatapara-to-raipur",
+  "from": "Bhatapara",
+  "to": "Raipur",
+  "fromName": "Bhatapara",
+  "toName": "Raipur",
+  "km": 85,
+  "fares": {
+   "Hatchback": 1900,
+   "Sedan": 2000,
+   "SUV": 2800
+  }
+ },
+ {
+  "slug": "raipur-airport-to-rajnandgaon",
+  "from": "Raipur Airport",
+  "to": "Rajnandgaon",
+  "fromName": "Raipur Airport",
+  "toName": "Rajnandgaon",
+  "km": 92,
+  "fares": {
+   "Hatchback": 2000,
+   "Sedan": 2100,
+   "SUV": 3100
+  }
+ },
+ {
+  "slug": "jagdalpur-to-raipur",
+  "from": "Jagdalpur",
+  "to": "Raipur",
+  "fromName": "Jagdalpur",
+  "toName": "Raipur",
+  "km": 305,
+  "fares": {
+   "Hatchback": 4500,
+   "Sedan": 4700,
+   "SUV": 6100
+  }
+ },
+ {
+  "slug": "raipur-airport-to-raigarh",
+  "from": "Raipur Airport",
+  "to": "Raigarh",
+  "fromName": "Raipur Airport",
+  "toName": "Raigarh",
+  "km": 245,
+  "fares": {
+   "Hatchback": 3900,
+   "Sedan": 4000,
+   "SUV": 5200
+  }
+ },
+ {
+  "slug": "bhilai-to-bilaspur",
+  "from": "Bhilai",
+  "to": "Bilaspur",
+  "fromName": "Bhilai",
+  "toName": "Bilaspur",
+  "km": 149,
+  "fares": {
+   "Hatchback": 2600,
+   "Sedan": 2700,
+   "SUV": 3500
+  }
+ },
+ {
+  "slug": "korba-to-bilaspur",
+  "from": "Korba",
+  "to": "Bilaspur",
+  "fromName": "Korba",
+  "toName": "Bilaspur",
+  "km": 95,
+  "fares": {
+   "Hatchback": 2000,
+   "Sedan": 2100,
+   "SUV": 3000
+  }
+ },
+ {
+  "slug": "raipur-to-dhamtari",
+  "from": "Raipur",
+  "to": "Dhamtari",
+  "fromName": "Raipur",
+  "toName": "Dhamtari",
+  "km": 83,
+  "fares": {
+   "Hatchback": 2000,
+   "Sedan": 2100,
+   "SUV": 3100
+  }
+ },
+ {
+  "slug": "raipur-to-ambikapur",
+  "from": "Raipur",
+  "to": "Ambikapur",
+  "fromName": "Raipur",
+  "toName": "Ambikapur",
+  "km": 343,
+  "fares": {
+   "Hatchback": 5400,
+   "Sedan": 5600,
+   "SUV": 8100
+  }
+ },
+ {
+  "slug": "rajnandgaon-to-raipur",
+  "from": "Rajnandgaon",
+  "to": "Raipur",
+  "fromName": "Rajnandgaon",
+  "toName": "Raipur",
+  "km": 80,
+  "fares": {
+   "Hatchback": 2000,
+   "Sedan": 2100,
+   "SUV": 3100
+  }
+ },
+ {
+  "slug": "bilaspur-to-ambikapur",
+  "from": "Bilaspur",
+  "to": "Ambikapur",
+  "fromName": "Bilaspur",
+  "toName": "Ambikapur",
+  "km": 224,
+  "fares": {
+   "Hatchback": 4200,
+   "Sedan": 4400,
+   "SUV": 6600
+  }
+ },
+ {
+  "slug": "raipur-airport-to-bhatapara",
+  "from": "Raipur Airport",
+  "to": "Bhatapara",
+  "fromName": "Raipur Airport",
+  "toName": "Bhatapara",
+  "km": 99,
+  "fares": {
+   "Hatchback": 1900,
+   "Sedan": 2000,
+   "SUV": 2800
+  }
+ },
+ {
+  "slug": "bhatapara-to-raipur-airport",
+  "from": "Bhatapara",
+  "to": "Raipur Airport",
+  "fromName": "Bhatapara",
+  "toName": "Raipur Airport",
+  "km": 99,
+  "fares": {
+   "Hatchback": 1900,
+   "Sedan": 2000,
+   "SUV": 2800
+  }
+ },
+ {
+  "slug": "raigarh-to-raipur-airport",
+  "from": "Raigarh",
+  "to": "Raipur Airport",
+  "fromName": "Raigarh",
+  "toName": "Raipur Airport",
+  "km": 245,
+  "fares": {
+   "Hatchback": 3900,
+   "Sedan": 4000,
+   "SUV": 5200
+  }
+ },
+ {
+  "slug": "bilaspur-to-champa",
+  "from": "Bilaspur",
+  "to": "Champa",
+  "fromName": "Bilaspur",
+  "toName": "Champa",
+  "km": 65,
+  "fares": {
+   "Hatchback": 1800,
+   "Sedan": 1900,
+   "SUV": 2800
+  }
+ },
+ {
+  "slug": "raipur-to-kanker",
+  "from": "Raipur",
+  "to": "Kanker",
+  "fromName": "Raipur",
+  "toName": "Kanker",
+  "km": 145,
+  "fares": {
+   "Hatchback": 2700,
+   "Sedan": 2900,
+   "SUV": 3800
+  }
+ },
+ {
+  "slug": "raipur-to-kawardha",
+  "from": "Raipur",
+  "to": "Kawardha",
+  "fromName": "Raipur",
+  "toName": "Kawardha",
+  "km": 124,
+  "fares": {
+   "Hatchback": 2500,
+   "Sedan": 2700,
+   "SUV": 3600
+  }
+ },
+ {
+  "slug": "raipur-to-nagpur",
+  "from": "Raipur",
+  "to": "Nagpur (MH)",
+  "fromName": "Raipur",
+  "toName": "Nagpur",
+  "km": 300,
+  "fares": {
+   "Hatchback": 5000,
+   "Sedan": 5200,
+   "SUV": 6900
+  }
+ },
+ {
+  "slug": "naya-raipur-to-bilaspur",
+  "from": "Naya Raipur",
+  "to": "Bilaspur",
+  "fromName": "Naya Raipur",
+  "toName": "Bilaspur",
+  "km": 150,
+  "fares": {
+   "Hatchback": 2200,
+   "Sedan": 2300,
+   "SUV": 3100
+  }
+ },
+ {
+  "slug": "raipur-airport-to-ambikapur",
+  "from": "Raipur Airport",
+  "to": "Ambikapur",
+  "fromName": "Raipur Airport",
+  "toName": "Ambikapur",
+  "km": 358,
+  "fares": {
+   "Hatchback": 5500,
+   "Sedan": 5700,
+   "SUV": 8300
+  }
+ },
+ {
+  "slug": "korba-to-raipur",
+  "from": "Korba",
+  "to": "Raipur",
+  "fromName": "Korba",
+  "toName": "Raipur",
+  "km": 235,
+  "fares": {
+   "Hatchback": 3500,
+   "Sedan": 3600,
+   "SUV": 4900
+  }
+ },
+ {
+  "slug": "raipur-to-baloda-bazar",
+  "from": "Raipur",
+  "to": "Baloda Bazar",
+  "fromName": "Raipur",
+  "toName": "Baloda Bazar",
+  "km": 89,
+  "fares": {
+   "Hatchback": 1900,
+   "Sedan": 2000,
+   "SUV": 2800
+  }
+ },
+ {
+  "slug": "uslapur-to-korba",
+  "from": "Uslapur",
+  "to": "Korba",
+  "fromName": "Uslapur",
+  "toName": "Korba",
+  "km": 115,
+  "fares": {
+   "Hatchback": 2000,
+   "Sedan": 2200,
+   "SUV": 3100
+  }
+ },
+ {
+  "slug": "ambikapur-to-raipur",
+  "from": "Ambikapur",
+  "to": "Raipur",
+  "fromName": "Ambikapur",
+  "toName": "Raipur",
+  "km": 343,
+  "fares": {
+   "Hatchback": 5400,
+   "Sedan": 5600,
+   "SUV": 8100
+  }
+ },
+ {
+  "slug": "bilaspur-to-pendra-road",
+  "from": "Bilaspur",
+  "to": "Pendra Road",
+  "fromName": "Bilaspur",
+  "toName": "Pendra Road",
+  "km": 105,
+  "fares": {
+   "Hatchback": 2700,
+   "Sedan": 2800,
+   "SUV": 3800
+  }
+ },
+ {
+  "slug": "kanker-to-raipur",
+  "from": "Kanker",
+  "to": "Raipur",
+  "fromName": "Kanker",
+  "toName": "Raipur",
+  "km": 145,
+  "fares": {
+   "Hatchback": 2700,
+   "Sedan": 2900,
+   "SUV": 3800
+  }
+ },
+ {
+  "slug": "korba-to-raipur-airport",
+  "from": "Korba",
+  "to": "Raipur Airport",
+  "fromName": "Korba",
+  "toName": "Raipur Airport",
+  "km": 235,
+  "fares": {
+   "Hatchback": 3500,
+   "Sedan": 3600,
+   "SUV": 4900
+  }
+ },
+ {
+  "slug": "raipur-airport-to-akaltara",
+  "from": "Raipur Airport",
+  "to": "Akaltara",
+  "fromName": "Raipur Airport",
+  "toName": "Akaltara",
+  "km": 155,
+  "fares": {
+   "Hatchback": 2800,
+   "Sedan": 3000,
+   "SUV": 3900
+  }
+ },
+ {
+  "slug": "dhamtari-to-raipur",
+  "from": "Dhamtari",
+  "to": "Raipur",
+  "fromName": "Dhamtari",
+  "toName": "Raipur",
+  "km": 83,
+  "fares": {
+   "Hatchback": 2000,
+   "Sedan": 2100,
+   "SUV": 3100
+  }
+ },
+ {
+  "slug": "bilaspur-to-janjgir-naila",
+  "from": "Bilaspur",
+  "to": "Janjgir Naila",
+  "fromName": "Bilaspur",
+  "toName": "Janjgir Naila",
+  "km": 55,
+  "fares": {
+   "Hatchback": 1600,
+   "Sedan": 1800,
+   "SUV": 2600
+  }
+ },
+ {
+  "slug": "durg-to-bilaspur",
+  "from": "Durg",
+  "to": "Bilaspur",
+  "fromName": "Durg",
+  "toName": "Bilaspur",
+  "km": 156,
+  "fares": {
+   "Hatchback": 2800,
+   "Sedan": 2900,
+   "SUV": 3900
+  }
+ },
+ {
+  "slug": "durg-to-rajnandgaon",
+  "from": "Durg",
+  "to": "Rajnandgaon",
+  "fromName": "Durg",
+  "toName": "Rajnandgaon",
+  "km": 38,
+  "fares": {
+   "Hatchback": 1300,
+   "Sedan": 1400,
+   "SUV": 1900
+  }
+ },
+ {
+  "slug": "rajnandgaon-to-bhilai",
+  "from": "Rajnandgaon",
+  "to": "Bhilai",
+  "fromName": "Rajnandgaon",
+  "toName": "Bhilai",
+  "km": 40,
+  "fares": {
+   "Hatchback": 1300,
+   "Sedan": 1400,
+   "SUV": 1900
+  }
+ },
+ {
+  "slug": "raigarh-to-uslapur",
+  "from": "Raigarh",
+  "to": "Uslapur",
+  "fromName": "Raigarh",
+  "toName": "Uslapur",
+  "km": 160,
+  "fares": {
+   "Hatchback": 2700,
+   "Sedan": 2900,
+   "SUV": 3700
+  }
+ },
+ {
+  "slug": "raipur-to-janjgir-naila",
+  "from": "Raipur",
+  "to": "Janjgir Naila",
+  "fromName": "Raipur",
+  "toName": "Janjgir Naila",
+  "km": 170,
+  "fares": {
+   "Hatchback": 3100,
+   "Sedan": 3300,
+   "SUV": 4400
+  }
+ },
+ {
+  "slug": "bilaspur-to-durg",
+  "from": "Bilaspur",
+  "to": "Durg",
+  "fromName": "Bilaspur",
+  "toName": "Durg",
+  "km": 156,
+  "fares": {
+   "Hatchback": 2800,
+   "Sedan": 2900,
+   "SUV": 3900
+  }
+ }
+]

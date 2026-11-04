@@ -1,0 +1,80 @@
+[
+ {
+  "slot": "1-3 hours",
+  "perKm": {
+   "Hatchback": 10,
+   "Sedan": 11,
+   "SUV": 16
+  },
+  "base": {
+   "Hatchback": 1200,
+   "Sedan": 1200,
+   "SUV": 1400
+  }
+ },
+ {
+  "slot": "3-6 hours",
+  "perKm": {
+   "Hatchback": 10,
+   "Sedan": 11,
+   "SUV": 16
+  },
+  "base": {
+   "Hatchback": 1200,
+   "Sedan": 1200,
+   "SUV": 1400
+  }
+ },
+ {
+  "slot": "6-9 hours",
+  "perKm": {
+   "Hatchback": 10,
+   "Sedan": 11,
+   "SUV": 16
+  },
+  "base": {
+   "Hatchback": 1300,
+   "Sedan": 1300,
+   "SUV": 1500
+  }
+ },
+ {
+  "slot": "1 day",
+  "perKm": {
+   "Hatchback": 10,
+   "Sedan": 11,
+   "SUV": 16
+  },
+  "base": {
+   "Hatchback": 1400,
+   "Sedan": 1500,
+   "SUV": 1600
+  }
+ },
+ {
+  "slot": "2 day",
+  "perKm": {
+   "Hatchback": 10,
+   "Sedan": 11,
+   "SUV": 16
+  },
+  "base": {
+   "Hatchback": 2800,
+   "Sedan": 3000,
+   "SUV": 3200
+  }
+ },
+ {
+  "slot": "3 day",
+  "perKm": {
+   "Hatchback": 10,
+   "Sedan": 11,
+   "SUV": 16
+  },
+  "base": {
+   "Hatchback": 4200,
+   "Sedan": 4500,
+   "SUV": 4800
+  }
+ }
+]

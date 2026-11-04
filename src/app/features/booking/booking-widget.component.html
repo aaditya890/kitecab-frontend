@@ -1,0 +1,277 @@
+<div class="rounded-2xl border border-kc-line bg-white p-4 shadow-sm sm:p-6">
+  @switch (step()) {
+    <!-- ================= 1. search ================= -->
+    @case ('search') {
+      <form (submit)="checkPrice($event)" novalidate>
+        <div role="tablist" aria-label="Trip type" class="mb-5 grid grid-cols-3 gap-1 rounded-xl bg-kc-surface p-1">
+          @for (t of types; track t) {
+            <button
+              type="button"
+              role="tab"
+              [attr.aria-selected]="type() === t"
+              (click)="selectType(t)"
+              class="h-11 rounded-lg text-sm font-semibold transition-colors"
+              [class]="type() === t ? 'bg-kc-teal text-white shadow-sm' : 'text-kc-ink hover:bg-white'"
+            >
+              {{ typeLabels[t] }}
+            </button>
+          }
+        </div>
+
+        <div class="grid gap-4 sm:grid-cols-2">
+          <kc-place-input
+            label="Pickup"
+            placeholder="e.g. Raipur"
+            [options]="catalog.locations()"
+            [(value)]="pickup"
+            [invalid]="searchTried() && !!errors()['pickup']"
+            [errorText]="errors()['pickup']"
+          />
+
+          @if (type() === 'local-rental') {
+            <div>
+              <label for="kc-rental" class="mb-1 block text-sm font-medium text-kc-ink">Package</label>
+              <select
+                id="kc-rental"
+                [value]="rentalId()"
+                (change)="rentalId.set($any($event.target).value)"
+                [attr.aria-invalid]="(searchTried() && !!errors()['rental']) || null"
+                class="h-12 w-full rounded-xl border border-kc-line bg-white px-3 text-base focus:border-kc-teal focus:outline-none"
+              >
+                <option value="">Choose hours and km</option>
+                @for (p of catalog.rentals(); track p.id) {
+                  <option [value]="p.id">{{ rentalDisplay(p) }} — from {{ inr(p.hatchback) }}</option>
+                }
+              </select>
+              @if (searchTried() && errors()['rental']) {
+                <p class="mt-1 text-sm text-red-700">{{ errors()['rental'] }}</p>
+              }
+            </div>
+          } @else {
+            <kc-place-input
+              label="Drop"
+              placeholder="e.g. Bilaspur"
+              [options]="dropOptions()"
+              [(value)]="drop"
+              [invalid]="searchTried() && !!errors()['drop']"
+              [errorText]="errors()['drop']"
+            />
+          }
+
+          @if (type() === 'round-trip') {
+            <div>
+              <label for="kc-wait" class="mb-1 block text-sm font-medium text-kc-ink">Waiting time</label>
+              <select
+                id="kc-wait"
+                [value]="waitingTime()"
+                (change)="waitingTime.set($any($event.target).value)"
+                class="h-12 w-full rounded-xl border border-kc-line bg-white px-3 text-base focus:border-kc-teal focus:outline-none"
+              >
+                <option value="">How long should the cab wait?</option>
+                @for (r of catalog.roundTripRates(); track r.slot) {
+                  <option [value]="r.slot">{{ r.slot }}</option>
+                }
+              </select>
+              @if (searchTried() && errors()['waiting']) {
+                <p class="mt-1 text-sm text-red-700">{{ errors()['waiting'] }}</p>
+              }
+            </div>
+            <div>
+              <label for="kc-km" class="mb-1 block text-sm font-medium text-kc-ink">Total km (up and down)</label>
+              <input
+                id="kc-km"
+                inputmode="numeric"
+                placeholder="e.g. 250"
+                [value]="approxKm()"
+                (input)="approxKm.set(onlyDigits($any($event.target).value, 4)); $any($event.target).value = approxKm()"
+                class="h-12 w-full rounded-xl border border-kc-line bg-white px-4 text-base focus:border-kc-teal focus:outline-none"
+              />
+              @if (searchTried() && errors()['km']) {
+                <p class="mt-1 text-sm text-red-700">{{ errors()['km'] }}</p>
+              }
+            </div>
+          }
+
+          <div [class.sm:col-span-2]="type() !== 'round-trip'">
+            <label for="kc-mobile" class="mb-1 block text-sm font-medium text-kc-ink">Mobile number</label>
+            <div class="flex">
+              <span class="inline-flex h-12 items-center rounded-l-xl border border-r-0 border-kc-line bg-kc-surface px-3 text-kc-muted">+91</span>
+              <input
+                id="kc-mobile"
+                type="tel"
+                inputmode="numeric"
+                autocomplete="tel-national"
+                placeholder="10-digit mobile"
+                [value]="mobile()"
+                (input)="mobile.set(onlyDigits($any($event.target).value, 10)); $any($event.target).value = mobile()"
+                [attr.aria-invalid]="(searchTried() && !!errors()['mobile']) || null"
+                class="h-12 w-full rounded-r-xl border border-kc-line bg-white px-4 text-base focus:border-kc-teal focus:outline-none"
+              />
+            </div>
+            @if (searchTried() && errors()['mobile']) {
+              <p class="mt-1 text-sm text-red-700">{{ errors()['mobile'] }}</p>
+            }
+          </div>
+        </div>
+
+        @if (searchError()) {
+          <p role="alert" class="mt-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-900">{{ searchError() }}</p>
+        }
+        @if (catalog.failed()) {
+          <p role="alert" class="mt-4 rounded-xl bg-amber-50 p-3 text-sm text-amber-900">
+            Couldn’t load fares. Check your connection, or call
+            <a class="font-semibold underline" [href]="settings.telHref()">{{ settings.contact().phoneDisplay }}</a>.
+          </p>
+        }
+
+        <button
+          type="submit"
+          class="mt-5 h-13 w-full rounded-xl bg-kc-yellow text-base font-bold text-kc-night hover:bg-kc-yellow-dark"
+        >
+          Check price
+        </button>
+        <p class="mt-3 text-center text-xs text-kc-muted">Fares for Hatchback, Sedan and SUV · no sign-up needed</p>
+      </form>
+    }
+
+    <!-- ================= 2. fares ================= -->
+    @case ('fares') {
+      @if (quote(); as q) {
+        <div aria-live="polite">
+          <button type="button" (click)="back('search')" class="mb-3 text-sm font-medium text-kc-teal hover:underline">← Change trip</button>
+          <h2 class="text-lg font-semibold">{{ typeLabels[q.type] }}</h2>
+          <p class="text-sm text-kc-muted">{{ q.summary }}</p>
+
+          <ul class="mt-4 grid gap-3">
+            @for (c of cars; track c) {
+              <li class="flex items-center justify-between gap-3 rounded-xl border border-kc-line p-4">
+                <div>
+                  <p class="font-semibold">{{ c }}</p>
+                  <p class="text-sm text-kc-muted">Up to {{ seats[c] }} passengers · AC</p>
+                </div>
+                <div class="flex items-center gap-3">
+                  <p class="text-xl font-bold">{{ inr(q.fares[c]) }}</p>
+                  <button type="button" (click)="chooseCar(c)" class="h-11 rounded-xl bg-kc-teal px-5 font-semibold text-white hover:bg-kc-teal-dark">
+                    Book
+                  </button>
+                </div>
+              </li>
+            }
+          </ul>
+          <p class="mt-3 text-xs text-kc-muted">{{ extrasNote }}</p>
+        </div>
+      }
+    }
+
+    <!-- ================= 3. details ================= -->
+    @case ('details') {
+      @if (quote(); as q) {
+        <form (submit)="submit($event)" novalidate>
+          <button type="button" (click)="back('fares')" class="mb-3 text-sm font-medium text-kc-teal hover:underline">← Change car</button>
+          <div class="mb-4 rounded-xl bg-kc-surface p-3 text-sm">
+            <p class="font-semibold">{{ car() }} · {{ inr(selectedFare() ?? 0) }}</p>
+            <p class="text-kc-muted">{{ q.summary }}</p>
+          </div>
+
+          <div class="grid gap-4 sm:grid-cols-2">
+            <div>
+              <label for="kc-name" class="mb-1 block text-sm font-medium">Full name</label>
+              <input id="kc-name" autocomplete="name" [value]="fullName()" (input)="fullName.set($any($event.target).value)"
+                class="h-12 w-full rounded-xl border border-kc-line px-4 text-base focus:border-kc-teal focus:outline-none" />
+              @if (detailsTried() && detailErrors()['name']) { <p class="mt-1 text-sm text-red-700">{{ detailErrors()['name'] }}</p> }
+            </div>
+            <div>
+              <label for="kc-mobile2" class="mb-1 block text-sm font-medium">Mobile number</label>
+              <input id="kc-mobile2" type="tel" inputmode="numeric" [value]="mobile()"
+                (input)="mobile.set(onlyDigits($any($event.target).value, 10)); $any($event.target).value = mobile()"
+                class="h-12 w-full rounded-xl border border-kc-line px-4 text-base focus:border-kc-teal focus:outline-none" />
+              @if (detailsTried() && detailErrors()['mobile']) { <p class="mt-1 text-sm text-red-700">{{ detailErrors()['mobile'] }}</p> }
+            </div>
+            <div>
+              <label for="kc-email" class="mb-1 block text-sm font-medium">Email</label>
+              <input id="kc-email" type="email" autocomplete="email" [value]="email()" (input)="email.set($any($event.target).value)"
+                class="h-12 w-full rounded-xl border border-kc-line px-4 text-base focus:border-kc-teal focus:outline-none" />
+              @if (detailsTried() && detailErrors()['email']) { <p class="mt-1 text-sm text-red-700">{{ detailErrors()['email'] }}</p> }
+            </div>
+            <div>
+              <label for="kc-pax" class="mb-1 block text-sm font-medium">Passengers</label>
+              <select id="kc-pax" [value]="passengers()" (change)="passengers.set($any($event.target).value)"
+                class="h-12 w-full rounded-xl border border-kc-line bg-white px-3 text-base focus:border-kc-teal focus:outline-none">
+                @for (n of [1, 2, 3, 4, 5, 6, 7]; track n) { <option [value]="n">{{ n }}</option> }
+              </select>
+            </div>
+            <div class="sm:col-span-2">
+              <label for="kc-address" class="mb-1 block text-sm font-medium">Pickup address</label>
+              <input id="kc-address" autocomplete="street-address" placeholder="House, street, landmark"
+                [value]="address()" (input)="address.set($any($event.target).value)"
+                class="h-12 w-full rounded-xl border border-kc-line px-4 text-base focus:border-kc-teal focus:outline-none" />
+              @if (detailsTried() && detailErrors()['address']) { <p class="mt-1 text-sm text-red-700">{{ detailErrors()['address'] }}</p> }
+            </div>
+            <div>
+              <label for="kc-date" class="mb-1 block text-sm font-medium">Pickup date</label>
+              <input id="kc-date" type="date" [min]="minDate" [value]="date()" (input)="date.set($any($event.target).value)"
+                class="h-12 w-full rounded-xl border border-kc-line bg-white px-4 text-base focus:border-kc-teal focus:outline-none" />
+              @if (detailsTried() && detailErrors()['date']) { <p class="mt-1 text-sm text-red-700">{{ detailErrors()['date'] }}</p> }
+            </div>
+            <div>
+              <label for="kc-time" class="mb-1 block text-sm font-medium">Pickup time</label>
+              <input id="kc-time" type="time" [value]="time()" (input)="time.set($any($event.target).value)"
+                class="h-12 w-full rounded-xl border border-kc-line bg-white px-4 text-base focus:border-kc-teal focus:outline-none" />
+              @if (detailsTried() && detailErrors()['time']) { <p class="mt-1 text-sm text-red-700">{{ detailErrors()['time'] }}</p> }
+            </div>
+          </div>
+
+          @if (submitError()) {
+            <div role="alert" class="mt-4 rounded-xl bg-amber-50 p-4 text-sm text-amber-900">
+              <p>{{ submitError() }}</p>
+              <a [href]="whatsappFallback()" target="_blank" rel="noopener"
+                class="mt-3 inline-flex h-11 items-center gap-2 rounded-xl bg-[#1c8a43] px-4 font-semibold text-white">
+                <kc-icon name="whatsapp" /> Send booking on WhatsApp
+              </a>
+            </div>
+          }
+
+          <button type="submit" [disabled]="submitting()"
+            class="mt-5 h-13 w-full rounded-xl bg-kc-yellow text-base font-bold text-kc-night hover:bg-kc-yellow-dark disabled:opacity-60">
+            {{ submitting() ? 'Booking…' : 'Confirm booking' }}
+          </button>
+          <p class="mt-3 text-center text-xs text-kc-muted">
+            By booking you agree to our <a href="/terms-and-conditions" class="underline">terms</a> and
+            <a href="/refund-policy" class="underline">cancellation policy</a>.
+          </p>
+        </form>
+      }
+    }
+
+    <!-- ================= 4. done ================= -->
+    @case ('done') {
+      @if (result(); as r) {
+        <div class="text-center" aria-live="polite">
+          <p class="mx-auto inline-flex size-14 items-center justify-center rounded-full bg-green-100 text-2xl text-green-800" aria-hidden="true">✓</p>
+          <h2 class="mt-3 text-xl font-semibold">Booking #{{ r.bookingId }} received</h2>
+          <p class="mt-1 text-kc-muted">Fare {{ inr(r.fare) }} · details sent to your WhatsApp</p>
+
+          @if (r.paymentLink) {
+            <a [href]="r.paymentLink" target="_blank" rel="noopener"
+              class="mt-5 flex h-13 items-center justify-center rounded-xl bg-kc-yellow text-base font-bold text-kc-night hover:bg-kc-yellow-dark">
+              Pay {{ inr(r.advanceAmount) }} advance to confirm
+            </a>
+            <p class="mt-2 text-xs text-kc-muted">Secure payment by Razorpay · balance {{ inr(r.fare - r.advanceAmount) }} to the driver</p>
+          } @else {
+            <p class="mt-4 rounded-xl bg-kc-surface p-3 text-sm">Our team will call you shortly to confirm and share the payment link.</p>
+          }
+
+          <div class="mt-5 grid grid-cols-2 gap-2">
+            <a [href]="settings.telHref()" class="flex h-11 items-center justify-center gap-2 rounded-xl border border-kc-line font-medium hover:bg-kc-surface">
+              <kc-icon name="phone" [size]="18" /> Call us
+            </a>
+            <a [href]="settings.whatsappHref()" target="_blank" rel="noopener" class="flex h-11 items-center justify-center gap-2 rounded-xl border border-kc-line font-medium hover:bg-kc-surface">
+              <kc-icon name="whatsapp" [size]="18" class="text-[#1c8a43]" /> WhatsApp
+            </a>
+          </div>
+          <button type="button" (click)="startOver()" class="mt-4 text-sm font-medium text-kc-teal hover:underline">Book another cab</button>
+        </div>
+      }
+    }
+  }
+</div>

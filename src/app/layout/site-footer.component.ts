@@ -1,7 +1,9 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
-import { MAIN_NAV, POLICY_NAV } from '../core/config/navigation';
+import { COMPANY_NAV, POLICY_NAV } from '../core/config/navigation';
+import { cityPath, HUBS } from '../data/places';
+import { routePath, SEO_ROUTES } from '../data/seo-routes';
 import { SITE } from '../core/config/site.config';
 import { SiteSettingsService } from '../core/services/site-settings.service';
 import { IconComponent } from '../shared/components/icon/icon.component';
@@ -12,8 +14,8 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
   imports: [RouterLink, LogoComponent, IconComponent],
   template: `
     <footer class="bg-kc-night text-white/80">
-      <div class="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-4">
-        <section class="lg:col-span-2" aria-labelledby="footer-about">
+      <div class="mx-auto grid max-w-6xl gap-10 px-4 py-12 sm:grid-cols-2 lg:grid-cols-5">
+        <section aria-labelledby="footer-about">
           <h2 id="footer-about" class="sr-only">About KiteCab</h2>
           <kc-logo tone="onDark" [size]="48" [tagline]="true" />
           <p class="mt-5 max-w-md text-sm leading-relaxed">
@@ -49,9 +51,24 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
           </address>
         </section>
 
-        <nav aria-labelledby="footer-links">
-          <h2 id="footer-links" class="text-sm font-semibold tracking-wide text-white uppercase">Useful links</h2>
+        <nav aria-labelledby="footer-routes">
+          <h2 id="footer-routes" class="text-sm font-semibold tracking-wide text-white uppercase">Popular routes</h2>
           <ul class="mt-4 flex flex-col gap-1 text-sm">
+            @for (r of routes; track r.slug) {
+              <li><a [routerLink]="routePath(r)" class="inline-block py-1.5 hover:text-kc-yellow">{{ r.fromName }} to {{ r.toName }} taxi</a></li>
+            }
+          </ul>
+        </nav>
+
+        <nav aria-labelledby="footer-cities">
+          <h2 id="footer-cities" class="text-sm font-semibold tracking-wide text-white uppercase">Cities</h2>
+          <ul class="mt-4 flex flex-col gap-1 text-sm">
+            @for (h of hubs; track h.slug) {
+              <li><a [routerLink]="cityPath(h.slug)" class="inline-block py-1.5 hover:text-kc-yellow">{{ h.slug === 'raipur-airport' ? 'Raipur Airport taxi' : 'Taxi in ' + h.name }}</a></li>
+            }
+          </ul>
+          <h2 class="mt-6 text-sm font-semibold tracking-wide text-white uppercase">Company</h2>
+          <ul class="mt-3 flex flex-col gap-1 text-sm">
             @for (link of links; track link.path) {
               <li><a [routerLink]="link.path" class="inline-block py-1.5 hover:text-kc-yellow">{{ link.label }}</a></li>
             }
@@ -71,7 +88,11 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
 export class SiteFooterComponent {
   protected readonly settings = inject(SiteSettingsService);
   protected readonly site = SITE;
-  protected readonly links = [...MAIN_NAV, ...POLICY_NAV];
+  protected readonly links = [...COMPANY_NAV, ...POLICY_NAV];
+  protected readonly routes = SEO_ROUTES.slice(0, 8);
+  protected readonly hubs = HUBS;
+  protected readonly routePath = routePath;
+  protected readonly cityPath = cityPath;
   protected readonly year = new Date().getFullYear();
   protected readonly cityList = SITE.keyCities.slice(0, -1).join(', ') + ' and ' + SITE.keyCities.at(-1);
 }

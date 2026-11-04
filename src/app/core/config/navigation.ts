@@ -4,8 +4,21 @@ export interface NavLink {
   path: string;
 }
 
-/** Header menu. More entries (airport taxi, routes, cities) arrive with those pages. */
-export const MAIN_NAV: readonly NavLink[] = [{ label: 'Home', path: '/' }];
+/** Header menu. */
+export const MAIN_NAV: readonly NavLink[] = [
+  { label: 'One way', path: '/one-way-taxi' },
+  { label: 'Round trip', path: '/round-trip-cab' },
+  { label: 'Local rental', path: '/local-taxi-rental' },
+  { label: 'Airport taxi', path: '/raipur-airport-taxi' },
+  { label: 'Routes', path: '/taxi-routes' },
+  { label: 'Contact', path: '/contact-us' },
+];
+
+export const COMPANY_NAV: readonly NavLink[] = [
+  { label: 'About us', path: '/about-us' },
+  { label: 'Contact us', path: '/contact-us' },
+  { label: 'All taxi routes', path: '/taxi-routes' },
+];
 
 export const POLICY_NAV: readonly NavLink[] = [
   { label: 'Privacy policy', path: '/privacy-policies' },
