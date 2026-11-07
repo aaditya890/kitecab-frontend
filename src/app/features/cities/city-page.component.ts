@@ -29,7 +29,6 @@ const RENTALS = rentalsJson as RentalPackage[];
           <div>
             <kc-breadcrumbs [items]="crumbs()" />
             <h1 class="mt-4 text-3xl font-bold text-kc-ink sm:text-4xl">{{ p.hub.heading }}</h1>
-            <p class="mt-1 text-kc-muted" lang="hi">{{ p.hindi }} टैक्सी सेवा</p>
             @for (para of p.hub.intro; track $index) {
               <p class="mt-4 text-lg leading-relaxed text-kc-muted">{{ para }}</p>
             }

@@ -1079,17 +1079,13 @@ export class BookingDetailComponent implements OnInit {
     const done = await this.toast.run(
       async () =>
         ok(
-          await (
-            await this.db.db()
-          )
-            .from('activity_log')
-            .insert({
-              entity: 'booking',
-              entity_id: String(this.bookingId),
-              action: 'note',
-              detail: note,
-              actor_id: this.db.userId(),
-            }),
+          await (await this.db.db()).from('activity_log').insert({
+            entity: 'booking',
+            entity_id: String(this.bookingId),
+            action: 'note',
+            detail: note,
+            actor_id: this.db.userId(),
+          }),
         ),
       'Note added',
     );
@@ -1124,17 +1120,13 @@ export class BookingDetailComponent implements OnInit {
       msg,
     );
     if (sent)
-      await (
-        await this.db.db()
-      )
-        .from('activity_log')
-        .insert({
-          entity: 'booking',
-          entity_id: String(this.bookingId),
-          action: 'whatsapp',
-          detail: msg,
-          actor_id: this.db.userId(),
-        });
+      await (await this.db.db()).from('activity_log').insert({
+        entity: 'booking',
+        entity_id: String(this.bookingId),
+        action: 'whatsapp',
+        detail: msg,
+        actor_id: this.db.userId(),
+      });
     await this.load();
     this.busy.set(false);
   }

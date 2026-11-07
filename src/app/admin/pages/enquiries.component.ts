@@ -411,11 +411,27 @@ const OPEN = ['new', 'contacted', 'follow_up'];
               Current one-way fares · {{ f.distance_km }} km
             </p>
           }
-          @if (e.assigned_to !== db.userId()) {
-            <button type="button" class="kc-adm-btn mt-3" (click)="assignMe(e)">
-              Assign to me
-            </button>
-          }
+          <div class="mt-3 flex flex-wrap gap-2">
+            @if (e.booking_id) {
+              <a
+                class="kc-adm-btn-primary"
+                [routerLink]="['/admin/bookings', e.booking_id]"
+                >Open booking #{{ e.booking_id }}</a
+              >
+            } @else {
+              <a
+                class="kc-adm-btn-primary"
+                routerLink="/admin/bookings/new"
+                [queryParams]="bookingParams(e)"
+                >Create booking</a
+              >
+            }
+            @if (e.assigned_to !== db.userId()) {
+              <button type="button" class="kc-adm-btn" (click)="assignMe(e)">
+                Assign to me
+              </button>
+            }
+          </div>
 
           <form
             class="mt-4 border-t border-kc-line pt-4"
@@ -646,6 +662,17 @@ export class EnquiriesComponent {
     return `Hello${e.customer_name ? ' ' + e.customer_name : ''}, this is KiteCab. You checked the cab fare for ${trip} on our website. Shall I book it for you? Please share your pickup date and time.`;
   }
 
+  protected bookingParams(e: Lead): Record<string, string> {
+    return {
+      enquiry: String(e.id),
+      type: e.service_type ?? 'oneway',
+      pickup: e.pickup,
+      drop: e.drop_or_package ?? '',
+      mobile: e.mobile ?? '',
+      name: e.customer_name ?? '',
+    };
+  }
+
   protected async open(e: Lead): Promise<void> {
     this.sel.set(e);
     this.outcome.set('');
@@ -710,9 +737,22 @@ export class EnquiriesComponent {
     );
     this.saving.set(false);
     if (!done) return;
+    if (outcome === 'booked' && !e.booking_id) {
+      await this.router.navigate(['/admin/bookings/new'], {
+        queryParams: this.bookingParams(e),
+      });
+      return;
+    }
     await this.refresh();
-    const fresh = this.list.rows().find((x) => x.id === e.id);
-    if (fresh) await this.open(fresh);
+    // keep the panel open with fresh data, even if the lead moved to another tab
+    const { data } = await (
+      await this.db.db()
+    )
+      .from('admin_enquiries')
+      .select(COLS)
+      .eq('id', e.id)
+      .maybeSingle();
+    if (data) await this.open(data as unknown as Lead);
     else this.sel.set(null);
   }
 

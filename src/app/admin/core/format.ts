@@ -143,6 +143,7 @@ for (const l of LEAD_STATUSES) STATUS_STYLE['lead_' + l.value] = l.style;
 export function ago(ts: string | null | undefined): string {
   if (!ts) return '-';
   const s = (Date.now() - new Date(ts).getTime()) / 1000;
+  if (s < 0 && s > -300) return 'just now'; // server and PC clocks differ a little
   if (s < 0) return inFuture(-s);
   if (s < 60) return 'just now';
   if (s < 3600) return `${Math.floor(s / 60)} min ago`;

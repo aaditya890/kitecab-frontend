@@ -33,11 +33,12 @@ const NAV: NavItem[] = [
   { label: 'Payments', path: '/admin/payments' },
   { label: 'Activity log', path: '/admin/activity' },
   {
-    label: 'Drivers & cars',
-    path: '/admin/drivers',
+    label: 'Staff & performance',
+    path: '/admin/staff',
     admin: true,
     section: 'Manage',
   },
+  { label: 'Drivers & cars', path: '/admin/drivers', admin: true },
   { label: 'Routes & fares', path: '/admin/routes', admin: true },
   { label: 'Locations', path: '/admin/locations', admin: true },
   { label: 'Rental & round trip', path: '/admin/rates', admin: true },
@@ -89,7 +90,12 @@ const NAV: NavItem[] = [
         </nav>
         <div class="border-t border-kc-line px-5 py-4 text-xs text-kc-muted">
           <p class="truncate font-medium text-kc-ink">{{ db.name() }}</p>
-          <p class="truncate">{{ db.email() }} · {{ db.role() }}</p>
+          <p class="truncate">
+            @if (db.name() !== db.email()) {
+              {{ db.email() }} ·
+            }
+            <span class="capitalize">{{ db.role() }}</span>
+          </p>
           <button
             type="button"
             class="mt-2 font-medium text-kc-teal hover:underline"
