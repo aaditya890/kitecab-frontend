@@ -7,7 +7,7 @@ import {
   signal,
 } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
-import { catchError } from 'rxjs';
+import { catchError, timeout } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 
@@ -74,7 +74,10 @@ export class CatalogService {
     this.requested = true;
     this.http
       .get<CatalogFile>(`${environment.apiUrl}/catalog`)
-      .pipe(catchError(() => this.http.get<CatalogFile>('/data/catalog.json')))
+      .pipe(
+        timeout(4000),
+        catchError(() => this.http.get<CatalogFile>('/data/catalog.json')),
+      )
       .subscribe({
         next: (f) => this.file.set(f),
         error: () => {
