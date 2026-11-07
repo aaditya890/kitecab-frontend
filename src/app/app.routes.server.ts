@@ -6,9 +6,12 @@ import { SEO_ROUTES } from './data/seo-routes';
 /**
  * How each URL is built. The site is hosted as static files on S3, so public
  * pages are prerendered to HTML at build time (best for SEO and speed).
- * Admin pages (added later) will use RenderMode.Client — no SEO needed.
+ * Admin pages use RenderMode.Client — no SEO needed; CloudFront serves
+ * index.csr.html for /admin/* (see README).
  */
 export const serverRoutes: ServerRoute[] = [
+  { path: 'admin', renderMode: RenderMode.Client },
+  { path: 'admin/**', renderMode: RenderMode.Client },
   {
     path: 'taxi/:slug',
     renderMode: RenderMode.Prerender,
@@ -18,7 +21,10 @@ export const serverRoutes: ServerRoute[] = [
     path: 'taxi-service/:city',
     renderMode: RenderMode.Prerender,
     // Raipur Airport has its own URL (/raipur-airport-taxi).
-    getPrerenderParams: async () => HUBS.filter((h) => h.slug !== 'raipur-airport').map((h) => ({ city: h.slug })),
+    getPrerenderParams: async () =>
+      HUBS.filter((h) => h.slug !== 'raipur-airport').map((h) => ({
+        city: h.slug,
+      })),
   },
   { path: '**', renderMode: RenderMode.Prerender },
 ];

@@ -1,15 +1,29 @@
 import { HttpClient } from '@angular/common/http';
-import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
+import {
+  Injectable,
+  PLATFORM_ID,
+  computed,
+  inject,
+  signal,
+} from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
+import { catchError } from 'rxjs';
 
-import { CatalogFile, RentalPackage, RoundTripRate, RouteFare } from '../../models/catalog.model';
+import { environment } from '../../../environments/environment';
+
+import {
+  CatalogFile,
+  RentalPackage,
+  RoundTripRate,
+  RouteFare,
+} from '../../models/catalog.model';
 
 /**
  * Locations, fares, rental packages and round-trip rates for the booking form.
  *
- * Source today: /data/catalog.json (built from the database backup by
- * scripts/build-catalog.py). When the new database is live, only `load()` changes
- * to read Supabase — every component keeps using the same methods.
+ * Source: kitecab-backend GET /api/catalog (live from the database, CDN-cached
+ * for a minute, so admin price changes and on/off switches show up quickly).
+ * If the API is down, the build-time copy /data/catalog.json is used instead.
  */
 @Injectable({ providedIn: 'root' })
 export class CatalogService {
@@ -22,8 +36,12 @@ export class CatalogService {
   readonly ready = computed(() => this.file() !== null);
   readonly failed = signal(false);
   readonly locations = computed(() => this.file()?.locations ?? []);
-  readonly rentals = computed<RentalPackage[]>(() => this.file()?.rentals ?? []);
-  readonly roundTripRates = computed<RoundTripRate[]>(() => this.file()?.roundTrip ?? []);
+  readonly rentals = computed<RentalPackage[]>(
+    () => this.file()?.rentals ?? [],
+  );
+  readonly roundTripRates = computed<RoundTripRate[]>(
+    () => this.file()?.roundTrip ?? [],
+  );
 
   /** "from|to" -> fare, for instant lookups while typing. */
   private readonly routeIndex = computed(() => {
@@ -31,7 +49,10 @@ export class CatalogService {
     const map = new Map<string, RouteFare>();
     if (!f) return map;
     for (const [a, b, km, h, s, suv] of f.routes) {
-      map.set(`${f.locations[a]}|${f.locations[b]}`, { km, fares: { Hatchback: h, Sedan: s, SUV: suv } });
+      map.set(`${f.locations[a]}|${f.locations[b]}`, {
+        km,
+        fares: { Hatchback: h, Sedan: s, SUV: suv },
+      });
     }
     return map;
   });
@@ -51,13 +72,16 @@ export class CatalogService {
   load(): void {
     if (!this.isBrowser || this.requested) return;
     this.requested = true;
-    this.http.get<CatalogFile>('/data/catalog.json').subscribe({
-      next: (f) => this.file.set(f),
-      error: () => {
-        this.requested = false;
-        this.failed.set(true);
-      },
-    });
+    this.http
+      .get<CatalogFile>(`${environment.apiUrl}/catalog`)
+      .pipe(catchError(() => this.http.get<CatalogFile>('/data/catalog.json')))
+      .subscribe({
+        next: (f) => this.file.set(f),
+        error: () => {
+          this.requested = false;
+          this.failed.set(true);
+        },
+      });
   }
 
   isLocation(name: string): boolean {
