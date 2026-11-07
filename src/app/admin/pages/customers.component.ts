@@ -12,6 +12,7 @@ import { AdminDbService } from '../core/admin-db.service';
 import { day, downloadCsv, rs, typeLabel } from '../core/format';
 import { PagedList, searchTerm, toPage } from '../core/paged-list';
 import { BadgeComponent } from '../ui/badge.component';
+import { ContactActionsComponent } from '../ui/contact-actions.component';
 import { PagerComponent } from '../ui/pager.component';
 
 interface Row {
@@ -37,7 +38,13 @@ interface Trip {
 
 @Component({
   selector: 'kc-admin-customers',
-  imports: [FormsModule, RouterLink, BadgeComponent, PagerComponent],
+  imports: [
+    FormsModule,
+    RouterLink,
+    BadgeComponent,
+    ContactActionsComponent,
+    PagerComponent,
+  ],
   template: `
     <div class="flex flex-wrap items-center justify-between gap-3">
       <h1 class="kc-adm-h1">Customers</h1>
@@ -91,12 +98,7 @@ interface Trip {
                   >
                 </td>
                 <td>
-                  <a
-                    class="text-kc-teal hover:underline"
-                    [href]="'tel:+91' + c.mobile"
-                    (click)="$event.stopPropagation()"
-                    >{{ c.mobile }}</a
-                  >
+                  <kc-contact [mobile]="c.mobile" />
                 </td>
                 <td>{{ c.bookings }}</td>
                 <td>{{ rs(c.total_fare) }}</td>

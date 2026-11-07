@@ -21,6 +21,7 @@ import {
 } from '../core/format';
 import { PagedList, searchTerm, toPage } from '../core/paged-list';
 import { BadgeComponent } from '../ui/badge.component';
+import { ContactActionsComponent } from '../ui/contact-actions.component';
 import { PagerComponent } from '../ui/pager.component';
 
 interface Row {
@@ -47,7 +48,13 @@ const COLS =
 
 @Component({
   selector: 'kc-admin-bookings',
-  imports: [FormsModule, RouterLink, BadgeComponent, PagerComponent],
+  imports: [
+    FormsModule,
+    RouterLink,
+    BadgeComponent,
+    ContactActionsComponent,
+    PagerComponent,
+  ],
   template: `
     <div class="flex flex-wrap items-center justify-between gap-3">
       <h1 class="kc-adm-h1">Bookings</h1>
@@ -162,16 +169,31 @@ const COLS =
                   >
                 </td>
                 <td>
-                  {{ b.customer_name }}<br /><a
-                    class="text-kc-muted hover:underline"
-                    [href]="'tel:+91' + b.mobile"
-                    >{{ b.mobile }}</a
-                  >
+                  <span class="block font-medium">{{ b.customer_name }}</span>
+                  <kc-contact [mobile]="b.mobile" />
                 </td>
                 <td class="whitespace-nowrap">{{ rs(b.fare) }}</td>
-                <td>{{ b.driver_name || '-' }}</td>
+                <td>
+                  @if (b.driver_name) {
+                    {{ b.driver_name }}
+                  } @else if (
+                    b.status !== 'cancelled' && b.status !== 'completed'
+                  ) {
+                    <span class="text-sm font-medium text-red-700"
+                      >Not assigned</span
+                    >
+                  } @else {
+                    <span class="text-kc-muted">—</span>
+                  }
+                </td>
                 <td><kc-badge [value]="b.status" /></td>
-                <td><kc-badge [value]="b.advance_status" /></td>
+                <td>
+                  @if (b.advance_status) {
+                    <kc-badge [value]="b.advance_status" />
+                  } @else {
+                    <span class="text-xs text-kc-muted">No link</span>
+                  }
+                </td>
               </tr>
             } @empty {
               <tr>
