@@ -25,7 +25,7 @@ import { IconComponent } from '../../shared/components/icon/icon.component';
         </a>
         <a [href]="settings.whatsappHref()" target="_blank" rel="noopener" (click)="analytics.event('click_whatsapp', { location: 'contact' })"
           class="flex items-center gap-4 rounded-2xl border border-kc-line bg-white p-5 hover:border-kc-teal">
-          <span class="inline-flex size-12 items-center justify-center rounded-xl bg-[#1c8a43] text-white"><kc-icon name="whatsapp" /></span>
+          <span class="inline-flex size-12 items-center justify-center rounded-xl bg-[#15773a] text-white"><kc-icon name="whatsapp" /></span>
           <span><span class="block text-sm text-kc-muted">WhatsApp</span><span class="text-lg font-semibold">Chat with us</span></span>
         </a>
         <a [href]="settings.mailHref()" class="flex items-center gap-4 rounded-2xl border border-kc-line bg-white p-5 hover:border-kc-teal">

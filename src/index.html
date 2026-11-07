@@ -13,14 +13,32 @@
   <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <link rel="manifest" href="site.webmanifest">
 
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;500;600;700&display=swap">
+  <!-- Fonts used in the first screen; the other weights load when needed. -->
+  <link rel="preload" href="/fonts/poppins-400.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/poppins-500.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/poppins-600.woff2" as="font" type="font/woff2" crossorigin>
+  <link rel="preload" href="/fonts/poppins-700.woff2" as="font" type="font/woff2" crossorigin>
 
   <!-- ===== Google tags: copied unchanged from the live site. Do not edit. ===== -->
     <!-- Google tag (gtag.js) -->
   <!-- ✅ Google tag (gtag.js) – single loader for both GA4 + Ads -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=G-F0DRP723DL"></script>
+  <!-- IDs, config and events are unchanged. Only the two Google script files are fetched
+       after the first scroll/tap/key or 3.5 s (whichever is first), so they don't slow the
+       first screen. Everything sent before that waits in dataLayer and is delivered. -->
+  <script>
+    window.kcLoadTag = function (src) {
+      var go = function () {
+        if (go.done) return; go.done = true;
+        var j = document.createElement('script'); j.async = true; j.src = src;
+        document.head.appendChild(j);
+      };
+      ['scroll', 'pointerdown', 'keydown', 'touchstart'].forEach(function (e) {
+        addEventListener(e, go, { once: true, passive: true });
+      });
+      addEventListener('load', function () { setTimeout(go, 3500); });
+    };
+    kcLoadTag('https://www.googletagmanager.com/gtag/js?id=G-F0DRP723DL');
+  </script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag() { dataLayer.push(arguments); }
@@ -35,9 +53,8 @@
 
 <!-- Google Tag Manager -->
 <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+new Date().getTime(),event:'gtm.js'});var dl=l!='dataLayer'?'&l='+l:'';w.kcLoadTag(
+'https://www.googletagmanager.com/gtm.js?id='+i+dl);
 })(window,document,'script','dataLayer','GTM-53VC3R5Q');</script>
 <!-- End Google Tag Manager -->
   <!-- ===== End Google tags ===== -->

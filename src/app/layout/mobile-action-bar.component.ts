@@ -22,7 +22,7 @@ import { IconComponent } from '../shared/components/icon/icon.component';
         target="_blank"
         rel="noopener"
         (click)="analytics.event('click_whatsapp', { location: 'mobile_bar' })"
-        class="flex h-12 items-center justify-center gap-2 rounded-xl bg-[#1c8a43] font-semibold text-white"
+        class="flex h-12 items-center justify-center gap-2 rounded-xl bg-[#15773a] font-semibold text-white"
       >
         <kc-icon name="whatsapp" [size]="20" /> WhatsApp
       </a>

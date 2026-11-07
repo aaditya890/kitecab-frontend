@@ -1,30 +1,64 @@
-<!-- Hero + booking -->
-<section class="relative overflow-hidden bg-kc-night text-white">
-  <div class="pointer-events-none absolute -top-40 -right-40 size-[520px] rounded-full bg-kc-teal/40 blur-3xl" aria-hidden="true"></div>
-  <div class="relative mx-auto grid max-w-6xl gap-10 px-4 py-10 lg:grid-cols-[1fr_460px] lg:items-center lg:py-16">
-    <div>
-      <p class="inline-flex items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm text-kc-yellow">Raipur · Bilaspur · Durg · Bhilai · Korba · Raigarh</p>
-      <h1 class="mt-5 text-4xl leading-tight font-bold sm:text-5xl">
+<!-- Hero + booking: on phones the form is in the first screen (headline → form → trust → text). -->
+<section
+  class="relative overflow-hidden bg-kc-night text-white"
+  style="background-image: radial-gradient(520px circle at 100% 0%, rgb(7 88 105 / 0.55), transparent 70%), radial-gradient(420px circle at 0% 100%, rgb(252 185 36 / 0.1), transparent 70%)"
+>
+  <div
+    class="relative mx-auto grid max-w-6xl gap-x-12 gap-y-5 px-4 pt-5 pb-8 lg:grid-cols-[1fr_470px] lg:grid-rows-[auto_auto_1fr] lg:py-16"
+  >
+    <!-- 1. headline -->
+    <div class="lg:col-start-1 lg:row-start-1">
+      <p class="hidden items-center gap-2 rounded-full bg-white/10 px-3 py-1 text-sm text-kc-yellow sm:inline-flex">
+        Raipur · Bilaspur · Durg · Bhilai · Korba · Raigarh · Nagpur
+      </p>
+      <h1 class="text-[1.7rem] leading-tight font-bold sm:mt-5 sm:text-5xl">
         Taxi service in <span class="text-kc-yellow">Chhattisgarh</span>
       </h1>
-      <p class="mt-5 max-w-xl text-lg leading-relaxed text-white/80">
-        One way, round trip, airport and local rental cabs across every city of Chhattisgarh and to Nagpur. See the fare
-        for Hatchback, Sedan and SUV before you book — pay only for your drop on one way trips.
+      <p class="mt-1.5 text-sm text-white/75 sm:mt-3 sm:text-lg">
+        One way, round trip, airport and rental cabs — see the fare instantly.
       </p>
-      <ul class="mt-7 grid max-w-xl grid-cols-2 gap-3 text-sm">
-        <li class="flex items-center gap-2"><span class="text-kc-yellow" aria-hidden="true">✓</span> Fares shown up front</li>
-        <li class="flex items-center gap-2"><span class="text-kc-yellow" aria-hidden="true">✓</span> No return fare on one way</li>
-        <li class="flex items-center gap-2"><span class="text-kc-yellow" aria-hidden="true">✓</span> Call or WhatsApp any time</li>
-        <li class="flex items-center gap-2"><span class="text-kc-yellow" aria-hidden="true">✓</span> Hatchback, Sedan and SUV</li>
-      </ul>
     </div>
-    <div class="text-kc-ink">
+
+    <!-- 2. booking form (right column on desktop) -->
+    <div id="book" class="scroll-mt-24 text-kc-ink lg:col-start-2 lg:row-span-3 lg:row-start-1 lg:self-center">
       <kc-booking-widget />
     </div>
+
+    <!-- 3. trust points -->
+    <ul class="grid grid-cols-2 gap-x-3 gap-y-2.5 text-sm lg:col-start-1 lg:row-start-2 lg:mt-2 lg:max-w-xl lg:text-base">
+      @for (t of trust; track t) {
+        <li class="flex items-start gap-2">
+          <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-kc-yellow text-xs font-bold text-kc-night" aria-hidden="true">✓</span>
+          {{ t }}
+        </li>
+      }
+    </ul>
+
+    <!-- 4. longer text (for people and Google) -->
+    <p class="max-w-xl text-base leading-relaxed text-white/75 lg:col-start-1 lg:row-start-3 lg:text-lg">
+      One way, round trip, airport and local rental cabs across every city of Chhattisgarh and to Nagpur. See the fare
+      for Hatchback, Sedan and SUV before you book — pay only for your drop on one way trips, and just {{ advance }}%
+      advance online to confirm.
+    </p>
   </div>
 </section>
 
 <div class="mx-auto max-w-6xl space-y-20 px-4 py-14">
+  <!-- How it works -->
+  <section aria-labelledby="how-h">
+    <h2 id="how-h" class="text-3xl font-semibold">Book a cab in 3 steps</h2>
+    <ol class="mt-8 grid gap-5 sm:grid-cols-3">
+      @for (s of steps; track s.title; let i = $index) {
+        <li class="relative rounded-2xl border border-kc-line bg-white p-6">
+          <span class="grid size-10 place-items-center rounded-full bg-kc-teal text-lg font-bold text-white" aria-hidden="true">{{ i + 1 }}</span>
+          <h3 class="mt-4 text-lg font-semibold">{{ s.title }}</h3>
+          <p class="mt-2 text-sm leading-relaxed text-kc-muted">{{ s.text }}</p>
+        </li>
+      }
+    </ol>
+    <a href="#book" class="mt-6 inline-flex h-12 items-center rounded-xl bg-kc-yellow px-6 font-bold text-kc-night hover:bg-kc-yellow-dark">Check your fare</a>
+  </section>
+
   <!-- Services -->
   <section aria-labelledby="services-h">
     <h2 id="services-h" class="text-3xl font-semibold">Cab services across Chhattisgarh</h2>

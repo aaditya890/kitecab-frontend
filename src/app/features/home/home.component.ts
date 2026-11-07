@@ -2,7 +2,13 @@ import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { SITE } from '../../core/config/site.config';
-import { FaqItem, faqPage, graph, localBusiness, website } from '../../core/seo/schema';
+import {
+  FaqItem,
+  faqPage,
+  graph,
+  localBusiness,
+  website,
+} from '../../core/seo/schema';
 import { SeoService } from '../../core/services/seo.service';
 import { inr, lowestFare, rentalDisplay } from '../../core/utils/fare';
 import { cityPath, HUBS } from '../../data/places';
@@ -15,7 +21,13 @@ import { RouteLinksComponent } from '../../shared/components/route-links.compone
 
 @Component({
   selector: 'kc-home',
-  imports: [RouterLink, BookingWidgetComponent, CtaBandComponent, FaqComponent, RouteLinksComponent],
+  imports: [
+    RouterLink,
+    BookingWidgetComponent,
+    CtaBandComponent,
+    FaqComponent,
+    RouteLinksComponent,
+  ],
   templateUrl: './home.component.html',
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
@@ -25,14 +37,43 @@ export class HomeComponent {
   protected readonly seats = SITE.fares.seats;
   protected readonly advance = SITE.fares.advancePercent;
   protected readonly popular = SEO_ROUTES.slice(0, 9);
+  protected readonly steps = [
+    {
+      title: 'Enter pickup and drop',
+      text: 'Choose one way, round trip or local rental and type your cities. No sign-up needed.',
+    },
+    {
+      title: 'See the fare and pick a car',
+      text: 'Fixed fares for Hatchback, Sedan and SUV appear instantly. Pick one and add your pickup time.',
+    },
+    {
+      title: `Pay ${SITE.fares.advancePercent}% and relax`,
+      text: 'Pay a small advance by UPI or card to confirm. Driver and car details come on WhatsApp before pickup.',
+    },
+  ];
+  protected readonly trust = [
+    'Fixed fare shown before booking',
+    'No return fare on one way',
+    `Only ${SITE.fares.advancePercent}% advance online`,
+    'Call or WhatsApp 24×7',
+  ];
   protected readonly firstRental = RENTALS[0];
-  protected readonly rentalText = RENTALS[0] ? `${rentalDisplay(RENTALS[0])} from ${inr(RENTALS[0].hatchback)}` : '';
-  protected readonly lowest = Math.min(...SEO_ROUTES.map((r) => lowestFare(r.fares)));
+  protected readonly rentalText = RENTALS[0]
+    ? `${rentalDisplay(RENTALS[0])} from ${inr(RENTALS[0].hatchback)}`
+    : '';
+  protected readonly lowest = Math.min(
+    ...SEO_ROUTES.map((r) => lowestFare(r.fares)),
+  );
 
   /** City cards with the cheapest route from each city. */
   protected readonly cities = HUBS.map((h) => {
     const routes = routesFor(h.key, 50);
-    return { ...h, from: routes.length ? Math.min(...routes.map((r) => lowestFare(r.fares))) : null };
+    return {
+      ...h,
+      from: routes.length
+        ? Math.min(...routes.map((r) => lowestFare(r.fares)))
+        : null,
+    };
   });
 
   protected readonly faqs: FaqItem[] = [
@@ -81,6 +122,8 @@ export class HomeComponent {
 
   private fare(slug: string): string {
     const r = SEO_ROUTES.find((x) => x.slug === slug);
-    return r ? `${inr(r.fares.Hatchback)} for a Hatchback, ${inr(r.fares.Sedan)} for a Sedan and ${inr(r.fares.SUV)} for an SUV` : 'see the booking form for the latest fare';
+    return r
+      ? `${inr(r.fares.Hatchback)} for a Hatchback, ${inr(r.fares.Sedan)} for a Sedan and ${inr(r.fares.SUV)} for an SUV`
+      : 'see the booking form for the latest fare';
   }
 }

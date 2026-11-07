@@ -37,7 +37,7 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
             (click)="analytics.event('click_whatsapp', { location: 'header' })"
             class="hidden h-11 items-center gap-2 rounded-xl border border-kc-line px-4 text-sm font-medium text-kc-ink hover:bg-kc-surface xl:inline-flex"
           >
-            <kc-icon name="whatsapp" class="text-[#1c8a43]" /> WhatsApp
+            <kc-icon name="whatsapp" class="text-[#15773a]" /> WhatsApp
           </a>
           <a
             [href]="settings.telHref()"

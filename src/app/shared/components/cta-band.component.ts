@@ -21,7 +21,7 @@ import { IconComponent } from './icon/icon.component';
         </a>
         <a [href]="settings.whatsappHref()" target="_blank" rel="noopener" (click)="analytics.event('click_whatsapp', { location: 'cta_band' })"
           class="inline-flex h-12 items-center gap-2 rounded-xl bg-white px-5 font-semibold text-kc-ink hover:bg-kc-surface">
-          <kc-icon name="whatsapp" class="text-[#1c8a43]" /> WhatsApp
+          <kc-icon name="whatsapp" class="text-[#15773a]" /> WhatsApp
         </a>
       </div>
     </section>
