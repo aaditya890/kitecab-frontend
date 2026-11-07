@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AdminDbService } from '../core/admin-db.service';
@@ -63,35 +58,20 @@ const blankVehicle = (): Vehicle => ({
   template: `
     <h1 class="kc-adm-h1">Drivers and cars</h1>
     <p class="mt-1 text-sm text-kc-muted">
-      Only <b>approved</b> drivers and <b>active</b> cars can be assigned to
-      bookings. Red dates have expired or expire within 30 days.
+      Only <b>approved</b> drivers and <b>active</b> cars can be assigned to bookings. Red dates have expired or expire
+      within 30 days.
     </p>
 
     <div class="mt-5 grid gap-5 xl:grid-cols-2">
       <section class="kc-adm-card overflow-hidden">
-        <div
-          class="flex items-center justify-between border-b border-kc-line px-4 py-3"
-        >
+        <div class="flex items-center justify-between border-b border-kc-line px-4 py-3">
           <h2 class="font-semibold">Drivers ({{ drivers().length }})</h2>
-          <button
-            type="button"
-            class="kc-adm-btn-primary"
-            (click)="d = blankDriver()"
-          >
-            + Add driver
-          </button>
+          <button type="button" class="kc-adm-btn-primary" (click)="d = blankDriver()">+ Add driver</button>
         </div>
         @if (d) {
-          <form
-            class="grid gap-3 border-b border-kc-line bg-kc-surface p-4 sm:grid-cols-2"
-            (ngSubmit)="saveDriver()"
-          >
+          <form class="grid gap-3 border-b border-kc-line bg-kc-surface p-4 sm:grid-cols-2" (ngSubmit)="saveDriver()">
             <label class="text-sm"
-              >Name<input
-                class="kc-adm-input mt-1 w-full"
-                name="n"
-                required
-                [(ngModel)]="d.full_name"
+              >Name<input class="kc-adm-input mt-1 w-full" name="n" required [(ngModel)]="d.full_name"
             /></label>
             <label class="text-sm"
               >Mobile (10 digits)<input
@@ -102,28 +82,18 @@ const blankVehicle = (): Vehicle => ({
                 [(ngModel)]="d.mobile"
             /></label>
             <label class="text-sm"
-              >Other mobile<input
-                class="kc-adm-input mt-1 w-full"
-                name="am"
-                [(ngModel)]="d.alt_mobile"
+              >Other mobile<input class="kc-adm-input mt-1 w-full" name="am" [(ngModel)]="d.alt_mobile"
             /></label>
             <label class="text-sm"
               >Status
-              <select
-                class="kc-adm-input mt-1 w-full"
-                name="s"
-                [(ngModel)]="d.status"
-              >
+              <select class="kc-adm-input mt-1 w-full" name="s" [(ngModel)]="d.status">
                 <option value="approved">approved</option>
                 <option value="pending">pending</option>
                 <option value="suspended">suspended</option>
               </select>
             </label>
             <label class="text-sm"
-              >Licence no.<input
-                class="kc-adm-input mt-1 w-full"
-                name="l"
-                [(ngModel)]="d.license_no"
+              >Licence no.<input class="kc-adm-input mt-1 w-full" name="l" [(ngModel)]="d.license_no"
             /></label>
             <label class="text-sm"
               >Licence expiry<input
@@ -133,18 +103,13 @@ const blankVehicle = (): Vehicle => ({
                 [(ngModel)]="d.license_expiry"
             /></label>
             <label class="text-sm sm:col-span-2"
-              >Notes<input
-                class="kc-adm-input mt-1 w-full"
-                name="no"
-                [(ngModel)]="d.notes"
+              >Notes<input class="kc-adm-input mt-1 w-full" name="no" [(ngModel)]="d.notes"
             /></label>
             <div class="flex gap-2 sm:col-span-2">
               <button class="kc-adm-btn-primary" type="submit">
                 {{ d.id ? 'Save driver' : 'Add driver' }}
               </button>
-              <button class="kc-adm-btn" type="button" (click)="d = null">
-                Cancel
-              </button>
+              <button class="kc-adm-btn" type="button" (click)="d = null">Cancel</button>
             </div>
           </form>
         }
@@ -165,17 +130,11 @@ const blankVehicle = (): Vehicle => ({
                   <td class="font-medium">
                     {{ x.full_name }}
                     @if (x.notes) {
-                      <br /><span class="text-xs font-normal text-kc-muted">{{
-                        x.notes
-                      }}</span>
+                      <br /><span class="text-xs font-normal text-kc-muted">{{ x.notes }}</span>
                     }
                   </td>
                   <td>
-                    <a
-                      class="text-kc-teal hover:underline"
-                      [href]="'tel:+91' + x.mobile"
-                      >{{ x.mobile }}</a
-                    >
+                    <a class="text-kc-teal hover:underline" [href]="'tel:+91' + x.mobile">{{ x.mobile }}</a>
                   </td>
                   <td>
                     {{ x.license_no || '-' }}<br /><span
@@ -186,20 +145,12 @@ const blankVehicle = (): Vehicle => ({
                   </td>
                   <td><kc-badge [value]="x.status" /></td>
                   <td>
-                    <button
-                      type="button"
-                      class="kc-adm-btn"
-                      (click)="d = { ...x }"
-                    >
-                      Edit
-                    </button>
+                    <button type="button" class="kc-adm-btn" (click)="d = { ...x }">Edit</button>
                   </td>
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="5" class="py-6 text-center text-kc-muted">
-                    No drivers yet.
-                  </td>
+                  <td colspan="5" class="py-6 text-center text-kc-muted">No drivers yet.</td>
                 </tr>
               }
             </tbody>
@@ -208,23 +159,12 @@ const blankVehicle = (): Vehicle => ({
       </section>
 
       <section class="kc-adm-card overflow-hidden">
-        <div
-          class="flex items-center justify-between border-b border-kc-line px-4 py-3"
-        >
+        <div class="flex items-center justify-between border-b border-kc-line px-4 py-3">
           <h2 class="font-semibold">Cars ({{ vehicles().length }})</h2>
-          <button
-            type="button"
-            class="kc-adm-btn-primary"
-            (click)="v = blankVehicle()"
-          >
-            + Add car
-          </button>
+          <button type="button" class="kc-adm-btn-primary" (click)="v = blankVehicle()">+ Add car</button>
         </div>
         @if (v) {
-          <form
-            class="grid gap-3 border-b border-kc-line bg-kc-surface p-4 sm:grid-cols-2"
-            (ngSubmit)="saveVehicle()"
-          >
+          <form class="grid gap-3 border-b border-kc-line bg-kc-surface p-4 sm:grid-cols-2" (ngSubmit)="saveVehicle()">
             <label class="text-sm"
               >Car number<input
                 class="kc-adm-input mt-1 w-full uppercase"
@@ -235,11 +175,7 @@ const blankVehicle = (): Vehicle => ({
             /></label>
             <label class="text-sm"
               >Type
-              <select
-                class="kc-adm-input mt-1 w-full"
-                name="t"
-                [(ngModel)]="v.car_type"
-              >
+              <select class="kc-adm-input mt-1 w-full" name="t" [(ngModel)]="v.car_type">
                 @for (c of cars; track c) {
                   <option [value]="c">{{ c }}</option>
                 }
@@ -253,19 +189,11 @@ const blankVehicle = (): Vehicle => ({
                 [(ngModel)]="v.model"
             /></label>
             <label class="text-sm"
-              >Seats<input
-                class="kc-adm-input mt-1 w-full"
-                type="number"
-                name="se"
-                [(ngModel)]="v.seats"
+              >Seats<input class="kc-adm-input mt-1 w-full" type="number" name="se" [(ngModel)]="v.seats"
             /></label>
             <label class="text-sm sm:col-span-2"
               >Usual driver
-              <select
-                class="kc-adm-input mt-1 w-full"
-                name="dr"
-                [(ngModel)]="v.driver_id"
-              >
+              <select class="kc-adm-input mt-1 w-full" name="dr" [(ngModel)]="v.driver_id">
                 <option [ngValue]="null">— none —</option>
                 @for (x of drivers(); track x.id) {
                   <option [ngValue]="x.id">{{ x.full_name }}</option>
@@ -280,30 +208,19 @@ const blankVehicle = (): Vehicle => ({
                 [(ngModel)]="v.insurance_expiry"
             /></label>
             <label class="text-sm"
-              >Permit expiry<input
-                class="kc-adm-input mt-1 w-full"
-                type="date"
-                name="pe"
-                [(ngModel)]="v.permit_expiry"
+              >Permit expiry<input class="kc-adm-input mt-1 w-full" type="date" name="pe" [(ngModel)]="v.permit_expiry"
             /></label>
             <label class="text-sm"
-              >PUC expiry<input
-                class="kc-adm-input mt-1 w-full"
-                type="date"
-                name="pu"
-                [(ngModel)]="v.puc_expiry"
+              >PUC expiry<input class="kc-adm-input mt-1 w-full" type="date" name="pu" [(ngModel)]="v.puc_expiry"
             /></label>
             <label class="flex items-center gap-2 text-sm"
-              ><input type="checkbox" name="a" [(ngModel)]="v.is_active" />
-              Active</label
+              ><input type="checkbox" name="a" [(ngModel)]="v.is_active" /> Active</label
             >
             <div class="flex gap-2 sm:col-span-2">
               <button class="kc-adm-btn-primary" type="submit">
                 {{ v.id ? 'Save car' : 'Add car' }}
               </button>
-              <button class="kc-adm-btn" type="button" (click)="v = null">
-                Cancel
-              </button>
+              <button class="kc-adm-btn" type="button" (click)="v = null">Cancel</button>
             </div>
           </form>
         }
@@ -321,40 +238,25 @@ const blankVehicle = (): Vehicle => ({
               @for (x of vehicles(); track x.id) {
                 <tr [class.opacity-50]="!x.is_active">
                   <td class="font-medium">
-                    {{ x.registration_no }}<br /><span
-                      class="text-xs font-normal text-kc-muted"
+                    {{ x.registration_no }}<br /><span class="text-xs font-normal text-kc-muted"
                       >{{ x.car_type }} · {{ x.model || '-' }}</span
                     >
                   </td>
                   <td>{{ driverName(x.driver_id) }}</td>
                   <td class="text-xs">
-                    <span [class.text-red-700]="soon(x.insurance_expiry)">{{
-                      day(x.insurance_expiry)
-                    }}</span>
+                    <span [class.text-red-700]="soon(x.insurance_expiry)">{{ day(x.insurance_expiry) }}</span>
                     /
-                    <span [class.text-red-700]="soon(x.permit_expiry)">{{
-                      day(x.permit_expiry)
-                    }}</span>
+                    <span [class.text-red-700]="soon(x.permit_expiry)">{{ day(x.permit_expiry) }}</span>
                     /
-                    <span [class.text-red-700]="soon(x.puc_expiry)">{{
-                      day(x.puc_expiry)
-                    }}</span>
+                    <span [class.text-red-700]="soon(x.puc_expiry)">{{ day(x.puc_expiry) }}</span>
                   </td>
                   <td>
-                    <button
-                      type="button"
-                      class="kc-adm-btn"
-                      (click)="v = { ...x }"
-                    >
-                      Edit
-                    </button>
+                    <button type="button" class="kc-adm-btn" (click)="v = { ...x }">Edit</button>
                   </td>
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="4" class="py-6 text-center text-kc-muted">
-                    No cars yet.
-                  </td>
+                  <td colspan="4" class="py-6 text-center text-kc-muted">No cars yet.</td>
                 </tr>
               }
             </tbody>
@@ -387,15 +289,11 @@ export class DriversComponent {
     const [d, v] = await Promise.all([
       db
         .from('drivers')
-        .select(
-          'id,full_name,mobile,alt_mobile,license_no,license_expiry,status,notes',
-        )
+        .select('id,full_name,mobile,alt_mobile,license_no,license_expiry,status,notes')
         .order('full_name'),
       db
         .from('vehicles')
-        .select(
-          'id,driver_id,registration_no,car_type,model,seats,insurance_expiry,permit_expiry,puc_expiry,is_active',
-        )
+        .select('id,driver_id,registration_no,car_type,model,seats,insurance_expiry,permit_expiry,puc_expiry,is_active')
         .order('registration_no'),
     ]);
     if (d.error || v.error) this.toast.error(d.error ?? v.error);
@@ -430,12 +328,7 @@ export class DriversComponent {
     const db = await this.db.db();
     if (
       await this.toast.run(
-        async () =>
-          ok(
-            id
-              ? await db.from('drivers').update(data).eq('id', id)
-              : await db.from('drivers').insert(data),
-          ),
+        async () => ok(id ? await db.from('drivers').update(data).eq('id', id) : await db.from('drivers').insert(data)),
         'Driver saved',
       )
     ) {
@@ -462,11 +355,7 @@ export class DriversComponent {
     if (
       await this.toast.run(
         async () =>
-          ok(
-            id
-              ? await db.from('vehicles').update(data).eq('id', id)
-              : await db.from('vehicles').insert(data),
-          ),
+          ok(id ? await db.from('vehicles').update(data).eq('id', id) : await db.from('vehicles').insert(data)),
         'Car saved',
       )
     ) {

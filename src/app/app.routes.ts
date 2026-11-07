@@ -2,25 +2,15 @@ import { Routes } from '@angular/router';
 
 import { PublicLayoutComponent } from './layout/public-layout.component';
 
-const notFound = () =>
-  import('./features/not-found/not-found.component').then(
-    (m) => m.NotFoundComponent,
-  );
-const service = () =>
-  import('./features/services/service-page.component').then(
-    (m) => m.ServicePageComponent,
-  );
-const city = () =>
-  import('./features/cities/city-page.component').then(
-    (m) => m.CityPageComponent,
-  );
+const notFound = () => import('./features/not-found/not-found.component').then((m) => m.NotFoundComponent);
+const service = () => import('./features/services/service-page.component').then((m) => m.ServicePageComponent);
+const city = () => import('./features/cities/city-page.component').then((m) => m.CityPageComponent);
 
 export const routes: Routes = [
   // Admin panel: own layout, browser-only, its code loads only when /admin is opened.
   {
     path: 'admin',
-    loadChildren: () =>
-      import('./admin/admin.routes').then((m) => m.ADMIN_ROUTES),
+    loadChildren: () => import('./admin/admin.routes').then((m) => m.ADMIN_ROUTES),
   },
   {
     path: '',
@@ -28,24 +18,17 @@ export const routes: Routes = [
     children: [
       {
         path: '',
-        loadComponent: () =>
-          import('./features/home/home.component').then((m) => m.HomeComponent),
+        loadComponent: () => import('./features/home/home.component').then((m) => m.HomeComponent),
       },
 
       // SEO pages
       {
         path: 'taxi-routes',
-        loadComponent: () =>
-          import('./features/routes/routes-index.component').then(
-            (m) => m.RoutesIndexComponent,
-          ),
+        loadComponent: () => import('./features/routes/routes-index.component').then((m) => m.RoutesIndexComponent),
       },
       {
         path: 'taxi/:slug',
-        loadComponent: () =>
-          import('./features/routes/route-page.component').then(
-            (m) => m.RoutePageComponent,
-          ),
+        loadComponent: () => import('./features/routes/route-page.component').then((m) => m.RoutePageComponent),
       },
       { path: 'taxi-service/:city', loadComponent: city },
       {
@@ -71,40 +54,27 @@ export const routes: Routes = [
 
       {
         path: 'about-us',
-        loadComponent: () =>
-          import('./features/pages/about.component').then(
-            (m) => m.AboutComponent,
-          ),
+        loadComponent: () => import('./features/pages/about.component').then((m) => m.AboutComponent),
       },
       {
         path: 'contact-us',
-        loadComponent: () =>
-          import('./features/pages/contact.component').then(
-            (m) => m.ContactComponent,
-          ),
+        loadComponent: () => import('./features/pages/contact.component').then((m) => m.ContactComponent),
       },
 
       // Policy URLs are the same as the live site, so existing Google rankings are kept.
       {
         path: 'privacy-policies',
         loadComponent: () =>
-          import('./features/policies/privacy-policy.component').then(
-            (m) => m.PrivacyPolicyComponent,
-          ),
+          import('./features/policies/privacy-policy.component').then((m) => m.PrivacyPolicyComponent),
       },
       {
         path: 'terms-and-conditions',
         loadComponent: () =>
-          import('./features/policies/terms-and-conditions.component').then(
-            (m) => m.TermsAndConditionsComponent,
-          ),
+          import('./features/policies/terms-and-conditions.component').then((m) => m.TermsAndConditionsComponent),
       },
       {
         path: 'refund-policy',
-        loadComponent: () =>
-          import('./features/policies/refund-policy.component').then(
-            (m) => m.RefundPolicyComponent,
-          ),
+        loadComponent: () => import('./features/policies/refund-policy.component').then((m) => m.RefundPolicyComponent),
       },
 
       // Prerendered as /404/index.html; CloudFront serves it (with status 404) for unknown URLs.

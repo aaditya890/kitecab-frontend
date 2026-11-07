@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { AdminDbService } from '../core/admin-db.service';
@@ -70,30 +64,19 @@ const CHART_H = 160;
         <p class="text-sm text-kc-muted">{{ todayLabel }}</p>
       </div>
       <div class="flex items-center gap-2">
-        <div
-          class="flex rounded-lg border border-kc-line bg-white p-0.5"
-          role="group"
-          aria-label="Period"
-        >
+        <div class="flex rounded-lg border border-kc-line bg-white p-0.5" role="group" aria-label="Period">
           @for (d of ranges; track d) {
             <button
               type="button"
               class="rounded-md px-3 py-1 text-sm font-medium"
-              [class]="
-                days() === d ? 'bg-kc-teal text-white' : 'hover:bg-kc-surface'
-              "
+              [class]="days() === d ? 'bg-kc-teal text-white' : 'hover:bg-kc-surface'"
               (click)="setDays(d)"
             >
               {{ d === 365 ? '1 year' : d + ' days' }}
             </button>
           }
         </div>
-        <button
-          type="button"
-          class="kc-adm-btn"
-          (click)="load()"
-          [disabled]="loading()"
-        >
+        <button type="button" class="kc-adm-btn" (click)="load()" [disabled]="loading()">
           {{ loading() ? 'Loading…' : 'Refresh' }}
         </button>
       </div>
@@ -108,15 +91,10 @@ const CHART_H = 160;
     <!-- today -->
     @if (today(); as t) {
       <div class="mt-5 grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-5">
-        <a
-          routerLink="/admin/bookings"
-          class="kc-adm-card block p-4 hover:border-kc-teal"
-        >
+        <a routerLink="/admin/bookings" class="kc-adm-card block p-4 hover:border-kc-teal">
           <p class="text-xs font-medium text-kc-muted">New bookings today</p>
           <p class="mt-1 text-3xl font-semibold">{{ t.bookings_today }}</p>
-          <p class="mt-1 text-xs text-kc-muted">
-            Yesterday {{ t.bookings_yesterday }}
-          </p>
+          <p class="mt-1 text-xs text-kc-muted">Yesterday {{ t.bookings_yesterday }}</p>
         </a>
         <a
           routerLink="/admin/bookings"
@@ -135,10 +113,7 @@ const CHART_H = 160;
           [class.!bg-red-50]="t.pickups_no_driver > 0"
         >
           <p class="text-xs font-medium text-kc-muted">Today without driver</p>
-          <p
-            class="mt-1 text-3xl font-semibold"
-            [class.text-red-700]="t.pickups_no_driver > 0"
-          >
+          <p class="mt-1 text-3xl font-semibold" [class.text-red-700]="t.pickups_no_driver > 0">
             {{ t.pickups_no_driver }}
           </p>
           <p
@@ -155,23 +130,16 @@ const CHART_H = 160;
           class="kc-adm-card block p-4 hover:border-kc-teal"
           [class.!border-amber-300]="(stats()?.needs_driver ?? 0) > 0"
         >
-          <p class="text-xs font-medium text-kc-muted">
-            Next 7 days without driver
-          </p>
+          <p class="text-xs font-medium text-kc-muted">Next 7 days without driver</p>
           <p class="mt-1 text-3xl font-semibold">
             {{ stats()?.needs_driver ?? '–' }}
           </p>
           <p class="mt-1 text-xs text-kc-muted">Upcoming trips</p>
         </a>
-        <a
-          routerLink="/admin/enquiries"
-          class="kc-adm-card col-span-2 block p-4 hover:border-kc-teal md:col-span-1"
-        >
+        <a routerLink="/admin/enquiries" class="kc-adm-card col-span-2 block p-4 hover:border-kc-teal md:col-span-1">
           <p class="text-xs font-medium text-kc-muted">Price checks today</p>
           <p class="mt-1 text-3xl font-semibold">{{ t.enquiries_today }}</p>
-          <p class="mt-1 text-xs text-kc-muted">
-            Call the ones who didn't book
-          </p>
+          <p class="mt-1 text-xs text-kc-muted">Call the ones who didn't book</p>
         </a>
       </div>
     }
@@ -182,22 +150,14 @@ const CHART_H = 160;
         <div class="kc-adm-card p-4">
           <p class="text-xs font-medium text-kc-muted">Bookings this month</p>
           <p class="mt-1 text-2xl font-semibold">{{ s.month.bookings }}</p>
-          <p
-            class="mt-1 text-xs"
-            [class]="trendClass(s.month.bookings, s.month.prev_bookings)"
-          >
+          <p class="mt-1 text-xs" [class]="trendClass(s.month.bookings, s.month.prev_bookings)">
             {{ trend(s.month.bookings, s.month.prev_bookings) }}
           </p>
         </div>
         <div class="kc-adm-card p-4">
-          <p class="text-xs font-medium text-kc-muted">
-            Fare booked this month
-          </p>
+          <p class="text-xs font-medium text-kc-muted">Fare booked this month</p>
           <p class="mt-1 text-2xl font-semibold">{{ rs(s.month.fare) }}</p>
-          <p
-            class="mt-1 text-xs"
-            [class]="trendClass(s.month.fare, s.month.prev_fare)"
-          >
+          <p class="mt-1 text-xs" [class]="trendClass(s.month.fare, s.month.prev_fare)">
             {{ trend(s.month.fare, s.month.prev_fare) }}
           </p>
         </div>
@@ -206,22 +166,15 @@ const CHART_H = 160;
           [queryParams]="{ status: 'PAID' }"
           class="kc-adm-card block p-4 hover:border-kc-teal"
         >
-          <p class="text-xs font-medium text-kc-muted">
-            Advance received · {{ rangeLabel() }}
-          </p>
+          <p class="text-xs font-medium text-kc-muted">Advance received · {{ rangeLabel() }}</p>
           <p class="mt-1 text-2xl font-semibold">{{ rs(s.advance.paid) }}</p>
-          <p class="mt-1 text-xs text-kc-muted">
-            {{ s.advance.paid_n }} paid · {{ s.advance.pending_n }} links unpaid
-          </p>
+          <p class="mt-1 text-xs text-kc-muted">{{ s.advance.paid_n }} paid · {{ s.advance.pending_n }} links unpaid</p>
         </a>
         <div class="kc-adm-card p-4">
-          <p class="text-xs font-medium text-kc-muted">
-            Price checks → bookings · {{ rangeLabel() }}
-          </p>
+          <p class="text-xs font-medium text-kc-muted">Price checks → bookings · {{ rangeLabel() }}</p>
           <p class="mt-1 text-2xl font-semibold">{{ conversion() }}</p>
           <p class="mt-1 text-xs text-kc-muted">
-            {{ totals().bookings }} bookings from {{ totals().enquiries }} price
-            checks
+            {{ totals().bookings }} bookings from {{ totals().enquiries }} price checks
           </p>
         </div>
       </div>
@@ -230,9 +183,7 @@ const CHART_H = 160;
       <section class="kc-adm-card mt-5 p-4">
         <div class="flex flex-wrap items-baseline justify-between gap-2">
           <h2 class="font-semibold">Bookings per day · {{ rangeLabel() }}</h2>
-          <p class="text-sm text-kc-muted">
-            Total {{ totals().bookings }} · best day {{ best()?.bookings ?? 0 }}
-          </p>
+          <p class="text-sm text-kc-muted">Total {{ totals().bookings }} · best day {{ best()?.bookings ?? 0 }}</p>
         </div>
         <div class="relative mt-4" (mouseleave)="hover.set(-1)">
           <svg
@@ -254,11 +205,7 @@ const CHART_H = 160;
               />
             }
             @for (b of chart().bars; track b.day; let i = $index) {
-              <path
-                [attr.d]="b.path"
-                [attr.fill]="bar"
-                [attr.opacity]="hover() === -1 || hover() === i ? 1 : 0.45"
-              />
+              <path [attr.d]="b.path" [attr.fill]="bar" [attr.opacity]="hover() === -1 || hover() === i ? 1 : 0.45" />
               <rect
                 [attr.x]="b.x - b.gap / 2"
                 y="0"
@@ -270,9 +217,7 @@ const CHART_H = 160;
               />
             }
           </svg>
-          <div
-            class="pointer-events-none absolute top-0 left-0 text-[11px] text-kc-muted"
-          >
+          <div class="pointer-events-none absolute top-0 left-0 text-[11px] text-kc-muted">
             {{ chart().max }}
           </div>
           <div class="mt-1 flex justify-between text-[11px] text-kc-muted">
@@ -326,11 +271,7 @@ const CHART_H = 160;
                   ><span class="text-kc-muted">{{ r.n }} · {{ r.pct }}%</span>
                 </div>
                 <div class="mt-1 h-2 rounded-full bg-kc-surface">
-                  <div
-                    class="h-2 rounded-full"
-                    [style.width.%]="r.pct"
-                    [style.background]="bar"
-                  ></div>
+                  <div class="h-2 rounded-full" [style.width.%]="r.pct" [style.background]="bar"></div>
                 </div>
               </li>
             }
@@ -338,9 +279,7 @@ const CHART_H = 160;
           <h3 class="mt-6 text-sm font-semibold">Status</h3>
           <div class="mt-2 flex flex-wrap gap-2">
             @for (st of statusRows(); track st.key) {
-              <a
-                routerLink="/admin/bookings"
-                class="flex items-center gap-1.5 text-sm"
+              <a routerLink="/admin/bookings" class="flex items-center gap-1.5 text-sm"
                 ><kc-badge [value]="st.key" /> {{ st.n }}</a
               >
             }
@@ -349,9 +288,7 @@ const CHART_H = 160;
 
         <!-- top routes -->
         <section class="kc-adm-card overflow-hidden">
-          <h2 class="border-b border-kc-line px-4 py-3 font-semibold">
-            Top routes · {{ rangeLabel() }}
-          </h2>
+          <h2 class="border-b border-kc-line px-4 py-3 font-semibold">Top routes · {{ rangeLabel() }}</h2>
           <div class="overflow-x-auto">
             <table class="kc-adm-table">
               <thead>
@@ -370,9 +307,7 @@ const CHART_H = 160;
                   </tr>
                 } @empty {
                   <tr>
-                    <td colspan="3" class="py-6 text-center text-kc-muted">
-                      No bookings in this period.
-                    </td>
+                    <td colspan="3" class="py-6 text-center text-kc-muted">No bookings in this period.</td>
                   </tr>
                 }
               </tbody>
@@ -384,9 +319,7 @@ const CHART_H = 160;
 
     <!-- upcoming -->
     <section class="kc-adm-card mt-5 overflow-hidden">
-      <h2 class="border-b border-kc-line px-4 py-3 font-semibold">
-        Pickups today and tomorrow
-      </h2>
+      <h2 class="border-b border-kc-line px-4 py-3 font-semibold">Pickups today and tomorrow</h2>
       <div class="overflow-x-auto">
         <table class="kc-adm-table">
           <thead>
@@ -404,38 +337,29 @@ const CHART_H = 160;
             @for (b of upcoming(); track b.id) {
               <tr>
                 <td>
-                  <a
-                    class="font-medium text-kc-teal hover:underline"
-                    [routerLink]="['/admin/bookings', b.id]"
+                  <a class="font-medium text-kc-teal hover:underline" [routerLink]="['/admin/bookings', b.id]"
                     >#{{ b.id }}</a
                   >
                 </td>
                 <td class="whitespace-nowrap">
-                  {{ day(b.pickup_date) }}<br /><span class="text-kc-muted">{{
-                    b.pickup_time
-                  }}</span>
+                  {{ day(b.pickup_date) }}<br /><span class="text-kc-muted">{{ b.pickup_time }}</span>
                 </td>
                 <td>
-                  {{ b.pickup_location }} →
-                  {{ b.drop_location || b.rental_package || '-' }}<br /><span
+                  {{ b.pickup_location }} → {{ b.drop_location || b.rental_package || '-' }}<br /><span
                     class="text-kc-muted"
                     >{{ typeLabel(b.booking_type) }} · {{ b.car_type }}</span
                   >
                 </td>
                 <td>
-                  {{ b.customer_name }}<br /><a
-                    class="text-kc-muted hover:underline"
-                    [href]="'tel:+91' + b.mobile"
-                    >{{ b.mobile }}</a
-                  >
+                  {{ b.customer_name }}<br /><a class="text-kc-muted hover:underline" [href]="'tel:+91' + b.mobile">{{
+                    b.mobile
+                  }}</a>
                 </td>
                 <td>
                   @if (b.driver_name) {
                     {{ b.driver_name }}
                   } @else {
-                    <a
-                      class="font-medium text-red-700 hover:underline"
-                      [routerLink]="['/admin/bookings', b.id]"
+                    <a class="font-medium text-red-700 hover:underline" [routerLink]="['/admin/bookings', b.id]"
                       >Assign driver</a
                     >
                   }
@@ -476,9 +400,7 @@ export class DashboardComponent {
   protected readonly error = signal('');
   protected readonly hover = signal(-1);
 
-  protected readonly rangeLabel = computed(() =>
-    this.days() === 365 ? 'last 1 year' : `last ${this.days()} days`,
-  );
+  protected readonly rangeLabel = computed(() => (this.days() === 365 ? 'last 1 year' : `last ${this.days()} days`));
 
   protected readonly totals = computed(() =>
     (this.stats()?.daily ?? []).reduce(
@@ -497,9 +419,7 @@ export class DashboardComponent {
   );
   protected readonly conversion = computed(() => {
     const t = this.totals();
-    return t.enquiries
-      ? `${Math.round((t.bookings / t.enquiries) * 100)}%`
-      : '–';
+    return t.enquiries ? `${Math.round((t.bookings / t.enquiries) * 100)}%` : '–';
   });
 
   /** Bars with rounded tops anchored to the baseline, 2px gaps; y scale on a nice max. */
@@ -563,8 +483,7 @@ export class DashboardComponent {
   }
 
   protected trend(now: number, prev: number): string {
-    if (!prev)
-      return now ? 'No data last month to compare' : 'Same days last month: 0';
+    if (!prev) return now ? 'No data last month to compare' : 'Same days last month: 0';
     const pct = Math.round(((now - prev) / prev) * 100);
     return `${pct >= 0 ? '▲' : '▼'} ${Math.abs(pct)}% vs same days last month`;
   }
@@ -575,9 +494,7 @@ export class DashboardComponent {
   }
 
   private async loadStats(): Promise<void> {
-    const { data, error } = await (
-      await this.db.db()
-    ).rpc('admin_stats', { p_days: this.days() });
+    const { data, error } = await (await this.db.db()).rpc('admin_stats', { p_days: this.days() });
     if (error) this.error.set(error.message);
     else this.stats.set(data as Stats);
   }

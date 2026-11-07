@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 
 import { AdminDbService } from '../core/admin-db.service';
@@ -49,13 +44,9 @@ const RT_NUMBERS = [
     <h1 class="kc-adm-h1">Local rental and round trip prices</h1>
 
     <section class="kc-adm-card mt-5 overflow-hidden">
-      <div
-        class="flex items-center justify-between border-b border-kc-line px-4 py-3"
-      >
+      <div class="flex items-center justify-between border-b border-kc-line px-4 py-3">
         <h2 class="font-semibold">Local rental packages</h2>
-        <button type="button" class="kc-adm-btn" (click)="addRental()">
-          + Add package
-        </button>
+        <button type="button" class="kc-adm-btn" (click)="addRental()">+ Add package</button>
       </div>
       <div class="overflow-x-auto">
         <table class="kc-adm-table">
@@ -74,55 +65,25 @@ const RT_NUMBERS = [
             @for (r of rentals(); track $index) {
               <tr>
                 <td>
-                  <input
-                    class="kc-adm-input w-20"
-                    type="number"
-                    [(ngModel)]="r.hours"
-                  />
+                  <input class="kc-adm-input w-20" type="number" [(ngModel)]="r.hours" />
                 </td>
                 <td>
-                  <input
-                    class="kc-adm-input w-20"
-                    type="number"
-                    [(ngModel)]="r.km"
-                  />
+                  <input class="kc-adm-input w-20" type="number" [(ngModel)]="r.km" />
                 </td>
                 <td>
-                  <input
-                    class="kc-adm-input w-24"
-                    type="number"
-                    [(ngModel)]="r.hatchback_price"
-                  />
+                  <input class="kc-adm-input w-24" type="number" [(ngModel)]="r.hatchback_price" />
                 </td>
                 <td>
-                  <input
-                    class="kc-adm-input w-24"
-                    type="number"
-                    [(ngModel)]="r.sedan_price"
-                  />
+                  <input class="kc-adm-input w-24" type="number" [(ngModel)]="r.sedan_price" />
                 </td>
                 <td>
-                  <input
-                    class="kc-adm-input w-24"
-                    type="number"
-                    [(ngModel)]="r.suv_price"
-                  />
+                  <input class="kc-adm-input w-24" type="number" [(ngModel)]="r.suv_price" />
                 </td>
                 <td>
-                  <input
-                    type="checkbox"
-                    [(ngModel)]="r.is_active"
-                    aria-label="Online"
-                  />
+                  <input type="checkbox" [(ngModel)]="r.is_active" aria-label="Online" />
                 </td>
                 <td>
-                  <button
-                    type="button"
-                    class="kc-adm-btn-primary"
-                    (click)="saveRental(r)"
-                  >
-                    Save
-                  </button>
+                  <button type="button" class="kc-adm-btn-primary" (click)="saveRental(r)">Save</button>
                 </td>
               </tr>
             }
@@ -134,9 +95,7 @@ const RT_NUMBERS = [
     <section class="kc-adm-card mt-5 overflow-hidden">
       <div class="border-b border-kc-line px-4 py-3">
         <h2 class="font-semibold">Round trip rates</h2>
-        <p class="mt-1 text-sm text-kc-muted">
-          Fare = per-km rate × approx km + base charge for the waiting time.
-        </p>
+        <p class="mt-1 text-sm text-kc-muted">Fare = per-km rate × approx km + base charge for the waiting time.</p>
       </div>
       <div class="overflow-x-auto">
         <table class="kc-adm-table">
@@ -161,28 +120,14 @@ const RT_NUMBERS = [
                 </td>
                 @for (k of rtNumbers; track k) {
                   <td>
-                    <input
-                      class="kc-adm-input w-20"
-                      type="number"
-                      [(ngModel)]="r[k]"
-                    />
+                    <input class="kc-adm-input w-20" type="number" [(ngModel)]="r[k]" />
                   </td>
                 }
                 <td>
-                  <input
-                    type="checkbox"
-                    [(ngModel)]="r.is_active"
-                    aria-label="Online"
-                  />
+                  <input type="checkbox" [(ngModel)]="r.is_active" aria-label="Online" />
                 </td>
                 <td>
-                  <button
-                    type="button"
-                    class="kc-adm-btn-primary"
-                    (click)="saveRoundTrip(r)"
-                  >
-                    Save
-                  </button>
+                  <button type="button" class="kc-adm-btn-primary" (click)="saveRoundTrip(r)">Save</button>
                 </td>
               </tr>
             }
@@ -190,8 +135,7 @@ const RT_NUMBERS = [
         </table>
       </div>
       <p class="px-4 py-3 text-sm text-kc-muted">
-        Example: 100 km Sedan with "1 day" waiting = 11 × 100 + 1500 = ₹2,600
-        (using the numbers above).
+        Example: 100 km Sedan with "1 day" waiting = 11 × 100 + 1500 = ₹2,600 (using the numbers above).
       </p>
     </section>
   `,
@@ -211,10 +155,7 @@ export class RatesComponent {
   private async load(): Promise<void> {
     const db = await this.db.db();
     const [r, t] = await Promise.all([
-      db
-        .from('rental_packages')
-        .select('id,hours,km,hatchback_price,sedan_price,suv_price,is_active')
-        .order('hours'),
+      db.from('rental_packages').select('id,hours,km,hatchback_price,sedan_price,suv_price,is_active').order('hours'),
       db.from('round_trip_rates').select('*').order('sort_order'),
     ]);
     this.rentals.set((r.data ?? []) as Rental[]);
@@ -240,15 +181,7 @@ export class RatesComponent {
   }
 
   protected async saveRental(r: Rental): Promise<void> {
-    if (
-      !this.positive(
-        r.hours,
-        r.km,
-        r.hatchback_price,
-        r.sedan_price,
-        r.suv_price,
-      )
-    ) {
+    if (!this.positive(r.hours, r.km, r.hatchback_price, r.sedan_price, r.suv_price)) {
       this.toast.error('All numbers must be whole numbers above 0.');
       return;
     }
@@ -286,15 +219,7 @@ export class RatesComponent {
     for (const k of RT_NUMBERS) patch[k] = Number(r[k]);
     if (
       await this.toast.run(
-        async () =>
-          ok(
-            await (
-              await this.db.db()
-            )
-              .from('round_trip_rates')
-              .update(patch)
-              .eq('id', r.id),
-          ),
+        async () => ok(await (await this.db.db()).from('round_trip_rates').update(patch).eq('id', r.id)),
         `${r.waiting_slot} saved`,
       )
     ) {

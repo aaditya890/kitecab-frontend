@@ -3,7 +3,12 @@ import { toApiError } from './api.service';
 
 describe('toApiError', () => {
   it('shows the server message (e.g. invalid mobile)', () => {
-    const err = toApiError(new HttpErrorResponse({ status: 400, error: { ok: false, message: 'mobile: enter a valid 10-digit mobile number' } }));
+    const err = toApiError(
+      new HttpErrorResponse({
+        status: 400,
+        error: { ok: false, message: 'mobile: enter a valid 10-digit mobile number' },
+      }),
+    );
     expect(err.status).toBe(400);
     expect(err.message).toContain('valid 10-digit mobile');
   });

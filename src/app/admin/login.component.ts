@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  input,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router } from '@angular/router';
 
@@ -16,10 +10,7 @@ import { AdminDbService } from './core/admin-db.service';
   imports: [FormsModule, LogoComponent],
   template: `
     <main class="grid min-h-dvh place-items-center bg-kc-surface px-4">
-      <form
-        class="w-full max-w-sm rounded-2xl border border-kc-line bg-white p-6 shadow-sm"
-        (ngSubmit)="submit()"
-      >
+      <form class="w-full max-w-sm rounded-2xl border border-kc-line bg-white p-6 shadow-sm" (ngSubmit)="submit()">
         <kc-logo class="mb-6 block" />
         <h1 class="text-xl font-semibold text-kc-ink">Admin login</h1>
         <label class="mt-5 block text-sm font-medium"
@@ -45,18 +36,11 @@ import { AdminDbService } from './core/admin-db.service';
           />
         </label>
         @if (error()) {
-          <p
-            class="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800"
-            role="alert"
-          >
+          <p class="mt-4 rounded-lg bg-red-50 px-3 py-2 text-sm text-red-800" role="alert">
             {{ error() }}
           </p>
         }
-        <button
-          class="kc-adm-btn-primary mt-6 w-full"
-          type="submit"
-          [disabled]="busy()"
-        >
+        <button class="kc-adm-btn-primary mt-6 w-full" type="submit" [disabled]="busy()">
           {{ busy() ? 'Checking…' : 'Log in' }}
         </button>
       </form>

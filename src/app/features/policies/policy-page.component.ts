@@ -21,15 +21,21 @@ import { SiteSettingsService } from '../../core/services/site-settings.service';
         <h2>Contact us</h2>
         <p>KiteCab Taxi Service</p>
         <ul>
-          <li>Phone and WhatsApp: <a [href]="settings.telHref()">{{ settings.contact().phoneDisplay }}</a></li>
-          <li>Email: <a [href]="settings.mailHref()">{{ settings.contact().email }}</a></li>
+          <li>
+            Phone and WhatsApp: <a [href]="settings.telHref()">{{ settings.contact().phoneDisplay }}</a>
+          </li>
+          <li>
+            Email: <a [href]="settings.mailHref()">{{ settings.contact().email }}</a>
+          </li>
           <li>Office: {{ settings.addressText() }}</li>
         </ul>
       </div>
 
       <nav aria-label="Other policies" class="mt-10 flex flex-wrap gap-2 border-t border-kc-line pt-6">
         @for (link of policies; track link.path) {
-          <a [routerLink]="link.path" class="rounded-lg border border-kc-line px-3 py-2 text-sm hover:bg-white">{{ link.label }}</a>
+          <a [routerLink]="link.path" class="rounded-lg border border-kc-line px-3 py-2 text-sm hover:bg-white">{{
+            link.label
+          }}</a>
         }
       </nav>
     </article>

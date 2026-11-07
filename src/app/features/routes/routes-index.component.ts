@@ -25,9 +25,9 @@ interface Group {
         <kc-breadcrumbs [items]="crumbs" />
         <h1 class="mt-4 text-3xl font-bold sm:text-4xl">Taxi routes and fares in Chhattisgarh</h1>
         <p class="mt-3 max-w-3xl text-lg text-kc-muted">
-          One way cab fares for our most booked routes between Raipur, Bilaspur, Durg, Bhilai, Korba, Raigarh, Jagdalpur,
-          Ambikapur, Nagpur and more. Every fare is for the full trip — no return charge. Don’t see your route? Check the
-          price in the booking form or call us; we cover over a thousand routes.
+          One way cab fares for our most booked routes between Raipur, Bilaspur, Durg, Bhilai, Korba, Raigarh,
+          Jagdalpur, Ambikapur, Nagpur and more. Every fare is for the full trip — no return charge. Don’t see your
+          route? Check the price in the booking form or call us; we cover over a thousand routes.
         </p>
       </header>
 
@@ -42,12 +42,21 @@ interface Group {
         <h2 id="cities-h" class="mb-4 text-xl font-semibold">Taxi service by city</h2>
         <ul class="flex flex-wrap gap-2">
           @for (h of hubs; track h.slug) {
-            <li><a [routerLink]="cityPath(h.slug)" class="inline-block rounded-full border border-kc-line bg-white px-4 py-2 text-sm hover:border-kc-teal">{{ h.hub.heading }}</a></li>
+            <li>
+              <a
+                [routerLink]="cityPath(h.slug)"
+                class="inline-block rounded-full border border-kc-line bg-white px-4 py-2 text-sm hover:border-kc-teal"
+                >{{ h.hub.heading }}</a
+              >
+            </li>
           }
         </ul>
       </section>
 
-      <kc-cta-band heading="Your route isn’t listed?" text="We drive to every district of Chhattisgarh. Call or WhatsApp for a fare." />
+      <kc-cta-band
+        heading="Your route isn’t listed?"
+        text="We drive to every district of Chhattisgarh. Call or WhatsApp for a fare."
+      />
     </div>
   `,
   changeDetection: ChangeDetectionStrategy.OnPush,
@@ -66,13 +75,16 @@ export class RoutesIndexComponent {
       const i = HUBS.findIndex((h) => h.name === name || PLACE_BY_KEY.get(h.key)?.name === name);
       return i < 0 ? 99 : i;
     };
-    return [...map.entries()].map(([name, routes]) => ({ name, routes })).sort((a, b) => order(a.name) - order(b.name) || b.routes.length - a.routes.length);
+    return [...map.entries()]
+      .map(([name, routes]) => ({ name, routes }))
+      .sort((a, b) => order(a.name) - order(b.name) || b.routes.length - a.routes.length);
   })();
 
   constructor() {
     inject(SeoService).set({
       title: 'Taxi Routes and Fares in Chhattisgarh | KiteCab',
-      description: 'One way taxi fares for popular routes from Raipur, Bilaspur, Durg, Bhilai, Korba, Raigarh and Raipur Airport. Hatchback, Sedan and SUV prices.',
+      description:
+        'One way taxi fares for popular routes from Raipur, Bilaspur, Durg, Bhilai, Korba, Raigarh and Raipur Airport. Hatchback, Sedan and SUV prices.',
       path: '/taxi-routes',
       jsonLd: graph(localBusiness(), breadcrumbs(this.crumbs)),
     });

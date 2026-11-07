@@ -9,7 +9,6 @@ export interface Place {
   key: string;
   name: string;
   slug: string;
-  hindi: string;
   /** One or two sentences, used on route pages that start or end here. */
   blurb: string;
   hub?: CityHub;
@@ -31,7 +30,6 @@ export const PLACES: Place[] = [
     key: 'Raipur',
     name: 'Raipur',
     slug: 'raipur',
-    hindi: 'रायपुर',
     blurb:
       'Raipur is the capital of Chhattisgarh and the state’s main travel hub, with Raipur Junction railway station and Swami Vivekananda Airport.',
     hub: {
@@ -40,7 +38,14 @@ export const PLACES: Place[] = [
         'KiteCab is based in Raipur, so this is where most of our trips start. We run one way drops, round trips, airport transfers and local rental cabs from every part of the city — Telibandha, Shankar Nagar, Pandri, Tatibandh, Kamal Vihar, Mowa and Naya Raipur.',
         'From Raipur we cover every district of Chhattisgarh and drive to Nagpur. Popular trips are Raipur to Bilaspur, Raipur to Jagdalpur, Raipur to Raigarh and Raipur to Korba, along with daily transfers between the city and Swami Vivekananda Airport.',
       ],
-      landmarks: ['Swami Vivekananda Airport (Mana)', 'Raipur Junction railway station', 'Naya Raipur (Atal Nagar)', 'Telibandha Lake (Marine Drive)', 'Purkhauti Muktangan', 'AIIMS Raipur'],
+      landmarks: [
+        'Swami Vivekananda Airport (Mana)',
+        'Raipur Junction railway station',
+        'Naya Raipur (Atal Nagar)',
+        'Telibandha Lake (Marine Drive)',
+        'Purkhauti Muktangan',
+        'AIIMS Raipur',
+      ],
       stations: ['Raipur Junction', 'Swami Vivekananda Airport'],
     },
   },
@@ -48,7 +53,6 @@ export const PLACES: Place[] = [
     key: 'Raipur Airport',
     name: 'Raipur Airport',
     slug: 'raipur-airport',
-    hindi: 'रायपुर एयरपोर्ट',
     blurb:
       'Swami Vivekananda Airport at Mana is Raipur’s airport and the main airport for Chhattisgarh, about 15 km from central Raipur.',
     hub: {
@@ -65,7 +69,6 @@ export const PLACES: Place[] = [
     key: 'Bilaspur',
     name: 'Bilaspur',
     slug: 'bilaspur',
-    hindi: 'बिलासपुर',
     blurb:
       'Bilaspur is Chhattisgarh’s second-largest city, home to the Chhattisgarh High Court, SECL headquarters and the South East Central Railway zone.',
     hub: {
@@ -74,7 +77,14 @@ export const PLACES: Place[] = [
         'Book a KiteCab taxi in Bilaspur for trips to Raipur and Raipur Airport, Korba, Raigarh, Ambikapur and every town in between. Bilaspur to Raipur is one of our busiest routes, with cabs running at all hours.',
         'We pick up from homes, hotels, Bilaspur railway station, Uslapur station and the High Court area, and offer local rental cabs for full-day use in the city.',
       ],
-      landmarks: ['Bilaspur railway station', 'Chhattisgarh High Court', 'SECL headquarters', 'Uslapur station', 'Mahamaya Temple, Ratanpur', 'Achanakmar Tiger Reserve'],
+      landmarks: [
+        'Bilaspur railway station',
+        'Chhattisgarh High Court',
+        'SECL headquarters',
+        'Uslapur station',
+        'Mahamaya Temple, Ratanpur',
+        'Achanakmar Tiger Reserve',
+      ],
       stations: ['Bilaspur Junction', 'Uslapur', 'Bilasa Devi Kevat Airport'],
     },
   },
@@ -82,7 +92,6 @@ export const PLACES: Place[] = [
     key: 'Durg',
     name: 'Durg',
     slug: 'durg',
-    hindi: 'दुर्ग',
     blurb: 'Durg is a district headquarters and twin city of Bhilai, about 40 km west of Raipur on NH-53.',
     hub: {
       heading: 'Taxi service in Durg',
@@ -98,7 +107,6 @@ export const PLACES: Place[] = [
     key: 'Bhilai',
     name: 'Bhilai',
     slug: 'bhilai',
-    hindi: 'भिलाई',
     blurb: 'Bhilai is home to the Bhilai Steel Plant and IIT Bhilai, and forms a twin city with Durg.',
     hub: {
       heading: 'Taxi service in Bhilai',
@@ -114,8 +122,8 @@ export const PLACES: Place[] = [
     key: 'Raigarh',
     name: 'Raigarh',
     slug: 'raigarh',
-    hindi: 'रायगढ़',
-    blurb: 'Raigarh is an industrial city on the Kelo river, known for its steel and power plants and the Raigarh gharana of Kathak.',
+    blurb:
+      'Raigarh is an industrial city on the Kelo river, known for its steel and power plants and the Raigarh gharana of Kathak.',
     hub: {
       heading: 'Taxi service in Raigarh',
       intro: [
@@ -130,8 +138,8 @@ export const PLACES: Place[] = [
     key: 'Korba',
     name: 'Korba',
     slug: 'korba',
-    hindi: 'कोरबा',
-    blurb: 'Korba is the power capital of Chhattisgarh, with NTPC Korba and some of India’s largest coal mines at Gevra and Kusmunda.',
+    blurb:
+      'Korba is the power capital of Chhattisgarh, with NTPC Korba and some of India’s largest coal mines at Gevra and Kusmunda.',
     hub: {
       heading: 'Taxi service in Korba',
       intro: [
@@ -146,8 +154,8 @@ export const PLACES: Place[] = [
     key: 'Ambikapur',
     name: 'Ambikapur',
     slug: 'ambikapur',
-    hindi: 'अंबिकापुर',
-    blurb: 'Ambikapur is the headquarters of Surguja district and the gateway to Mainpat, the hill station called the Shimla of Chhattisgarh.',
+    blurb:
+      'Ambikapur is the headquarters of Surguja district and the gateway to Mainpat, the hill station called the Shimla of Chhattisgarh.',
     hub: {
       heading: 'Taxi service in Ambikapur',
       intro: [
@@ -162,7 +170,6 @@ export const PLACES: Place[] = [
     key: 'Jagdalpur',
     name: 'Jagdalpur',
     slug: 'jagdalpur',
-    hindi: 'जगदलपुर',
     blurb: 'Jagdalpur is the main city of Bastar, close to Chitrakote Falls and famous for the 75-day Bastar Dussehra.',
     hub: {
       heading: 'Taxi service in Jagdalpur',
@@ -178,8 +185,8 @@ export const PLACES: Place[] = [
     key: 'Rajnandgaon',
     name: 'Rajnandgaon',
     slug: 'rajnandgaon',
-    hindi: 'राजनांदगांव',
-    blurb: 'Rajnandgaon lies on NH-53 west of Durg, on the road to Nagpur, near the Maa Bamleshwari temple at Dongargarh.',
+    blurb:
+      'Rajnandgaon lies on NH-53 west of Durg, on the road to Nagpur, near the Maa Bamleshwari temple at Dongargarh.',
     hub: {
       heading: 'Taxi service in Rajnandgaon',
       intro: [
@@ -194,8 +201,8 @@ export const PLACES: Place[] = [
     key: 'Nagpur (MH)',
     name: 'Nagpur',
     slug: 'nagpur',
-    hindi: 'नागपुर',
-    blurb: 'Nagpur in Maharashtra is about 290 km from Raipur along NH-53, with Dr. Babasaheb Ambedkar International Airport.',
+    blurb:
+      'Nagpur in Maharashtra is about 290 km from Raipur along NH-53, with Dr. Babasaheb Ambedkar International Airport.',
     hub: {
       heading: 'Raipur to Nagpur taxi',
       intro: [
@@ -208,18 +215,79 @@ export const PLACES: Place[] = [
   },
 
   // ---- towns (route pages only) -------------------------------------------
-  { key: 'Naya Raipur', name: 'Naya Raipur', slug: 'naya-raipur', hindi: 'नया रायपुर', blurb: 'Naya Raipur (Atal Nagar) is the planned capital city with the state government offices at Mantralaya.' },
-  { key: 'Bhatapara', name: 'Bhatapara', slug: 'bhatapara', hindi: 'भाटापारा', blurb: 'Bhatapara is a railway town in Baloda Bazar district, known for its rice mills.' },
-  { key: 'Baloda Bazar', name: 'Baloda Bazar', slug: 'baloda-bazar', hindi: 'बलौदा बाजार', blurb: 'Baloda Bazar is a district headquarters north-east of Raipur, near the cement plants of the region.' },
-  { key: 'Kondagaon', name: 'Kondagaon', slug: 'kondagaon', hindi: 'कोंडागांव', blurb: 'Kondagaon in the Bastar region is known for its Dhokra bell-metal craft and lies on the Raipur–Jagdalpur highway.' },
-  { key: 'Kanker', name: 'Kanker', slug: 'kanker', hindi: 'कांकेर', blurb: 'Kanker is a district headquarters on NH-30, the first major town of the Bastar region coming from Raipur.' },
-  { key: 'Dhamtari', name: 'Dhamtari', slug: 'dhamtari', hindi: 'धमतरी', blurb: 'Dhamtari is a district headquarters south of Raipur, close to the Gangrel dam on the Mahanadi.' },
-  { key: 'Kawardha', name: 'Kawardha', slug: 'kawardha', hindi: 'कवर्धा', blurb: 'Kawardha is the headquarters of Kabirdham district, near the Bhoramdeo temple.' },
-  { key: 'Champa', name: 'Champa', slug: 'champa', hindi: 'चांपा', blurb: 'Champa in Janjgir-Champa district is known for its kosa silk weaving.' },
-  { key: 'Janjgir Naila', name: 'Janjgir Naila', slug: 'janjgir-naila', hindi: 'जांजगीर नैला', blurb: 'Janjgir is the headquarters of Janjgir-Champa district, served by Naila railway station.' },
-  { key: 'Akaltara', name: 'Akaltara', slug: 'akaltara', hindi: 'अकलतरा', blurb: 'Akaltara is a town in Janjgir-Champa district on the Bilaspur–Raigarh rail line.' },
-  { key: 'Pendra Road', name: 'Pendra Road', slug: 'pendra-road', hindi: 'पेंड्रा रोड', blurb: 'Pendra Road is the railway gateway to Amarkantak, the source of the Narmada river.' },
-  { key: 'Uslapur', name: 'Uslapur', slug: 'uslapur', hindi: 'उसलापुर', blurb: 'Uslapur is Bilaspur’s second railway station, used by many long-distance trains.' },
+  {
+    key: 'Naya Raipur',
+    name: 'Naya Raipur',
+    slug: 'naya-raipur',
+    blurb: 'Naya Raipur (Atal Nagar) is the planned capital city with the state government offices at Mantralaya.',
+  },
+  {
+    key: 'Bhatapara',
+    name: 'Bhatapara',
+    slug: 'bhatapara',
+    blurb: 'Bhatapara is a railway town in Baloda Bazar district, known for its rice mills.',
+  },
+  {
+    key: 'Baloda Bazar',
+    name: 'Baloda Bazar',
+    slug: 'baloda-bazar',
+    blurb: 'Baloda Bazar is a district headquarters north-east of Raipur, near the cement plants of the region.',
+  },
+  {
+    key: 'Kondagaon',
+    name: 'Kondagaon',
+    slug: 'kondagaon',
+    blurb:
+      'Kondagaon in the Bastar region is known for its Dhokra bell-metal craft and lies on the Raipur–Jagdalpur highway.',
+  },
+  {
+    key: 'Kanker',
+    name: 'Kanker',
+    slug: 'kanker',
+    blurb: 'Kanker is a district headquarters on NH-30, the first major town of the Bastar region coming from Raipur.',
+  },
+  {
+    key: 'Dhamtari',
+    name: 'Dhamtari',
+    slug: 'dhamtari',
+    blurb: 'Dhamtari is a district headquarters south of Raipur, close to the Gangrel dam on the Mahanadi.',
+  },
+  {
+    key: 'Kawardha',
+    name: 'Kawardha',
+    slug: 'kawardha',
+    blurb: 'Kawardha is the headquarters of Kabirdham district, near the Bhoramdeo temple.',
+  },
+  {
+    key: 'Champa',
+    name: 'Champa',
+    slug: 'champa',
+    blurb: 'Champa in Janjgir-Champa district is known for its kosa silk weaving.',
+  },
+  {
+    key: 'Janjgir Naila',
+    name: 'Janjgir Naila',
+    slug: 'janjgir-naila',
+    blurb: 'Janjgir is the headquarters of Janjgir-Champa district, served by Naila railway station.',
+  },
+  {
+    key: 'Akaltara',
+    name: 'Akaltara',
+    slug: 'akaltara',
+    blurb: 'Akaltara is a town in Janjgir-Champa district on the Bilaspur–Raigarh rail line.',
+  },
+  {
+    key: 'Pendra Road',
+    name: 'Pendra Road',
+    slug: 'pendra-road',
+    blurb: 'Pendra Road is the railway gateway to Amarkantak, the source of the Narmada river.',
+  },
+  {
+    key: 'Uslapur',
+    name: 'Uslapur',
+    slug: 'uslapur',
+    blurb: 'Uslapur is Bilaspur’s second railway station, used by many long-distance trains.',
+  },
 ];
 
 export const PLACE_BY_KEY = new Map(PLACES.map((p) => [p.key, p]));

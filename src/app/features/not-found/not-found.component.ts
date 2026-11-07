@@ -11,7 +11,9 @@ import { SeoService } from '../../core/services/seo.service';
       <p class="text-6xl font-bold text-kc-teal">404</p>
       <h1 class="text-2xl font-semibold text-kc-ink">This page doesn't exist</h1>
       <p class="text-kc-muted">Check the address, or book your cab from the home page.</p>
-      <a routerLink="/" class="inline-flex h-12 items-center rounded-xl bg-kc-teal px-6 font-medium text-white hover:bg-kc-teal-dark"
+      <a
+        routerLink="/"
+        class="inline-flex h-12 items-center rounded-xl bg-kc-teal px-6 font-medium text-white hover:bg-kc-teal-dark"
         >Go to home page</a
       >
     </section>

@@ -14,21 +14,10 @@ import { AnalyticsService } from '../../core/services/analytics.service';
 import { ApiService } from '../../core/services/api.service';
 import { CatalogService } from '../../core/services/catalog.service';
 import { SiteSettingsService } from '../../core/services/site-settings.service';
-import {
-  inr,
-  rentalDisplay,
-  rentalFares,
-  rentalLabel,
-  roundTripFares,
-} from '../../core/utils/fare';
+import { inr, rentalDisplay, rentalFares, rentalLabel, roundTripFares } from '../../core/utils/fare';
 import { BookingResponse } from '../../models/booking.model';
 import { CarPrices } from '../../models/catalog.model';
-import {
-  BOOKING_TYPE_LABELS,
-  BookingType,
-  CAR_TYPES,
-  CarType,
-} from '../../models/common.model';
+import { BOOKING_TYPE_LABELS, BookingType, CAR_TYPES, CarType } from '../../models/common.model';
 import { IconComponent } from '../../shared/components/icon/icon.component';
 import { PlaceInputComponent } from './place-input.component';
 
@@ -58,9 +47,7 @@ function to12h(value: string): string {
 
 function todayIso(): string {
   const d = new Date();
-  return new Date(d.getTime() - d.getTimezoneOffset() * 60000)
-    .toISOString()
-    .slice(0, 10);
+  return new Date(d.getTime() - d.getTimezoneOffset() * 60000).toISOString().slice(0, 10);
 }
 
 @Component({
@@ -80,11 +67,7 @@ export class BookingWidgetComponent implements OnInit {
   private readonly api = inject(ApiService);
   private readonly analytics = inject(AnalyticsService);
 
-  protected readonly types: BookingType[] = [
-    'oneway',
-    'round-trip',
-    'local-rental',
-  ];
+  protected readonly types: BookingType[] = ['oneway', 'round-trip', 'local-rental'];
   protected readonly typeLabels = BOOKING_TYPE_LABELS;
   protected readonly cars = CAR_TYPES;
   protected readonly seats = SITE.fares.seats;
@@ -119,9 +102,7 @@ export class BookingWidgetComponent implements OnInit {
   protected readonly submitError = signal('');
   protected readonly result = signal<BookingResponse | null>(null);
 
-  protected readonly dropOptions = computed(() =>
-    this.catalog.destinations(this.pickup()),
-  );
+  protected readonly dropOptions = computed(() => this.catalog.destinations(this.pickup()));
   protected readonly selectedFare = computed(() => {
     const q = this.quote();
     const c = this.car();
@@ -131,34 +112,26 @@ export class BookingWidgetComponent implements OnInit {
   protected readonly errors = computed(() => {
     const t = this.type();
     const e: Record<string, string> = {};
-    if (!this.catalog.isLocation(this.pickup()))
-      e['pickup'] = 'Choose your pickup place from the list';
+    if (!this.catalog.isLocation(this.pickup())) e['pickup'] = 'Choose your pickup place from the list';
     if (t !== 'local-rental' && !this.dropOptions().includes(this.drop()))
       e['drop'] = 'Choose a drop place from the list';
     if (t === 'round-trip') {
-      if (!this.waitingTime())
-        e['waiting'] = 'Choose how long the cab should wait';
+      if (!this.waitingTime()) e['waiting'] = 'Choose how long the cab should wait';
       const km = Number(this.approxKm());
-      if (!Number.isInteger(km) || km < 1 || km > 3000)
-        e['km'] = 'Enter the total kilometres (1–3000)';
+      if (!Number.isInteger(km) || km < 1 || km > 3000) e['km'] = 'Enter the total kilometres (1–3000)';
     }
-    if (t === 'local-rental' && !this.rentalId())
-      e['rental'] = 'Choose a package';
-    if (!MOBILE.test(this.mobile()))
-      e['mobile'] = 'Enter a valid 10-digit mobile number';
+    if (t === 'local-rental' && !this.rentalId()) e['rental'] = 'Choose a package';
+    if (!MOBILE.test(this.mobile())) e['mobile'] = 'Enter a valid 10-digit mobile number';
     return e;
   });
 
   protected readonly detailErrors = computed(() => {
     const e: Record<string, string> = {};
     if (this.fullName().trim().length < 2) e['name'] = 'Enter your name';
-    if (!MOBILE.test(this.mobile()))
-      e['mobile'] = 'Enter a valid 10-digit mobile number';
+    if (!MOBILE.test(this.mobile())) e['mobile'] = 'Enter a valid 10-digit mobile number';
     if (!EMAIL.test(this.email().trim())) e['email'] = 'Enter a valid email';
-    if (this.address().trim().length < 3)
-      e['address'] = 'Enter the pickup address';
-    if (!this.date() || this.date() < this.minDate)
-      e['date'] = 'Choose today or a later date';
+    if (this.address().trim().length < 3) e['address'] = 'Enter the pickup address';
+    if (!this.date() || this.date() < this.minDate) e['date'] = 'Choose today or a later date';
     if (!this.time()) e['time'] = 'Choose a pickup time';
     return e;
   });
@@ -196,18 +169,14 @@ export class BookingWidgetComponent implements OnInit {
     this.searchTried.set(true);
     this.searchError.set('');
     if (!this.catalog.ready()) {
-      this.searchError.set(
-        'Fares are still loading. Please try again in a moment.',
-      );
+      this.searchError.set('Fares are still loading. Please try again in a moment.');
       return;
     }
     if (Object.keys(this.errors()).length) return;
 
     const quote = this.buildQuote();
     if (!quote) {
-      this.searchError.set(
-        'We don’t have a fixed fare for this trip yet. Call or WhatsApp us for a quote.',
-      );
+      this.searchError.set('We don’t have a fixed fare for this trip yet. Call or WhatsApp us for a quote.');
       return;
     }
 
@@ -231,9 +200,7 @@ export class BookingWidgetComponent implements OnInit {
     const t = this.type();
     const pickup = this.pickup();
     if (t === 'local-rental') {
-      const pkg = this.catalog
-        .rentals()
-        .find((p) => String(p.id) === this.rentalId());
+      const pkg = this.catalog.rentals().find((p) => String(p.id) === this.rentalId());
       if (!pkg) return null;
       return {
         type: t,
@@ -256,9 +223,7 @@ export class BookingWidgetComponent implements OnInit {
         km: route.km,
       };
     }
-    const rate = this.catalog
-      .roundTripRates()
-      .find((r) => r.slot === this.waitingTime());
+    const rate = this.catalog.roundTripRates().find((r) => r.slot === this.waitingTime());
     if (!rate) return null;
     const km = Number(this.approxKm());
     return {
@@ -297,12 +262,8 @@ export class BookingWidgetComponent implements OnInit {
         bookingType: q.type,
         carType: car,
         pickup: q.pickup,
-        ...(q.type === 'local-rental'
-          ? { rentalPackageId: q.rentalId }
-          : { drop: q.dropOrPackage }),
-        ...(q.type === 'round-trip'
-          ? { waitingTime: q.waitingTime, approxDistanceKm: q.approxKm }
-          : {}),
+        ...(q.type === 'local-rental' ? { rentalPackageId: q.rentalId } : { drop: q.dropOrPackage }),
+        ...(q.type === 'round-trip' ? { waitingTime: q.waitingTime, approxDistanceKm: q.approxKm } : {}),
         customer: {
           fullName: this.fullName().trim(),
           mobile: this.mobile(),

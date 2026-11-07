@@ -18,16 +18,11 @@ import { SeoRoute } from '../../models/catalog.model';
             class="flex h-full items-center justify-between gap-3 rounded-xl border border-kc-line bg-white px-4 py-2.5 hover:border-kc-teal sm:py-3"
           >
             <span>
-              <span class="block font-medium text-kc-ink"
-                >{{ r.fromName }} to {{ r.toName }} taxi</span
-              >
+              <span class="block font-medium text-kc-ink">{{ r.fromName }} to {{ r.toName }} taxi</span>
               <span class="text-sm text-kc-muted">{{ r.km }} km</span>
             </span>
             <span class="shrink-0 text-right text-sm text-kc-muted"
-              >from
-              <b class="block text-base text-kc-teal">{{
-                inr(low(r))
-              }}</b></span
+              >from <b class="block text-base text-kc-teal">{{ inr(low(r)) }}</b></span
             >
           </a>
         </li>

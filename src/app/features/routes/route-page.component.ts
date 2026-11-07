@@ -76,14 +76,20 @@ import { RouteLinksComponent } from '../../shared/components/route-links.compone
             <li>Free cancellation before the driver is dispatched</li>
           </ul>
           @if (fromHub(); as hub) {
-            <p>More trips from {{ hub.name }}: see our <a [routerLink]="cityPath(hub.slug)">taxi service in {{ hub.name }}</a>.</p>
+            <p>
+              More trips from {{ hub.name }}: see our
+              <a [routerLink]="cityPath(hub.slug)">taxi service in {{ hub.name }}</a
+              >.
+            </p>
           }
         </section>
 
         <section aria-labelledby="related-h">
           <h2 id="related-h" class="mb-5 text-2xl font-semibold">Related routes</h2>
           <kc-route-links [routes]="related()" />
-          <p class="mt-4 text-sm"><a routerLink="/taxi-routes" class="font-medium text-kc-teal hover:underline">See all taxi routes →</a></p>
+          <p class="mt-4 text-sm">
+            <a routerLink="/taxi-routes" class="font-medium text-kc-teal hover:underline">See all taxi routes →</a>
+          </p>
         </section>
 
         <kc-faq [items]="c.faqs" [heading]="r.fromName + ' to ' + r.toName + ' taxi — questions'" />

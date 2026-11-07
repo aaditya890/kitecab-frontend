@@ -16,8 +16,8 @@ import { CtaBandComponent } from '../../shared/components/cta-band.component';
       <div class="kc-prose mt-6">
         <p>
           KiteCab is a taxi service from Raipur, built for travel across Chhattisgarh. We started with a simple idea:
-          booking an outstation cab should be as easy as checking the fare, choosing a car and getting in — with the price
-          shown up front and a real person on the phone if you need help.
+          booking an outstation cab should be as easy as checking the fare, choosing a car and getting in — with the
+          price shown up front and a real person on the phone if you need help.
         </p>
         <h2>What we do</h2>
         <ul>
@@ -28,9 +28,9 @@ import { CtaBandComponent } from '../../shared/components/cta-band.component';
         </ul>
         <h2>Where we drive</h2>
         <p>
-          Every district of Chhattisgarh — from Raipur, Durg and Bhilai to Bilaspur, Korba and Raigarh in the north-east,
-          Ambikapur and Surguja in the north, and Kanker, Kondagaon and Jagdalpur in Bastar — plus Nagpur in Maharashtra.
-          See all our <a routerLink="/taxi-routes">taxi routes and fares</a>.
+          Every district of Chhattisgarh — from Raipur, Durg and Bhilai to Bilaspur, Korba and Raigarh in the
+          north-east, Ambikapur and Surguja in the north, and Kanker, Kondagaon and Jagdalpur in Bastar — plus Nagpur in
+          Maharashtra. See all our <a routerLink="/taxi-routes">taxi routes and fares</a>.
         </p>
         <h2>How we work</h2>
         <ul>
@@ -54,7 +54,8 @@ export class AboutComponent {
   constructor() {
     inject(SeoService).set({
       title: 'About KiteCab – Raipur Taxi Service for Chhattisgarh',
-      description: 'KiteCab is a Raipur-based taxi service for one way, round trip, airport and local rental cabs across Chhattisgarh and to Nagpur.',
+      description:
+        'KiteCab is a Raipur-based taxi service for one way, round trip, airport and local rental cabs across Chhattisgarh and to Nagpur.',
       path: '/about-us',
       jsonLd: graph(localBusiness(), breadcrumbs(this.crumbs)),
     });

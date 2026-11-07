@@ -16,7 +16,14 @@ import { RouteLinksComponent } from '../../shared/components/route-links.compone
 /** /one-way-taxi, /round-trip-cab, /local-taxi-rental (chosen by route data `service`). */
 @Component({
   selector: 'kc-service-page',
-  imports: [RouterLink, BookingWidgetComponent, BreadcrumbsComponent, CtaBandComponent, FaqComponent, RouteLinksComponent],
+  imports: [
+    RouterLink,
+    BookingWidgetComponent,
+    BreadcrumbsComponent,
+    CtaBandComponent,
+    FaqComponent,
+    RouteLinksComponent,
+  ],
   template: `
     @let s = page();
     <section class="bg-gradient-to-b from-white to-kc-surface">
@@ -30,7 +37,10 @@ import { RouteLinksComponent } from '../../shared/components/route-links.compone
           <ol class="mt-6 space-y-3">
             @for (step of s.steps; track $index) {
               <li class="flex items-start gap-3">
-                <span class="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-kc-yellow text-sm font-bold text-kc-night">{{ $index + 1 }}</span>
+                <span
+                  class="inline-flex size-7 shrink-0 items-center justify-center rounded-full bg-kc-yellow text-sm font-bold text-kc-night"
+                  >{{ $index + 1 }}</span
+                >
                 <span class="pt-0.5">{{ step }}</span>
               </li>
             }
@@ -46,16 +56,22 @@ import { RouteLinksComponent } from '../../shared/components/route-links.compone
           <section aria-labelledby="price-h">
             <h2 id="price-h" class="mb-5 text-2xl font-semibold">Popular one way taxi routes</h2>
             <kc-route-links [routes]="topRoutes" />
-            <p class="mt-4 text-sm"><a routerLink="/taxi-routes" class="font-medium text-kc-teal hover:underline">All routes and fares →</a></p>
+            <p class="mt-4 text-sm">
+              <a routerLink="/taxi-routes" class="font-medium text-kc-teal hover:underline">All routes and fares →</a>
+            </p>
           </section>
         }
         @case ('round-trip') {
           <section aria-labelledby="price-h">
             <h2 id="price-h" class="text-2xl font-semibold">Round trip rates</h2>
-            <p class="mt-2 mb-5 text-kc-muted">Fare = rate per km × total km (up and down) + amount for waiting time.</p>
+            <p class="mt-2 mb-5 text-kc-muted">
+              Fare = rate per km × total km (up and down) + amount for waiting time.
+            </p>
             <div class="overflow-x-auto rounded-2xl border border-kc-line bg-white">
               <table class="w-full min-w-[560px] text-left">
-                <caption class="sr-only">Round trip cab rates by waiting time</caption>
+                <caption class="sr-only">
+                  Round trip cab rates by waiting time
+                </caption>
                 <thead class="bg-kc-surface text-sm text-kc-muted">
                   <tr>
                     <th scope="col" class="px-5 py-3 font-medium">Waiting time</th>
@@ -86,9 +102,12 @@ import { RouteLinksComponent } from '../../shared/components/route-links.compone
                 <li class="rounded-2xl border border-kc-line bg-white p-5">
                   <h3 class="text-lg font-semibold">{{ rentalDisplay(r) }}</h3>
                   <dl class="mt-3 grid grid-cols-2 gap-y-1 text-sm">
-                    <dt class="text-kc-muted">Hatchback</dt><dd class="text-right font-semibold">{{ inr(r.hatchback) }}</dd>
-                    <dt class="text-kc-muted">Sedan</dt><dd class="text-right font-semibold">{{ inr(r.sedan) }}</dd>
-                    <dt class="text-kc-muted">SUV</dt><dd class="text-right font-semibold">{{ inr(r.suv) }}</dd>
+                    <dt class="text-kc-muted">Hatchback</dt>
+                    <dd class="text-right font-semibold">{{ inr(r.hatchback) }}</dd>
+                    <dt class="text-kc-muted">Sedan</dt>
+                    <dd class="text-right font-semibold">{{ inr(r.sedan) }}</dd>
+                    <dt class="text-kc-muted">SUV</dt>
+                    <dd class="text-right font-semibold">{{ inr(r.suv) }}</dd>
                   </dl>
                 </li>
               }
@@ -101,7 +120,13 @@ import { RouteLinksComponent } from '../../shared/components/route-links.compone
         <h2 id="cities-h" class="mb-4 text-2xl font-semibold">Available in these cities</h2>
         <ul class="flex flex-wrap gap-2">
           @for (h of hubs; track h.slug) {
-            <li><a [routerLink]="cityPath(h.slug)" class="inline-block rounded-full border border-kc-line bg-white px-4 py-2 text-sm hover:border-kc-teal">{{ h.name }}</a></li>
+            <li>
+              <a
+                [routerLink]="cityPath(h.slug)"
+                class="inline-block rounded-full border border-kc-line bg-white px-4 py-2 text-sm hover:border-kc-teal"
+                >{{ h.name }}</a
+              >
+            </li>
           }
         </ul>
       </section>
@@ -137,7 +162,12 @@ export class ServicePageComponent implements OnInit {
       path: s.path,
       jsonLd: graph(
         localBusiness(),
-        taxiService({ name: s.h1, path: s.path, area: ['Chhattisgarh', ...HUBS.map((h) => h.name)], description: s.intro[0] }),
+        taxiService({
+          name: s.h1,
+          path: s.path,
+          area: ['Chhattisgarh', ...HUBS.map((h) => h.name)],
+          description: s.intro[0],
+        }),
         breadcrumbs(this.crumbs()),
         faqPage(s.faqs),
       ),

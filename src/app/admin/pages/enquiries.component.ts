@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 import type { SupabaseClient } from '@supabase/supabase-js';
@@ -65,15 +59,7 @@ interface Fare {
   suv_price: number;
 }
 
-type Tab =
-  | 'due'
-  | 'new'
-  | 'follow_up'
-  | 'contacted'
-  | 'converted'
-  | 'not_interested'
-  | 'invalid'
-  | 'all';
+type Tab = 'due' | 'new' | 'follow_up' | 'contacted' | 'converted' | 'not_interested' | 'invalid' | 'all';
 
 const TABS: { key: Tab; label: string }[] = [
   { key: 'due', label: 'Call now' },
@@ -92,52 +78,27 @@ const OPEN = ['new', 'contacted', 'follow_up'];
 
 @Component({
   selector: 'kc-admin-enquiries',
-  imports: [
-    FormsModule,
-    RouterLink,
-    BadgeComponent,
-    ContactActionsComponent,
-    PagerComponent,
-  ],
+  imports: [FormsModule, RouterLink, BadgeComponent, ContactActionsComponent, PagerComponent],
   template: `
     <div class="flex flex-wrap items-center justify-between gap-3">
       <div>
         <h1 class="kc-adm-h1">Enquiries / leads</h1>
-        <p class="text-sm text-kc-muted">
-          Everyone who checked a fare. Call, log what happened, set the next
-          call.
-        </p>
+        <p class="text-sm text-kc-muted">Everyone who checked a fare. Call, log what happened, set the next call.</p>
       </div>
       <div class="flex gap-2">
-        <button type="button" class="kc-adm-btn" (click)="exportCsv()">
-          Export CSV
-        </button>
-        <button
-          type="button"
-          class="kc-adm-btn-primary"
-          (click)="adding.set(!adding())"
-        >
-          + Add lead
-        </button>
+        <button type="button" class="kc-adm-btn" (click)="exportCsv()">Export CSV</button>
+        <button type="button" class="kc-adm-btn-primary" (click)="adding.set(!adding())">+ Add lead</button>
       </div>
     </div>
 
     @if (adding()) {
-      <form
-        class="kc-adm-card mt-4 grid gap-3 p-4 sm:grid-cols-3 lg:grid-cols-6"
-        (ngSubmit)="addLead()"
-      >
+      <form class="kc-adm-card mt-4 grid gap-3 p-4 sm:grid-cols-3 lg:grid-cols-6" (ngSubmit)="addLead()">
         <label class="text-sm"
           ><span class="kc-adm-label">Mobile *</span
-          ><input
-            class="kc-adm-input w-full"
-            name="m"
-            inputmode="numeric"
-            [(ngModel)]="nl.mobile"
+          ><input class="kc-adm-input w-full" name="m" inputmode="numeric" [(ngModel)]="nl.mobile"
         /></label>
         <label class="text-sm"
-          ><span class="kc-adm-label">Name</span
-          ><input class="kc-adm-input w-full" name="n" [(ngModel)]="nl.name"
+          ><span class="kc-adm-label">Name</span><input class="kc-adm-input w-full" name="n" [(ngModel)]="nl.name"
         /></label>
         <label class="text-sm"
           ><span class="kc-adm-label">Trip</span>
@@ -165,22 +126,16 @@ const OPEN = ['new', 'contacted', 'follow_up'];
           </select>
         </label>
         <label class="text-sm sm:col-span-2 lg:col-span-5"
-          ><span class="kc-adm-label">Note</span
-          ><input class="kc-adm-input w-full" name="no" [(ngModel)]="nl.note"
+          ><span class="kc-adm-label">Note</span><input class="kc-adm-input w-full" name="no" [(ngModel)]="nl.note"
         /></label>
         <div class="flex items-end gap-2">
           <button class="kc-adm-btn-primary" type="submit">Save lead</button
-          ><button class="kc-adm-btn" type="button" (click)="adding.set(false)">
-            Cancel
-          </button>
+          ><button class="kc-adm-btn" type="button" (click)="adding.set(false)">Cancel</button>
         </div>
       </form>
     }
 
-    <div
-      class="mt-4 flex gap-1 overflow-x-auto border-b border-kc-line"
-      role="tablist"
-    >
+    <div class="mt-4 flex gap-1 overflow-x-auto border-b border-kc-line" role="tablist">
       @for (t of tabs; track t.key) {
         <button
           type="button"
@@ -189,20 +144,14 @@ const OPEN = ['new', 'contacted', 'follow_up'];
           (click)="setTab(t.key)"
           class="-mb-px flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-2 text-sm font-medium"
           [class]="
-            tab() === t.key
-              ? 'border-kc-teal text-kc-teal'
-              : 'border-transparent text-kc-muted hover:text-kc-ink'
+            tab() === t.key ? 'border-kc-teal text-kc-teal' : 'border-transparent text-kc-muted hover:text-kc-ink'
           "
         >
           {{ t.label }}
           @if (t.key !== 'all') {
             <span
               class="rounded-full px-1.5 text-xs"
-              [class]="
-                t.key === 'due' && counts()[t.key]
-                  ? 'bg-red-600 text-white'
-                  : 'bg-kc-surface text-kc-ink'
-              "
+              [class]="t.key === 'due' && counts()[t.key] ? 'bg-red-600 text-white' : 'bg-kc-surface text-kc-ink'"
               >{{ counts()[t.key] ?? 0 }}</span
             >
           }
@@ -219,35 +168,20 @@ const OPEN = ['new', 'contacted', 'follow_up'];
         (ngModelChange)="list.debounce()"
         aria-label="Search leads"
       />
-      <select
-        class="kc-adm-input"
-        [(ngModel)]="type"
-        (ngModelChange)="list.reset()"
-        aria-label="Trip"
-      >
+      <select class="kc-adm-input" [(ngModel)]="type" (ngModelChange)="list.reset()" aria-label="Trip">
         <option value="">All trips</option>
         @for (t of types; track t.value) {
           <option [value]="t.value">{{ t.label }}</option>
         }
       </select>
       <label class="flex items-center gap-2 text-sm"
-        ><input
-          type="checkbox"
-          [(ngModel)]="mine"
-          (ngModelChange)="list.reset()"
-        />
-        Only mine</label
+        ><input type="checkbox" [(ngModel)]="mine" (ngModelChange)="list.reset()" /> Only mine</label
       >
-      <button type="button" class="kc-adm-btn" (click)="refresh()">
-        Refresh
-      </button>
+      <button type="button" class="kc-adm-btn" (click)="refresh()">Refresh</button>
     </div>
 
     <div class="mt-3 grid gap-4" [class.xl:grid-cols-[1fr_420px]]="!!sel()">
-      <div
-        class="kc-adm-card min-w-0 overflow-hidden"
-        [class.opacity-60]="list.loading()"
-      >
+      <div class="kc-adm-card min-w-0 overflow-hidden" [class.opacity-60]="list.loading()">
         <div class="overflow-x-auto">
           <table class="kc-adm-table">
             <thead>
@@ -262,20 +196,13 @@ const OPEN = ['new', 'contacted', 'follow_up'];
             </thead>
             <tbody>
               @for (e of list.rows(); track e.id) {
-                <tr
-                  class="cursor-pointer"
-                  [class.!bg-sky-50]="sel()?.id === e.id"
-                  (click)="open(e)"
-                >
+                <tr class="cursor-pointer" [class.!bg-sky-50]="sel()?.id === e.id" (click)="open(e)">
                   <td class="whitespace-nowrap">
                     <span class="font-medium">{{ ago(e.created_at) }}</span
-                    ><br /><span class="text-xs text-kc-muted">{{
-                      e.source
-                    }}</span>
+                    ><br /><span class="text-xs text-kc-muted">{{ e.source }}</span>
                   </td>
                   <td class="min-w-44">
-                    {{ e.pickup }} → {{ e.drop_or_package || '…' }}<br /><span
-                      class="text-xs text-kc-muted"
+                    {{ e.pickup }} → {{ e.drop_or_package || '…' }}<br /><span class="text-xs text-kc-muted"
                       >{{ typeLabel(e.service_type) }}
                       @if (e.quoted_fare) {
                         · from {{ rs(e.quoted_fare) }}
@@ -284,43 +211,24 @@ const OPEN = ['new', 'contacted', 'follow_up'];
                   </td>
                   <td>
                     @if (e.customer_name) {
-                      <span class="block text-sm font-medium">{{
-                        e.customer_name
-                      }}</span>
+                      <span class="block text-sm font-medium">{{ e.customer_name }}</span>
                     }
-                    <kc-contact
-                      [mobile]="e.mobile"
-                      [text]="waText(e)"
-                      (used)="open(e)"
-                    />
+                    <kc-contact [mobile]="e.mobile" [text]="waText(e)" (used)="open(e)" />
                     @if (e.past_bookings) {
-                      <span class="mt-0.5 block text-xs text-emerald-700"
-                        >★ {{ e.past_bookings }} past booking(s)</span
-                      >
+                      <span class="mt-0.5 block text-xs text-emerald-700">★ {{ e.past_bookings }} past booking(s)</span>
                     }
                   </td>
                   <td>
-                    <kc-badge
-                      [value]="'lead_' + e.status"
-                      [label]="leadLabel(e.status)"
-                    />
+                    <kc-badge [value]="'lead_' + e.status" [label]="leadLabel(e.status)" />
                     @if (e.attempts) {
-                      <span class="mt-0.5 block text-xs text-kc-muted"
-                        >{{ e.attempts }} call(s)</span
-                      >
+                      <span class="mt-0.5 block text-xs text-kc-muted">{{ e.attempts }} call(s)</span>
                     }
                   </td>
                   <td class="whitespace-nowrap text-sm">
                     @if (isOpen(e)) {
-                      <span
-                        [class.font-semibold]="overdue(e)"
-                        [class.text-red-700]="overdue(e)"
-                        >{{
-                          e.next_follow_up_at
-                            ? ago(e.next_follow_up_at)
-                            : 'Call now'
-                        }}</span
-                      >
+                      <span [class.font-semibold]="overdue(e)" [class.text-red-700]="overdue(e)">{{
+                        e.next_follow_up_at ? ago(e.next_follow_up_at) : 'Call now'
+                      }}</span>
                     } @else if (e.booking_id) {
                       <a
                         class="text-kc-teal hover:underline"
@@ -339,13 +247,7 @@ const OPEN = ['new', 'contacted', 'follow_up'];
               } @empty {
                 <tr>
                   <td colspan="6" class="py-10 text-center text-kc-muted">
-                    {{
-                      list.loading()
-                        ? 'Loading…'
-                        : tab() === 'due'
-                          ? 'Nobody to call right now.'
-                          : 'No leads here.'
-                    }}
+                    {{ list.loading() ? 'Loading…' : tab() === 'due' ? 'Nobody to call right now.' : 'No leads here.' }}
                   </td>
                 </tr>
               }
@@ -359,36 +261,20 @@ const OPEN = ['new', 'contacted', 'follow_up'];
         <aside class="kc-adm-card h-fit p-4 xl:sticky xl:top-4">
           <div class="flex items-start justify-between gap-2">
             <div>
-              <p class="text-xs text-kc-muted">
-                Lead #{{ e.id }} · {{ stamp(e.created_at) }}
-              </p>
-              <h2 class="mt-0.5 text-lg font-semibold">
-                {{ e.pickup }} → {{ e.drop_or_package || '…' }}
-              </h2>
+              <p class="text-xs text-kc-muted">Lead #{{ e.id }} · {{ stamp(e.created_at) }}</p>
+              <h2 class="mt-0.5 text-lg font-semibold">{{ e.pickup }} → {{ e.drop_or_package || '…' }}</h2>
               <p class="text-sm text-kc-muted">
                 {{ typeLabel(e.service_type) }}
               </p>
             </div>
-            <button
-              type="button"
-              class="kc-adm-btn"
-              (click)="sel.set(null)"
-              aria-label="Close"
-            >
-              ✕
-            </button>
+            <button type="button" class="kc-adm-btn" (click)="sel.set(null)" aria-label="Close">✕</button>
           </div>
-          <div
-            class="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-kc-surface p-3"
-          >
+          <div class="mt-3 flex flex-wrap items-center justify-between gap-2 rounded-lg bg-kc-surface p-3">
             <div>
               <p class="font-medium">
                 {{ e.customer_name || 'Name not known' }}
               </p>
-              <kc-badge
-                [value]="'lead_' + e.status"
-                [label]="leadLabel(e.status)"
-              />
+              <kc-badge [value]="'lead_' + e.status" [label]="leadLabel(e.status)" />
             </div>
             <kc-contact [mobile]="e.mobile" [text]="waText(e)" />
           </div>
@@ -407,36 +293,24 @@ const OPEN = ['new', 'contacted', 'follow_up'];
                 <p class="font-semibold">{{ rs(f.suv_price) }}</p>
               </div>
             </div>
-            <p class="mt-1 text-xs text-kc-muted">
-              Current one-way fares · {{ f.distance_km }} km
-            </p>
+            <p class="mt-1 text-xs text-kc-muted">Current one-way fares · {{ f.distance_km }} km</p>
           }
           <div class="mt-3 flex flex-wrap gap-2">
             @if (e.booking_id) {
-              <a
-                class="kc-adm-btn-primary"
-                [routerLink]="['/admin/bookings', e.booking_id]"
+              <a class="kc-adm-btn-primary" [routerLink]="['/admin/bookings', e.booking_id]"
                 >Open booking #{{ e.booking_id }}</a
               >
             } @else {
-              <a
-                class="kc-adm-btn-primary"
-                routerLink="/admin/bookings/new"
-                [queryParams]="bookingParams(e)"
+              <a class="kc-adm-btn-primary" routerLink="/admin/bookings/new" [queryParams]="bookingParams(e)"
                 >Create booking</a
               >
             }
             @if (e.assigned_to !== db.userId()) {
-              <button type="button" class="kc-adm-btn" (click)="assignMe(e)">
-                Assign to me
-              </button>
+              <button type="button" class="kc-adm-btn" (click)="assignMe(e)">Assign to me</button>
             }
           </div>
 
-          <form
-            class="mt-4 border-t border-kc-line pt-4"
-            (ngSubmit)="saveFollowUp(e)"
-          >
+          <form class="mt-4 border-t border-kc-line pt-4" (ngSubmit)="saveFollowUp(e)">
             <p class="text-sm font-semibold">What happened?</p>
             <div class="mt-2 grid grid-cols-2 gap-1.5">
               @for (o of outcomes; track o.value) {
@@ -456,38 +330,20 @@ const OPEN = ['new', 'contacted', 'follow_up'];
             </div>
             <label class="mt-3 block text-sm"
               ><span class="kc-adm-label">Note</span
-              ><textarea
-                class="kc-adm-input w-full"
-                name="note"
-                rows="2"
-                [(ngModel)]="note"
-              ></textarea>
+              ><textarea class="kc-adm-input w-full" name="note" rows="2" [(ngModel)]="note"></textarea>
             </label>
             @if (needsNext()) {
               <p class="kc-adm-label mt-3">Next call</p>
               <div class="flex flex-wrap gap-1.5">
                 @for (t of quickTimes; track t.label) {
-                  <button
-                    type="button"
-                    class="kc-adm-btn !px-2 !py-1 text-xs"
-                    (click)="setNext(t.mins)"
-                  >
+                  <button type="button" class="kc-adm-btn !px-2 !py-1 text-xs" (click)="setNext(t.mins)">
                     {{ t.label }}
                   </button>
                 }
               </div>
-              <input
-                class="kc-adm-input mt-2 w-full"
-                type="datetime-local"
-                name="next"
-                [(ngModel)]="next"
-              />
+              <input class="kc-adm-input mt-2 w-full" type="datetime-local" name="next" [(ngModel)]="next" />
             }
-            <button
-              class="kc-adm-btn-primary mt-3 w-full"
-              type="submit"
-              [disabled]="!outcome() || saving()"
-            >
+            <button class="kc-adm-btn-primary mt-3 w-full" type="submit" [disabled]="!outcome() || saving()">
               {{ saving() ? 'Saving…' : 'Save follow-up' }}
             </button>
           </form>
@@ -498,9 +354,7 @@ const OPEN = ['new', 'contacted', 'follow_up'];
               <li class="rounded-lg border border-kc-line p-2">
                 <div class="flex justify-between gap-2">
                   <b>{{ outcomeLabel(h.outcome) }}</b
-                  ><span class="text-xs text-kc-muted">{{
-                    ago(h.created_at)
-                  }}</span>
+                  ><span class="text-xs text-kc-muted">{{ ago(h.created_at) }}</span>
                 </div>
                 <p class="text-xs text-kc-muted">
                   {{ h.channel }} · {{ staffName(h.staff_id) }}
@@ -572,8 +426,7 @@ export class EnquiriesComponent {
   };
 
   protected readonly list = new PagedList<Lead>(
-    async (from, to) =>
-      toPage<Lead>(await this.query(await this.db.db(), true).range(from, to)),
+    async (from, to) => toPage<Lead>(await this.query(await this.db.db(), true).range(from, to)),
     30,
   );
 
@@ -588,27 +441,13 @@ export class EnquiriesComponent {
   }
 
   protected async refresh(): Promise<void> {
-    const [{ data }] = await Promise.all([
-      (await this.db.db()).rpc('lead_counts'),
-      this.list.load(),
-    ]);
+    const [{ data }] = await Promise.all([(await this.db.db()).rpc('lead_counts'), this.list.load()]);
     if (data) this.counts.set(data as Record<string, number>);
   }
 
   private async loadStaff(): Promise<void> {
-    const { data } = await (
-      await this.db.db()
-    )
-      .from('admin_staff')
-      .select('id,full_name,email');
-    this.staff.set(
-      new Map(
-        (data ?? []).map((s) => [
-          s.id as string,
-          (s.full_name || s.email) as string,
-        ]),
-      ),
-    );
+    const { data } = await (await this.db.db()).from('admin_staff').select('id,full_name,email');
+    this.staff.set(new Map((data ?? []).map((s) => [s.id as string, (s.full_name || s.email) as string])));
   }
 
   protected staffName(id: string | null): string {
@@ -616,30 +455,20 @@ export class EnquiriesComponent {
   }
 
   private query(db: SupabaseClient, count: boolean) {
-    let q = db
-      .from('admin_enquiries')
-      .select(COLS, count ? { count: 'exact' } : undefined);
+    let q = db.from('admin_enquiries').select(COLS, count ? { count: 'exact' } : undefined);
     const t = this.tab();
     if (t === 'due')
-      q = q
-        .in('status', OPEN)
-        .or(
-          `next_follow_up_at.is.null,next_follow_up_at.lte.${new Date().toISOString()}`,
-        );
+      q = q.in('status', OPEN).or(`next_follow_up_at.is.null,next_follow_up_at.lte.${new Date().toISOString()}`);
     else if (t !== 'all') q = q.eq('status', t);
     const s = searchTerm(this.q);
     if (s)
       q = /^\d+$/.test(s)
         ? q.like('mobile', `${s}%`)
-        : q.or(
-            `customer_name.ilike.*${s}*,pickup.ilike.*${s}*,drop_or_package.ilike.*${s}*`,
-          );
+        : q.or(`customer_name.ilike.*${s}*,pickup.ilike.*${s}*,drop_or_package.ilike.*${s}*`);
     if (this.type) q = q.eq('service_type', this.type);
     if (this.mine) q = q.eq('assigned_to', this.db.userId());
     return t === 'due'
-      ? q
-          .order('next_follow_up_at', { ascending: true, nullsFirst: true })
-          .order('created_at', { ascending: false })
+      ? q.order('next_follow_up_at', { ascending: true, nullsFirst: true }).order('created_at', { ascending: false })
       : q.order('created_at', { ascending: false });
   }
 
@@ -648,17 +477,11 @@ export class EnquiriesComponent {
   }
 
   protected overdue(e: Lead): boolean {
-    return (
-      this.isOpen(e) &&
-      (!e.next_follow_up_at ||
-        new Date(e.next_follow_up_at).getTime() <= Date.now())
-    );
+    return this.isOpen(e) && (!e.next_follow_up_at || new Date(e.next_follow_up_at).getTime() <= Date.now());
   }
 
   protected waText(e: Lead): string {
-    const trip = e.drop_or_package
-      ? `${e.pickup} to ${e.drop_or_package}`
-      : e.pickup;
+    const trip = e.drop_or_package ? `${e.pickup} to ${e.drop_or_package}` : e.pickup;
     return `Hello${e.customer_name ? ' ' + e.customer_name : ''}, this is KiteCab. You checked the cab fare for ${trip} on our website. Shall I book it for you? Please share your pickup date and time.`;
   }
 
@@ -720,8 +543,7 @@ export class EnquiriesComponent {
     const outcome = this.outcome();
     if (!outcome) return;
     this.saving.set(true);
-    const nextAt =
-      this.needsNext() && this.next ? new Date(this.next).toISOString() : null;
+    const nextAt = this.needsNext() && this.next ? new Date(this.next).toISOString() : null;
     const done = await this.toast.run(
       async () =>
         ok(
@@ -745,13 +567,7 @@ export class EnquiriesComponent {
     }
     await this.refresh();
     // keep the panel open with fresh data, even if the lead moved to another tab
-    const { data } = await (
-      await this.db.db()
-    )
-      .from('admin_enquiries')
-      .select(COLS)
-      .eq('id', e.id)
-      .maybeSingle();
+    const { data } = await (await this.db.db()).from('admin_enquiries').select(COLS).eq('id', e.id).maybeSingle();
     if (data) await this.open(data as unknown as Lead);
     else this.sel.set(null);
   }
@@ -760,14 +576,7 @@ export class EnquiriesComponent {
     if (
       await this.toast.run(
         async () =>
-          ok(
-            await (
-              await this.db.db()
-            )
-              .from('enquiries')
-              .update({ assigned_to: this.db.userId() })
-              .eq('id', e.id),
-          ),
+          ok(await (await this.db.db()).from('enquiries').update({ assigned_to: this.db.userId() }).eq('id', e.id)),
         'Assigned to you',
       )
     ) {

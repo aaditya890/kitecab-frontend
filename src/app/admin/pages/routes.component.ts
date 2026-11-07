@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { SupabaseClient } from '@supabase/supabase-js';
 
@@ -41,32 +36,19 @@ const COLS =
     <div class="flex flex-wrap items-center justify-between gap-3">
       <h1 class="kc-adm-h1">Routes and one-way fares</h1>
       <div class="flex gap-2">
-        <button type="button" class="kc-adm-btn" (click)="exportCsv()">
-          Export CSV
-        </button>
-        <button type="button" class="kc-adm-btn-primary" (click)="openNew()">
-          + Add route
-        </button>
+        <button type="button" class="kc-adm-btn" (click)="exportCsv()">Export CSV</button>
+        <button type="button" class="kc-adm-btn-primary" (click)="openNew()">+ Add route</button>
       </div>
     </div>
     <p class="mt-1 text-sm text-kc-muted">
-      Changes reach the website booking form within about a minute. Switch a
-      route off to stop online bookings on it.
+      Changes reach the website booking form within about a minute. Switch a route off to stop online bookings on it.
     </p>
 
     @if (n) {
-      <form
-        class="kc-adm-card mt-4 grid gap-3 p-4 sm:grid-cols-4"
-        (ngSubmit)="create()"
-      >
+      <form class="kc-adm-card mt-4 grid gap-3 p-4 sm:grid-cols-4" (ngSubmit)="create()">
         <label class="text-sm sm:col-span-2"
           >From
-          <select
-            class="kc-adm-input mt-1 w-full"
-            name="f"
-            required
-            [(ngModel)]="n.from"
-          >
+          <select class="kc-adm-input mt-1 w-full" name="f" required [(ngModel)]="n.from">
             @for (p of places(); track p.id) {
               <option [ngValue]="p.id">{{ p.name }}</option>
             }
@@ -74,54 +56,31 @@ const COLS =
         </label>
         <label class="text-sm sm:col-span-2"
           >To
-          <select
-            class="kc-adm-input mt-1 w-full"
-            name="t"
-            required
-            [(ngModel)]="n.to"
-          >
+          <select class="kc-adm-input mt-1 w-full" name="t" required [(ngModel)]="n.to">
             @for (p of places(); track p.id) {
               <option [ngValue]="p.id">{{ p.name }}</option>
             }
           </select>
         </label>
         <label class="text-sm"
-          >Distance km<input
-            class="kc-adm-input mt-1 w-full"
-            type="number"
-            name="km"
-            [(ngModel)]="n.km"
+          >Distance km<input class="kc-adm-input mt-1 w-full" type="number" name="km" [(ngModel)]="n.km"
         /></label>
         <label class="text-sm"
-          >Hatchback ₹<input
-            class="kc-adm-input mt-1 w-full"
-            type="number"
-            name="h"
-            [(ngModel)]="n.h"
+          >Hatchback ₹<input class="kc-adm-input mt-1 w-full" type="number" name="h" [(ngModel)]="n.h"
         /></label>
         <label class="text-sm"
-          >Sedan ₹<input
-            class="kc-adm-input mt-1 w-full"
-            type="number"
-            name="s"
-            [(ngModel)]="n.s"
+          >Sedan ₹<input class="kc-adm-input mt-1 w-full" type="number" name="s" [(ngModel)]="n.s"
         /></label>
         <label class="text-sm"
-          >SUV ₹<input
-            class="kc-adm-input mt-1 w-full"
-            type="number"
-            name="u"
-            [(ngModel)]="n.u"
+          >SUV ₹<input class="kc-adm-input mt-1 w-full" type="number" name="u" [(ngModel)]="n.u"
         /></label>
         <label class="flex items-center gap-2 text-sm sm:col-span-4"
-          ><input type="checkbox" name="rev" [(ngModel)]="n.reverse" /> Also add
-          the return route (same km and prices)</label
+          ><input type="checkbox" name="rev" [(ngModel)]="n.reverse" /> Also add the return route (same km and
+          prices)</label
         >
         <div class="flex gap-2 sm:col-span-4">
           <button class="kc-adm-btn-primary" type="submit">Add route</button>
-          <button class="kc-adm-btn" type="button" (click)="n = null">
-            Cancel
-          </button>
+          <button class="kc-adm-btn" type="button" (click)="n = null">Cancel</button>
         </div>
       </form>
     }
@@ -135,22 +94,14 @@ const COLS =
         (ngModelChange)="list.debounce()"
         aria-label="Search routes"
       />
-      <select
-        class="kc-adm-input"
-        [(ngModel)]="active"
-        (ngModelChange)="list.reset()"
-        aria-label="On or off"
-      >
+      <select class="kc-adm-input" [(ngModel)]="active" (ngModelChange)="list.reset()" aria-label="On or off">
         <option value="">On and off</option>
         <option value="on">On only</option>
         <option value="off">Off only</option>
       </select>
     </div>
 
-    <div
-      class="kc-adm-card mt-4 overflow-hidden"
-      [class.opacity-60]="list.loading()"
-    >
+    <div class="kc-adm-card mt-4 overflow-hidden" [class.opacity-60]="list.loading()">
       <div class="overflow-x-auto">
         <table class="kc-adm-table">
           <thead>
@@ -167,54 +118,24 @@ const COLS =
           <tbody>
             @for (r of list.rows(); track r.id) {
               <tr [class.opacity-50]="!r.is_active">
-                <td class="min-w-48 font-medium">
-                  {{ r.pickup }} → {{ r.drop }}
-                </td>
+                <td class="min-w-48 font-medium">{{ r.pickup }} → {{ r.drop }}</td>
                 @if (editId() === r.id) {
                   <td>
-                    <input
-                      class="kc-adm-input w-20"
-                      type="number"
-                      [(ngModel)]="e.distance_km"
-                    />
+                    <input class="kc-adm-input w-20" type="number" [(ngModel)]="e.distance_km" />
                   </td>
                   <td>
-                    <input
-                      class="kc-adm-input w-24"
-                      type="number"
-                      [(ngModel)]="e.hatchback_price"
-                    />
+                    <input class="kc-adm-input w-24" type="number" [(ngModel)]="e.hatchback_price" />
                   </td>
                   <td>
-                    <input
-                      class="kc-adm-input w-24"
-                      type="number"
-                      [(ngModel)]="e.sedan_price"
-                    />
+                    <input class="kc-adm-input w-24" type="number" [(ngModel)]="e.sedan_price" />
                   </td>
                   <td>
-                    <input
-                      class="kc-adm-input w-24"
-                      type="number"
-                      [(ngModel)]="e.suv_price"
-                    />
+                    <input class="kc-adm-input w-24" type="number" [(ngModel)]="e.suv_price" />
                   </td>
                   <td></td>
                   <td class="whitespace-nowrap">
-                    <button
-                      type="button"
-                      class="kc-adm-btn-primary"
-                      (click)="save(r)"
-                    >
-                      Save
-                    </button>
-                    <button
-                      type="button"
-                      class="kc-adm-btn"
-                      (click)="editId.set(null)"
-                    >
-                      ✕
-                    </button>
+                    <button type="button" class="kc-adm-btn-primary" (click)="save(r)">Save</button>
+                    <button type="button" class="kc-adm-btn" (click)="editId.set(null)">✕</button>
                   </td>
                 } @else {
                   <td>{{ r.distance_km }}</td>
@@ -223,22 +144,12 @@ const COLS =
                   <td>{{ r.suv_price }}</td>
                   <td>
                     <label class="inline-flex items-center gap-2"
-                      ><input
-                        type="checkbox"
-                        [checked]="r.is_active"
-                        (change)="toggle(r)"
-                      />
+                      ><input type="checkbox" [checked]="r.is_active" (change)="toggle(r)" />
                       {{ r.is_active ? 'On' : 'Off' }}</label
                     >
                   </td>
                   <td>
-                    <button
-                      type="button"
-                      class="kc-adm-btn"
-                      (click)="startEdit(r)"
-                    >
-                      Edit
-                    </button>
+                    <button type="button" class="kc-adm-btn" (click)="startEdit(r)">Edit</button>
                   </td>
                 }
               </tr>
@@ -276,8 +187,7 @@ export class RoutesComponent {
   } | null = null;
 
   protected readonly list = new PagedList<Row>(
-    async (from, to) =>
-      toPage(await this.query(await this.db.db(), true).range(from, to)),
+    async (from, to) => toPage(await this.query(await this.db.db(), true).range(from, to)),
     50,
   );
 
@@ -286,9 +196,7 @@ export class RoutesComponent {
   }
 
   private query(db: SupabaseClient, count: boolean) {
-    let q = db
-      .from('admin_routes')
-      .select(COLS, count ? { count: 'exact' } : undefined);
+    let q = db.from('admin_routes').select(COLS, count ? { count: 'exact' } : undefined);
     const t = searchTerm(this.q);
     if (t) q = q.or(`pickup.ilike.*${t}*,drop.ilike.*${t}*`);
     if (this.active) q = q.eq('is_active', this.active === 'on');
@@ -311,9 +219,7 @@ export class RoutesComponent {
 
   protected async save(r: Row): Promise<void> {
     const e = this.e;
-    if (
-      !this.valid(e.distance_km, e.hatchback_price, e.sedan_price, e.suv_price)
-    ) {
+    if (!this.valid(e.distance_km, e.hatchback_price, e.sedan_price, e.suv_price)) {
       this.toast.error('Km and all prices must be whole numbers above 0.');
       return;
     }
@@ -325,15 +231,7 @@ export class RoutesComponent {
     };
     if (
       await this.toast.run(
-        async () =>
-          ok(
-            await (
-              await this.db.db()
-            )
-              .from('routes')
-              .update(patch)
-              .eq('id', r.id),
-          ),
+        async () => ok(await (await this.db.db()).from('routes').update(patch).eq('id', r.id)),
         `${r.pickup} → ${r.drop} saved`,
       )
     ) {
@@ -344,15 +242,7 @@ export class RoutesComponent {
 
   protected async toggle(r: Row): Promise<void> {
     await this.toast.run(
-      async () =>
-        ok(
-          await (
-            await this.db.db()
-          )
-            .from('routes')
-            .update({ is_active: !r.is_active })
-            .eq('id', r.id),
-        ),
+      async () => ok(await (await this.db.db()).from('routes').update({ is_active: !r.is_active }).eq('id', r.id)),
       `${r.pickup} → ${r.drop} is ${r.is_active ? 'off' : 'on'}`,
     );
     await this.list.load();
@@ -361,27 +251,15 @@ export class RoutesComponent {
   protected async openNew(): Promise<void> {
     this.n = { from: null, to: null, km: 0, h: 0, s: 0, u: 0, reverse: true };
     if (!this.places().length) {
-      const { data } = await (
-        await this.db.db()
-      )
-        .from('locations')
-        .select('id,name')
-        .order('name');
+      const { data } = await (await this.db.db()).from('locations').select('id,name').order('name');
       this.places.set((data ?? []) as Place[]);
     }
   }
 
   protected async create(): Promise<void> {
     const n = this.n!;
-    if (
-      !n.from ||
-      !n.to ||
-      n.from === n.to ||
-      !this.valid(n.km, n.h, n.s, n.u)
-    ) {
-      this.toast.error(
-        'Pick two different places and fill km and all three prices.',
-      );
+    if (!n.from || !n.to || n.from === n.to || !this.valid(n.km, n.h, n.s, n.u)) {
+      this.toast.error('Pick two different places and fill km and all three prices.');
       return;
     }
     const row = (a: number, b: number) => ({
@@ -392,16 +270,12 @@ export class RoutesComponent {
       sedan_price: +n.s,
       suv_price: +n.u,
     });
-    const rows = n.reverse
-      ? [row(n.from, n.to), row(n.to, n.from)]
-      : [row(n.from, n.to)];
+    const rows = n.reverse ? [row(n.from, n.to), row(n.to, n.from)] : [row(n.from, n.to)];
     const done = await this.toast.run(
       async () => {
         const res = await (await this.db.db()).from('routes').insert(rows);
         if (res.error?.code === '23505')
-          throw new Error(
-            'This route (or its return) already exists — search for it and edit it.',
-          );
+          throw new Error('This route (or its return) already exists — search for it and edit it.');
         ok(res);
       },
       rows.length > 1 ? 'Route and return route added' : 'Route added',
@@ -417,9 +291,7 @@ export class RoutesComponent {
     if (res.data)
       downloadCsv(
         'kitecab-routes.csv',
-        (res.data as unknown as Row[]).map(
-          ({ id, from_location_id, to_location_id, ...r }) => r,
-        ),
+        (res.data as unknown as Row[]).map(({ id, from_location_id, to_location_id, ...r }) => r),
       );
   }
 }

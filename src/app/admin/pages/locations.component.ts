@@ -30,14 +30,11 @@ const slugify = (s: string) =>
   template: `
     <h1 class="kc-adm-h1">Locations</h1>
     <p class="mt-1 text-sm text-kc-muted">
-      Switch a place off to stop all online bookings from or to it (for example
-      during a strike or bad roads). Routes stay saved.
+      Switch a place off to stop all online bookings from or to it (for example during a strike or bad roads). Routes
+      stay saved.
     </p>
 
-    <form
-      class="kc-adm-card mt-4 flex flex-wrap items-end gap-3 p-4"
-      (ngSubmit)="add()"
-    >
+    <form class="kc-adm-card mt-4 flex flex-wrap items-end gap-3 p-4" (ngSubmit)="add()">
       <label class="text-sm"
         >New place<input
           class="kc-adm-input mt-1 block w-60"
@@ -54,9 +51,7 @@ const slugify = (s: string) =>
         </select>
       </label>
       <button class="kc-adm-btn-primary" type="submit">Add place</button>
-      <span class="text-xs text-kc-muted"
-        >Then add its routes in Routes and fares.</span
-      >
+      <span class="text-xs text-kc-muted">Then add its routes in Routes and fares.</span>
     </form>
 
     <div class="mt-4 flex flex-wrap gap-2">
@@ -68,22 +63,14 @@ const slugify = (s: string) =>
         (ngModelChange)="list.debounce()"
         aria-label="Search places"
       />
-      <select
-        class="kc-adm-input"
-        [(ngModel)]="active"
-        (ngModelChange)="list.reset()"
-        aria-label="On or off"
-      >
+      <select class="kc-adm-input" [(ngModel)]="active" (ngModelChange)="list.reset()" aria-label="On or off">
         <option value="">On and off</option>
         <option value="on">On only</option>
         <option value="off">Off only</option>
       </select>
     </div>
 
-    <div
-      class="kc-adm-card mt-4 overflow-hidden"
-      [class.opacity-60]="list.loading()"
-    >
+    <div class="kc-adm-card mt-4 overflow-hidden" [class.opacity-60]="list.loading()">
       <div class="overflow-x-auto">
         <table class="kc-adm-table">
           <thead>
@@ -101,11 +88,7 @@ const slugify = (s: string) =>
                 <td>{{ l.state }}</td>
                 <td>
                   <label class="inline-flex items-center gap-2"
-                    ><input
-                      type="checkbox"
-                      [checked]="l.is_active"
-                      (change)="set(l, { is_active: !l.is_active })"
-                    />
+                    ><input type="checkbox" [checked]="l.is_active" (change)="set(l, { is_active: !l.is_active })" />
                     {{ l.is_active ? 'On' : 'Off' }}</label
                   >
                 </td>
@@ -136,28 +119,16 @@ const slugify = (s: string) =>
 export class LocationsComponent {
   private readonly db = inject(AdminDbService);
   private readonly toast = inject(ToastService);
-  protected readonly states = [
-    'CG',
-    'MH',
-    'MP',
-    'OD',
-    'BR',
-    'UP',
-    'JH',
-    'TS',
-    'AP',
-  ];
+  protected readonly states = ['CG', 'MH', 'MP', 'OD', 'BR', 'UP', 'JH', 'TS', 'AP'];
   protected q = '';
   protected active = '';
   protected newName = '';
   protected newState = 'CG';
 
   protected readonly list = new PagedList<Row>(async (from, to) => {
-    let q = (await this.db.db())
-      .from('locations')
-      .select('id,name,slug,state,is_active,is_featured,sort_order', {
-        count: 'exact',
-      });
+    let q = (await this.db.db()).from('locations').select('id,name,slug,state,is_active,is_featured,sort_order', {
+      count: 'exact',
+    });
     const t = searchTerm(this.q);
     if (t) q = q.ilike('name', `%${t}%`);
     if (this.active) q = q.eq('is_active', this.active === 'on');
@@ -170,15 +141,7 @@ export class LocationsComponent {
 
   protected async set(l: Row, patch: Partial<Row>): Promise<void> {
     await this.toast.run(
-      async () =>
-        ok(
-          await (
-            await this.db.db()
-          )
-            .from('locations')
-            .update(patch)
-            .eq('id', l.id),
-        ),
+      async () => ok(await (await this.db.db()).from('locations').update(patch).eq('id', l.id)),
       `${l.name} updated`,
     );
     await this.list.load();
@@ -191,13 +154,10 @@ export class LocationsComponent {
     const done = await this.toast.run(async () => {
       const res = await (await this.db.db()).from('locations').insert({
         name: label,
-        slug:
-          slugify(name) +
-          (this.newState === 'CG' ? '' : '-' + this.newState.toLowerCase()),
+        slug: slugify(name) + (this.newState === 'CG' ? '' : '-' + this.newState.toLowerCase()),
         state: this.newState,
       });
-      if (res.error?.code === '23505')
-        throw new Error(`${label} already exists.`);
+      if (res.error?.code === '23505') throw new Error(`${label} already exists.`);
       ok(res);
     }, `${label} added`);
     if (done) {

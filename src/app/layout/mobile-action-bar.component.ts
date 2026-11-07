@@ -9,7 +9,9 @@ import { IconComponent } from '../shared/components/icon/icon.component';
   selector: 'kc-mobile-action-bar',
   imports: [IconComponent],
   template: `
-    <div class="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-2 border-t border-kc-line bg-white p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] md:hidden">
+    <div
+      class="fixed inset-x-0 bottom-0 z-40 grid grid-cols-2 gap-2 border-t border-kc-line bg-white p-2 pb-[max(0.5rem,env(safe-area-inset-bottom))] md:hidden"
+    >
       <a
         [href]="settings.telHref()"
         (click)="analytics.event('click_call', { location: 'mobile_bar' })"

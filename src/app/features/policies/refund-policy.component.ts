@@ -10,9 +10,8 @@ import { PolicyPageComponent } from './policy-page.component';
   template: `
     <kc-policy-page heading="Cancellation and refund policy" updated="26 October 2026">
       <p>
-        This policy explains how cancellations and refunds work for cabs booked with KiteCab on kitecab.com, by
-        phone or on WhatsApp, for one way trips, round trips, airport transfers and local rentals in Chhattisgarh and
-        Nagpur.
+        This policy explains how cancellations and refunds work for cabs booked with KiteCab on kitecab.com, by phone or
+        on WhatsApp, for one way trips, round trips, airport transfers and local rentals in Chhattisgarh and Nagpur.
       </p>
 
       <h2>How payment works</h2>
@@ -72,7 +71,12 @@ export class RefundPolicyComponent {
       description:
         'KiteCab taxi cancellation and refund rules for Chhattisgarh trips: free cancellation before the driver is dispatched, refunds in 5–7 working days.',
       path: '/refund-policy',
-      jsonLd: graph(breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Cancellation and Refund Policy', path: '/refund-policy' }])),
+      jsonLd: graph(
+        breadcrumbs([
+          { name: 'Home', path: '/' },
+          { name: 'Cancellation and Refund Policy', path: '/refund-policy' },
+        ]),
+      ),
     });
   }
 }

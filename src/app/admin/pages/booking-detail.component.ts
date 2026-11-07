@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  computed,
-  inject,
-  input,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -17,10 +9,7 @@ import { downloadInvoice, type InvoiceBooking } from '../core/invoice';
 import { ok } from '../core/paged-list';
 import { ToastService } from '../core/toast.service';
 import { BadgeComponent } from '../ui/badge.component';
-import {
-  ContactActionsComponent,
-  waLink,
-} from '../ui/contact-actions.component';
+import { ContactActionsComponent, waLink } from '../ui/contact-actions.component';
 
 interface Booking extends InvoiceBooking {
   status: string;
@@ -99,9 +88,7 @@ const ACTION_LABEL: Record<string, string> = {
   selector: 'kc-admin-booking-detail',
   imports: [FormsModule, RouterLink, BadgeComponent, ContactActionsComponent],
   template: `
-    <a routerLink="/admin/bookings" class="text-sm text-kc-teal hover:underline"
-      >← All bookings</a
-    >
+    <a routerLink="/admin/bookings" class="text-sm text-kc-teal hover:underline">← All bookings</a>
 
     @if (b(); as b) {
       <!-- header -->
@@ -111,10 +98,7 @@ const ACTION_LABEL: Record<string, string> = {
             <h1 class="kc-adm-h1">Booking #{{ b.id }}</h1>
             <kc-badge [value]="b.status" />
             @if (latestPayment(); as p) {
-              <kc-badge
-                [value]="p.status"
-                [label]="'Advance ' + p.status.toLowerCase()"
-              />
+              <kc-badge [value]="p.status" [label]="'Advance ' + p.status.toLowerCase()" />
             }
           </div>
           <p class="mt-1 text-sm text-kc-muted">
@@ -122,34 +106,14 @@ const ACTION_LABEL: Record<string, string> = {
             {{ handledName() || 'nobody' }}
             @if (b.handled_by !== db.userId()) {
               ·
-              <button
-                type="button"
-                class="text-kc-teal hover:underline"
-                (click)="takeOver()"
-              >
-                take it
-              </button>
+              <button type="button" class="text-kc-teal hover:underline" (click)="takeOver()">take it</button>
             }
           </p>
         </div>
         <div class="flex flex-wrap gap-2">
-          <button type="button" class="kc-adm-btn" (click)="copyDetails()">
-            Copy details
-          </button>
-          <button
-            type="button"
-            class="kc-adm-btn"
-            (click)="invoice()"
-            [disabled]="busy()"
-          >
-            Invoice PDF
-          </button>
-          <a
-            class="kc-adm-btn"
-            [routerLink]="['/admin/bookings/new']"
-            [queryParams]="{ copy: b.id }"
-            >Book again</a
-          >
+          <button type="button" class="kc-adm-btn" (click)="copyDetails()">Copy details</button>
+          <button type="button" class="kc-adm-btn" (click)="invoice()" [disabled]="busy()">Invoice PDF</button>
+          <a class="kc-adm-btn" [routerLink]="['/admin/bookings/new']" [queryParams]="{ copy: b.id }">Book again</a>
         </div>
       </div>
 
@@ -161,11 +125,7 @@ const ACTION_LABEL: Record<string, string> = {
         >
           <p class="text-sm"><b>Next:</b> {{ n.text }}</p>
           @if (n.action) {
-            <button
-              type="button"
-              class="kc-adm-btn-primary"
-              (click)="n.action!()"
-            >
+            <button type="button" class="kc-adm-btn-primary" (click)="n.action!()">
               {{ n.button }}
             </button>
           }
@@ -178,9 +138,7 @@ const ACTION_LABEL: Record<string, string> = {
           <section class="kc-adm-card p-5">
             <div class="flex flex-wrap items-start justify-between gap-3">
               <div>
-                <p class="text-xs text-kc-muted">
-                  {{ typeLabel(b.booking_type) }} · {{ b.car_type }}
-                </p>
+                <p class="text-xs text-kc-muted">{{ typeLabel(b.booking_type) }} · {{ b.car_type }}</p>
                 <h2 class="text-xl font-semibold">
                   {{ b.pickup_location }} →
                   {{ b.drop_location || b.rental_package || 'Local' }}
@@ -194,17 +152,13 @@ const ACTION_LABEL: Record<string, string> = {
                 <p class="text-2xl font-semibold">{{ rs(b.fare) }}</p>
                 @if (b.discount_amount) {
                   <p class="text-xs text-emerald-700">
-                    {{ rs(b.discount_amount) }} off{{
-                      b.coupon_code ? ' · ' + b.coupon_code : ''
-                    }}
+                    {{ rs(b.discount_amount) }} off{{ b.coupon_code ? ' · ' + b.coupon_code : '' }}
                   </p>
                 }
               </div>
             </div>
 
-            <dl
-              class="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 border-t border-kc-line pt-4 text-sm sm:grid-cols-3"
-            >
+            <dl class="mt-4 grid grid-cols-2 gap-x-6 gap-y-3 border-t border-kc-line pt-4 text-sm sm:grid-cols-3">
               @for (f of facts(); track f.k) {
                 <div>
                   <dt class="text-xs text-kc-muted">{{ f.k }}</dt>
@@ -213,9 +167,7 @@ const ACTION_LABEL: Record<string, string> = {
               }
             </dl>
 
-            <div
-              class="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg bg-kc-surface p-3"
-            >
+            <div class="mt-4 flex flex-wrap items-center justify-between gap-3 rounded-lg bg-kc-surface p-3">
               <div>
                 <p class="font-medium">{{ b.customer_name }}</p>
                 @if (val(b.email)) {
@@ -226,9 +178,7 @@ const ACTION_LABEL: Record<string, string> = {
             </div>
 
             @if (val(b.admin_notes)) {
-              <p class="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm">
-                <b>Office note:</b> {{ b.admin_notes }}
-              </p>
+              <p class="mt-3 rounded-lg bg-amber-50 px-3 py-2 text-sm"><b>Office note:</b> {{ b.admin_notes }}</p>
             }
             @if (b.status === 'cancelled') {
               <p class="mt-3 rounded-lg bg-zinc-100 px-3 py-2 text-sm">
@@ -240,12 +190,10 @@ const ACTION_LABEL: Record<string, string> = {
             }
             @if (b.status === 'completed') {
               <p class="mt-3 rounded-lg bg-emerald-50 px-3 py-2 text-sm">
-                <b>Completed</b> {{ stamp(b.completed_at) }} · collected
-                {{ rs(b.balance_collected)
+                <b>Completed</b> {{ stamp(b.completed_at) }} · collected {{ rs(b.balance_collected)
                 }}{{ b.balance_mode ? ' by ' + b.balance_mode : '' }}
                 @if (b.extra_charges) {
-                  · extras {{ rs(b.extra_charges)
-                  }}{{ b.extra_note ? ' (' + b.extra_note + ')' : '' }}
+                  · extras {{ rs(b.extra_charges) }}{{ b.extra_note ? ' (' + b.extra_note + ')' : '' }}
                 }
                 @if (b.customer_rating) {
                   · {{ '★'.repeat(b.customer_rating) }}
@@ -254,142 +202,71 @@ const ACTION_LABEL: Record<string, string> = {
             }
 
             <div class="mt-4 flex flex-wrap gap-2 border-t border-kc-line pt-4">
-              <button type="button" class="kc-adm-btn" (click)="toggle('edit')">
-                Edit trip
-              </button>
+              <button type="button" class="kc-adm-btn" (click)="toggle('edit')">Edit trip</button>
               @if (b.status !== 'completed' && b.status !== 'cancelled') {
                 @if (b.status === 'new') {
-                  <button
-                    type="button"
-                    class="kc-adm-btn"
-                    (click)="setStatus('confirmed')"
-                  >
-                    Mark confirmed
-                  </button>
+                  <button type="button" class="kc-adm-btn" (click)="setStatus('confirmed')">Mark confirmed</button>
                 }
-                <button
-                  type="button"
-                  class="kc-adm-btn"
-                  (click)="toggle('complete')"
-                >
-                  Trip completed
-                </button>
-                <button
-                  type="button"
-                  class="kc-adm-btn !text-red-700"
-                  (click)="toggle('cancel')"
-                >
+                <button type="button" class="kc-adm-btn" (click)="toggle('complete')">Trip completed</button>
+                <button type="button" class="kc-adm-btn !text-red-700" (click)="toggle('cancel')">
                   Cancel booking
                 </button>
               } @else {
-                <button
-                  type="button"
-                  class="kc-adm-btn"
-                  (click)="setStatus('confirmed')"
-                >
-                  Re-open
-                </button>
+                <button type="button" class="kc-adm-btn" (click)="setStatus('confirmed')">Re-open</button>
               }
             </div>
 
             <!-- panels -->
             @switch (panel()) {
               @case ('edit') {
-                <div
-                  class="mt-4 grid gap-3 rounded-xl border border-kc-line p-4 sm:grid-cols-2"
-                >
+                <div class="mt-4 grid gap-3 rounded-xl border border-kc-line p-4 sm:grid-cols-2">
                   <label class="text-sm"
                     ><span class="kc-adm-label">Pickup date</span
-                    ><input
-                      class="kc-adm-input w-full"
-                      type="date"
-                      [(ngModel)]="edit.pickup_date"
+                    ><input class="kc-adm-input w-full" type="date" [(ngModel)]="edit.pickup_date"
                   /></label>
                   <label class="text-sm"
                     ><span class="kc-adm-label">Pickup time</span
-                    ><input
-                      class="kc-adm-input w-full"
-                      [(ngModel)]="edit.pickup_time"
-                      placeholder="6:30 PM"
+                    ><input class="kc-adm-input w-full" [(ngModel)]="edit.pickup_time" placeholder="6:30 PM"
                   /></label>
                   <label class="text-sm sm:col-span-2"
                     ><span class="kc-adm-label">Pickup address</span
-                    ><input
-                      class="kc-adm-input w-full"
-                      [(ngModel)]="edit.pickup_address"
+                    ><input class="kc-adm-input w-full" [(ngModel)]="edit.pickup_address"
                   /></label>
                   <label class="text-sm"
                     ><span class="kc-adm-label">Name</span
-                    ><input
-                      class="kc-adm-input w-full"
-                      [(ngModel)]="edit.customer_name"
+                    ><input class="kc-adm-input w-full" [(ngModel)]="edit.customer_name"
                   /></label>
                   <label class="text-sm"
-                    ><span class="kc-adm-label">Email</span
-                    ><input
-                      class="kc-adm-input w-full"
-                      [(ngModel)]="edit.email"
+                    ><span class="kc-adm-label">Email</span><input class="kc-adm-input w-full" [(ngModel)]="edit.email"
                   /></label>
                   <label class="text-sm"
                     ><span class="kc-adm-label">Fare (₹)</span
-                    ><input
-                      class="kc-adm-input w-full"
-                      type="number"
-                      min="0"
-                      [(ngModel)]="edit.fare"
+                    ><input class="kc-adm-input w-full" type="number" min="0" [(ngModel)]="edit.fare"
                   /></label>
                   <label class="text-sm"
                     ><span class="kc-adm-label">Passengers</span
-                    ><input
-                      class="kc-adm-input w-full"
-                      type="number"
-                      min="1"
-                      max="20"
-                      [(ngModel)]="edit.passengers"
+                    ><input class="kc-adm-input w-full" type="number" min="1" max="20" [(ngModel)]="edit.passengers"
                   /></label>
                   <label class="text-sm sm:col-span-2"
                     ><span class="kc-adm-label">Office note</span
-                    ><textarea
-                      class="kc-adm-input w-full"
-                      rows="2"
-                      [(ngModel)]="edit.admin_notes"
-                    ></textarea>
+                    ><textarea class="kc-adm-input w-full" rows="2" [(ngModel)]="edit.admin_notes"></textarea>
                   </label>
                   <div class="flex gap-2 sm:col-span-2">
-                    <button
-                      type="button"
-                      class="kc-adm-btn-primary"
-                      (click)="saveEdit()"
-                      [disabled]="busy()"
-                    >
+                    <button type="button" class="kc-adm-btn-primary" (click)="saveEdit()" [disabled]="busy()">
                       Save changes</button
-                    ><button
-                      type="button"
-                      class="kc-adm-btn"
-                      (click)="panel.set('')"
-                    >
-                      Close
-                    </button>
+                    ><button type="button" class="kc-adm-btn" (click)="panel.set('')">Close</button>
                   </div>
                 </div>
               }
               @case ('complete') {
-                <div
-                  class="mt-4 grid gap-3 rounded-xl border border-emerald-200 bg-emerald-50/40 p-4 sm:grid-cols-2"
-                >
+                <div class="mt-4 grid gap-3 rounded-xl border border-emerald-200 bg-emerald-50/40 p-4 sm:grid-cols-2">
                   <p class="text-sm sm:col-span-2">
                     Balance due from customer:
-                    <b>{{ rs(balanceDue()) }}</b> (fare {{ rs(b.fare) }} −
-                    advance paid {{ rs(paid()) }})
+                    <b>{{ rs(balanceDue()) }}</b> (fare {{ rs(b.fare) }} − advance paid {{ rs(paid()) }})
                   </p>
                   <label class="text-sm"
-                    ><span class="kc-adm-label"
-                      >Amount collected by driver (₹)</span
-                    ><input
-                      class="kc-adm-input w-full"
-                      type="number"
-                      min="0"
-                      [(ngModel)]="done.collected"
+                    ><span class="kc-adm-label">Amount collected by driver (₹)</span
+                    ><input class="kc-adm-input w-full" type="number" min="0" [(ngModel)]="done.collected"
                   /></label>
                   <label class="text-sm"
                     ><span class="kc-adm-label">How</span>
@@ -401,26 +278,16 @@ const ACTION_LABEL: Record<string, string> = {
                     </select>
                   </label>
                   <label class="text-sm"
-                    ><span class="kc-adm-label"
-                      >Extra charges (₹) — toll, parking, extra km</span
-                    ><input
-                      class="kc-adm-input w-full"
-                      type="number"
-                      min="0"
-                      [(ngModel)]="done.extra"
+                    ><span class="kc-adm-label">Extra charges (₹) — toll, parking, extra km</span
+                    ><input class="kc-adm-input w-full" type="number" min="0" [(ngModel)]="done.extra"
                   /></label>
                   <label class="text-sm"
                     ><span class="kc-adm-label">Extra charges note</span
-                    ><input
-                      class="kc-adm-input w-full"
-                      [(ngModel)]="done.extraNote"
+                    ><input class="kc-adm-input w-full" [(ngModel)]="done.extraNote"
                   /></label>
                   <label class="text-sm"
                     ><span class="kc-adm-label">Customer rating</span>
-                    <select
-                      class="kc-adm-input w-full"
-                      [(ngModel)]="done.rating"
-                    >
+                    <select class="kc-adm-input w-full" [(ngModel)]="done.rating">
                       <option [ngValue]="null">Not asked</option>
                       @for (r of [5, 4, 3, 2, 1]; track r) {
                         <option [ngValue]="r">{{ '★'.repeat(r) }}</option>
@@ -429,32 +296,17 @@ const ACTION_LABEL: Record<string, string> = {
                   </label>
                   <label class="text-sm"
                     ><span class="kc-adm-label">Feedback</span
-                    ><input
-                      class="kc-adm-input w-full"
-                      [(ngModel)]="done.feedback"
+                    ><input class="kc-adm-input w-full" [(ngModel)]="done.feedback"
                   /></label>
                   <div class="flex gap-2 sm:col-span-2">
-                    <button
-                      type="button"
-                      class="kc-adm-btn-primary"
-                      (click)="complete()"
-                      [disabled]="busy()"
-                    >
+                    <button type="button" class="kc-adm-btn-primary" (click)="complete()" [disabled]="busy()">
                       Mark trip completed</button
-                    ><button
-                      type="button"
-                      class="kc-adm-btn"
-                      (click)="panel.set('')"
-                    >
-                      Close
-                    </button>
+                    ><button type="button" class="kc-adm-btn" (click)="panel.set('')">Close</button>
                   </div>
                 </div>
               }
               @case ('cancel') {
-                <div
-                  class="mt-4 rounded-xl border border-red-200 bg-red-50/40 p-4"
-                >
+                <div class="mt-4 rounded-xl border border-red-200 bg-red-50/40 p-4">
                   <p class="kc-adm-label">Why is it cancelled?</p>
                   <div class="flex flex-wrap gap-1.5">
                     @for (r of cancelReasons; track r) {
@@ -469,15 +321,10 @@ const ACTION_LABEL: Record<string, string> = {
                       </button>
                     }
                   </div>
-                  <input
-                    class="kc-adm-input mt-2 w-full"
-                    [(ngModel)]="cancelReason"
-                    placeholder="Or type the reason"
-                  />
+                  <input class="kc-adm-input mt-2 w-full" [(ngModel)]="cancelReason" placeholder="Or type the reason" />
                   @if (paid() > 0) {
                     <p class="mt-2 text-sm text-red-800">
-                      Advance of {{ rs(paid()) }} was paid — refund it from
-                      Razorpay if the policy allows.
+                      Advance of {{ rs(paid()) }} was paid — refund it from Razorpay if the policy allows.
                     </p>
                   }
                   <div class="mt-3 flex gap-2">
@@ -488,13 +335,7 @@ const ACTION_LABEL: Record<string, string> = {
                       [disabled]="busy() || !cancelReason.trim()"
                     >
                       Cancel booking</button
-                    ><button
-                      type="button"
-                      class="kc-adm-btn"
-                      (click)="panel.set('')"
-                    >
-                      Keep it
-                    </button>
+                    ><button type="button" class="kc-adm-btn" (click)="panel.set('')">Keep it</button>
                   </div>
                 </div>
               }
@@ -507,18 +348,14 @@ const ACTION_LABEL: Record<string, string> = {
             <ol class="mt-3 border-l-2 border-kc-line pl-4">
               @for (a of activity(); track a.id) {
                 <li class="relative pb-3 text-sm">
-                  <span
-                    class="absolute top-1.5 -left-[21px] size-2.5 rounded-full bg-kc-teal"
-                  ></span>
+                  <span class="absolute top-1.5 -left-[21px] size-2.5 rounded-full bg-kc-teal"></span>
                   <p>
                     <b>{{ actionLabel(a.action) }}</b>
                     @if (a.detail) {
                       — {{ a.detail }}
                     }
                   </p>
-                  <p class="text-xs text-kc-muted">
-                    {{ stamp(a.created_at) }} · {{ a.actor_name }}
-                  </p>
+                  <p class="text-xs text-kc-muted">{{ stamp(a.created_at) }} · {{ a.actor_name }}</p>
                 </li>
               } @empty {
                 <li class="text-sm text-kc-muted">No activity yet.</li>
@@ -531,14 +368,7 @@ const ACTION_LABEL: Record<string, string> = {
                 placeholder="Add a note to the timeline…"
                 (keydown.enter)="addNote()"
               />
-              <button
-                type="button"
-                class="kc-adm-btn"
-                (click)="addNote()"
-                [disabled]="!newNote.trim()"
-              >
-                Add
-              </button>
+              <button type="button" class="kc-adm-btn" (click)="addNote()" [disabled]="!newNote.trim()">Add</button>
             </div>
           </section>
         </div>
@@ -568,19 +398,11 @@ const ACTION_LABEL: Record<string, string> = {
               </button>
             }
             <label class="mt-3 block text-sm"
-              ><span class="kc-adm-label">{{
-                b.driver_id ? 'Change driver' : 'Driver'
-              }}</span>
-              <select
-                class="kc-adm-input w-full"
-                [(ngModel)]="driverId"
-                (ngModelChange)="onDriver($event)"
-              >
+              ><span class="kc-adm-label">{{ b.driver_id ? 'Change driver' : 'Driver' }}</span>
+              <select class="kc-adm-input w-full" [(ngModel)]="driverId" (ngModelChange)="onDriver($event)">
                 <option [ngValue]="null">— none —</option>
                 @for (d of drivers(); track d.id) {
-                  <option [ngValue]="d.id">
-                    {{ d.full_name }} · {{ d.mobile }}
-                  </option>
+                  <option [ngValue]="d.id">{{ d.full_name }} · {{ d.mobile }}</option>
                 }
               </select>
             </label>
@@ -589,9 +411,7 @@ const ACTION_LABEL: Record<string, string> = {
               <select class="kc-adm-input w-full" [(ngModel)]="vehicleId">
                 <option [ngValue]="null">— none —</option>
                 @for (v of vehicles(); track v.id) {
-                  <option [ngValue]="v.id">
-                    {{ v.registration_no }} · {{ v.model || v.car_type }}
-                  </option>
+                  <option [ngValue]="v.id">{{ v.registration_no }} · {{ v.model || v.car_type }}</option>
                 }
               </select>
             </label>
@@ -599,11 +419,7 @@ const ACTION_LABEL: Record<string, string> = {
               <p class="mt-2 text-xs text-kc-muted">
                 No approved drivers yet.
                 @if (db.isAdmin()) {
-                  <a
-                    routerLink="/admin/drivers"
-                    class="text-kc-teal hover:underline"
-                    >Add drivers</a
-                  >
+                  <a routerLink="/admin/drivers" class="text-kc-teal hover:underline">Add drivers</a>
                 }
               </p>
             }
@@ -611,10 +427,7 @@ const ACTION_LABEL: Record<string, string> = {
               type="button"
               class="kc-adm-btn mt-3 w-full"
               (click)="assign()"
-              [disabled]="
-                busy() ||
-                (driverId === b.driver_id && vehicleId === b.vehicle_id)
-              "
+              [disabled]="busy() || (driverId === b.driver_id && vehicleId === b.vehicle_id)"
             >
               Save driver
             </button>
@@ -628,9 +441,7 @@ const ACTION_LABEL: Record<string, string> = {
                 <dd>{{ rs(b.fare) }}</dd>
               </div>
               <div class="flex justify-between">
-                <dt class="text-kc-muted">
-                  Advance asked ({{ b.advance_percent ?? '-' }}%)
-                </dt>
+                <dt class="text-kc-muted">Advance asked ({{ b.advance_percent ?? '-' }}%)</dt>
                 <dd>{{ rs(b.advance_amount) }}</dd>
               </div>
               <div class="flex justify-between">
@@ -648,9 +459,7 @@ const ACTION_LABEL: Record<string, string> = {
               @for (p of payments(); track p.id) {
                 <li class="rounded-lg border border-kc-line p-2">
                   <div class="flex items-center justify-between">
-                    <kc-badge [value]="p.status" /><span>{{
-                      rs(p.amount_paid ?? p.advance_amount)
-                    }}</span>
+                    <kc-badge [value]="p.status" /><span>{{ rs(p.amount_paid ?? p.advance_amount) }}</span>
                   </div>
                   <p class="mt-1 text-xs text-kc-muted">
                     Link {{ p.attempt }} · {{ ago(p.created_at) }}
@@ -687,40 +496,22 @@ const ACTION_LABEL: Record<string, string> = {
               }
             </ul>
             <div class="mt-3 grid gap-2">
-              @if (
-                paid() === 0 &&
-                b.status !== 'cancelled' &&
-                b.status !== 'completed'
-              ) {
+              @if (paid() === 0 && b.status !== 'cancelled' && b.status !== 'completed') {
                 <button
                   type="button"
                   class="kc-adm-btn-primary"
                   (click)="resend('new-payment-link')"
                   [disabled]="busy()"
                 >
-                  {{
-                    payments().length
-                      ? 'New payment link + WhatsApp'
-                      : 'Create payment link + WhatsApp'
-                  }}
+                  {{ payments().length ? 'New payment link + WhatsApp' : 'Create payment link + WhatsApp' }}
                 </button>
               }
               @if (latestPayment()?.status === 'PENDING') {
-                <button
-                  type="button"
-                  class="kc-adm-btn"
-                  (click)="resend('customer-whatsapp')"
-                  [disabled]="busy()"
-                >
+                <button type="button" class="kc-adm-btn" (click)="resend('customer-whatsapp')" [disabled]="busy()">
                   Resend booking WhatsApp
                 </button>
               }
-              <button
-                type="button"
-                class="kc-adm-btn"
-                (click)="resend('admin-whatsapp')"
-                [disabled]="busy()"
-              >
+              <button type="button" class="kc-adm-btn" (click)="resend('admin-whatsapp')" [disabled]="busy()">
                 Resend admin alert
               </button>
             </div>
@@ -780,28 +571,18 @@ export class BookingDetailComponent implements OnInit {
   };
   private readonly chosenDriver = signal<number | null>(null);
 
-  protected readonly latestPayment = computed<Payment | null>(
-    () => this.payments()[0] ?? null,
-  );
+  protected readonly latestPayment = computed<Payment | null>(() => this.payments()[0] ?? null);
   protected readonly paid = computed(() =>
     this.payments()
       .filter((p) => p.status === 'PAID')
       .reduce((s, p) => s + (p.amount_paid ?? p.advance_amount), 0),
   );
-  protected readonly balanceDue = computed(() =>
-    Math.max(0, (this.b()?.fare ?? 0) - this.paid()),
-  );
-  protected readonly currentDriver = computed(
-    () => this.drivers().find((d) => d.id === this.b()?.driver_id) ?? null,
-  );
-  protected readonly currentCar = computed(
-    () => this.allVehicles().find((v) => v.id === this.b()?.vehicle_id) ?? null,
-  );
+  protected readonly balanceDue = computed(() => Math.max(0, (this.b()?.fare ?? 0) - this.paid()));
+  protected readonly currentDriver = computed(() => this.drivers().find((d) => d.id === this.b()?.driver_id) ?? null);
+  protected readonly currentCar = computed(() => this.allVehicles().find((v) => v.id === this.b()?.vehicle_id) ?? null);
   protected readonly vehicles = computed(() => {
     const d = this.chosenDriver();
-    return [...this.allVehicles()].sort(
-      (a, b) => Number(b.driver_id === d) - Number(a.driver_id === d),
-    );
+    return [...this.allVehicles()].sort((a, b) => Number(b.driver_id === d) - Number(a.driver_id === d));
   });
 
   /** Only facts that have a value — no empty boxes. */
@@ -886,9 +667,7 @@ export class BookingDetailComponent implements OnInit {
       db.from('bookings').select('*').eq('id', this.bookingId).maybeSingle(),
       db
         .from('booking_payments')
-        .select(
-          'id,status,advance_amount,amount_paid,payment_link,razorpay_payment_id,attempt,paid_at,created_at',
-        )
+        .select('id,status,advance_amount,amount_paid,payment_link,razorpay_payment_id,attempt,paid_at,created_at')
         .eq('booking_id', this.bookingId)
         .order('created_at', { ascending: false }),
       db
@@ -897,11 +676,7 @@ export class BookingDetailComponent implements OnInit {
         .eq('entity', 'booking')
         .eq('entity_id', String(this.bookingId))
         .order('created_at', { ascending: false }),
-      db
-        .from('drivers')
-        .select('id,full_name,mobile')
-        .eq('status', 'approved')
-        .order('full_name'),
+      db.from('drivers').select('id,full_name,mobile').eq('status', 'approved').order('full_name'),
       db
         .from('vehicles')
         .select('id,driver_id,registration_no,car_type,model')
@@ -945,21 +720,10 @@ export class BookingDetailComponent implements OnInit {
     this.b.set(booking);
   }
 
-  private async update(
-    patch: Record<string, unknown>,
-    success: string,
-  ): Promise<boolean> {
+  private async update(patch: Record<string, unknown>, success: string): Promise<boolean> {
     this.busy.set(true);
     const okay = await this.toast.run(
-      async () =>
-        ok(
-          await (
-            await this.db.db()
-          )
-            .from('bookings')
-            .update(patch)
-            .eq('id', this.bookingId),
-        ),
+      async () => ok(await (await this.db.db()).from('bookings').update(patch).eq('id', this.bookingId)),
       success,
     );
     if (okay) {
@@ -975,10 +739,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
   protected takeOver(): void {
-    void this.update(
-      { handled_by: this.db.userId() },
-      'You now handle this booking',
-    );
+    void this.update({ handled_by: this.db.userId() }, 'You now handle this booking');
   }
 
   protected saveEdit(): void {
@@ -1001,10 +762,7 @@ export class BookingDetailComponent implements OnInit {
         customer_name: e.customer_name.trim(),
         email: e.email?.trim() || null,
         fare: Math.round(Number(e.fare)),
-        passengers: Math.min(
-          20,
-          Math.max(1, Math.round(Number(e.passengers) || 1)),
-        ),
+        passengers: Math.min(20, Math.max(1, Math.round(Number(e.passengers) || 1))),
         admin_notes: e.admin_notes?.trim() || null,
       },
       'Booking saved',
@@ -1067,13 +825,10 @@ export class BookingDetailComponent implements OnInit {
       vehicle_id: this.vehicleId,
       assigned_at: this.driverId ? new Date().toISOString() : null,
     };
-    if (this.driverId && (b.status === 'new' || b.status === 'confirmed'))
-      patch['status'] = 'assigned';
+    if (this.driverId && (b.status === 'new' || b.status === 'confirmed')) patch['status'] = 'assigned';
     void this.update(
       patch,
-      this.driverId
-        ? 'Driver assigned — now send the details to the customer'
-        : 'Driver removed',
+      this.driverId ? 'Driver assigned — now send the details to the customer' : 'Driver removed',
     );
   }
 
@@ -1100,11 +855,7 @@ export class BookingDetailComponent implements OnInit {
   }
 
   protected async resend(
-    action:
-      | 'customer-whatsapp'
-      | 'admin-whatsapp'
-      | 'new-payment-link'
-      | 'driver-whatsapp',
+    action: 'customer-whatsapp' | 'admin-whatsapp' | 'new-payment-link' | 'driver-whatsapp',
   ): Promise<void> {
     if (
       action === 'new-payment-link' &&
@@ -1119,10 +870,7 @@ export class BookingDetailComponent implements OnInit {
       'new-payment-link': 'Payment link sent',
       'driver-whatsapp': 'Driver details sent to customer',
     }[action];
-    const sent = await this.toast.run(
-      () => this.db.api('/admin/resend', { bookingId: this.bookingId, action }),
-      msg,
-    );
+    const sent = await this.toast.run(() => this.db.api('/admin/resend', { bookingId: this.bookingId, action }), msg);
     if (sent)
       await (await this.db.db()).from('activity_log').insert({
         entity: 'booking',
@@ -1178,9 +926,7 @@ export class BookingDetailComponent implements OnInit {
       `Customer: ${b.customer_name}, ${b.mobile}`,
       `Passengers: ${b.passengers}`,
       `Fare: ${rs(b.fare)} · advance paid ${rs(this.paid())} · balance ${rs(this.balanceDue())}`,
-      d
-        ? `Driver: ${d.full_name}, ${d.mobile}${c ? ` · ${c.registration_no}` : ''}`
-        : '',
+      d ? `Driver: ${d.full_name}, ${d.mobile}${c ? ` · ${c.registration_no}` : ''}` : '',
     ].filter(Boolean);
     this.copy(lines.join('\n'), 'Booking details copied');
   }

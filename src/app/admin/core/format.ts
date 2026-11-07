@@ -1,17 +1,4 @@
-const MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 export const BOOKING_TYPES = [
   { value: 'oneway', label: 'One way' },
@@ -19,13 +6,7 @@ export const BOOKING_TYPES = [
   { value: 'local-rental', label: 'Local rental' },
 ] as const;
 
-export const BOOKING_STATUSES = [
-  'new',
-  'confirmed',
-  'assigned',
-  'completed',
-  'cancelled',
-] as const;
+export const BOOKING_STATUSES = ['new', 'confirmed', 'assigned', 'completed', 'cancelled'] as const;
 export type BookingStatus = (typeof BOOKING_STATUSES)[number];
 
 export const CAR_TYPES = ['Hatchback', 'Sedan', 'SUV'] as const;
@@ -56,9 +37,7 @@ export function stamp(ts: string | null | undefined): string {
 
 /** Today's date in India as YYYY-MM-DD. */
 export function todayIst(offsetDays = 0): string {
-  return new Date(Date.now() + 330 * 60_000 + offsetDays * 86_400_000)
-    .toISOString()
-    .slice(0, 10);
+  return new Date(Date.now() + 330 * 60_000 + offsetDays * 86_400_000).toISOString().slice(0, 10);
 }
 
 export const STATUS_STYLE: Record<string, string> = {
@@ -75,20 +54,14 @@ export const STATUS_STYLE: Record<string, string> = {
 };
 
 /** CSV download (Excel opens it). */
-export function downloadCsv(
-  name: string,
-  rows: Record<string, unknown>[],
-): void {
+export function downloadCsv(name: string, rows: Record<string, unknown>[]): void {
   if (!rows.length) return;
   const cols = Object.keys(rows[0]);
   const cell = (v: unknown) => {
     const s = v == null ? '' : String(v);
     return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
   };
-  const csv = [
-    cols.join(','),
-    ...rows.map((r) => cols.map((c) => cell(r[c])).join(',')),
-  ].join('\n');
+  const csv = [cols.join(','), ...rows.map((r) => cols.map((c) => cell(r[c])).join(','))].join('\n');
   const a = document.createElement('a');
   a.href = URL.createObjectURL(new Blob(['﻿' + csv], { type: 'text/csv' }));
   a.download = name;
@@ -148,8 +121,7 @@ export function ago(ts: string | null | undefined): string {
   if (s < 60) return 'just now';
   if (s < 3600) return `${Math.floor(s / 60)} min ago`;
   if (s < 86400) return `${Math.floor(s / 3600)} h ago`;
-  if (s < 7 * 86400)
-    return `${Math.floor(s / 86400)} day${s < 2 * 86400 ? '' : 's'} ago`;
+  if (s < 7 * 86400) return `${Math.floor(s / 86400)} day${s < 2 * 86400 ? '' : 's'} ago`;
   return stamp(ts);
 }
 

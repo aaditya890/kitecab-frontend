@@ -1,22 +1,11 @@
 import { HttpClient } from '@angular/common/http';
-import {
-  Injectable,
-  PLATFORM_ID,
-  computed,
-  inject,
-  signal,
-} from '@angular/core';
+import { Injectable, PLATFORM_ID, computed, inject, signal } from '@angular/core';
 import { isPlatformBrowser } from '@angular/common';
 import { catchError, timeout } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
 
-import {
-  CatalogFile,
-  RentalPackage,
-  RoundTripRate,
-  RouteFare,
-} from '../../models/catalog.model';
+import { CatalogFile, RentalPackage, RoundTripRate, RouteFare } from '../../models/catalog.model';
 
 /**
  * Locations, fares, rental packages and round-trip rates for the booking form.
@@ -36,12 +25,8 @@ export class CatalogService {
   readonly ready = computed(() => this.file() !== null);
   readonly failed = signal(false);
   readonly locations = computed(() => this.file()?.locations ?? []);
-  readonly rentals = computed<RentalPackage[]>(
-    () => this.file()?.rentals ?? [],
-  );
-  readonly roundTripRates = computed<RoundTripRate[]>(
-    () => this.file()?.roundTrip ?? [],
-  );
+  readonly rentals = computed<RentalPackage[]>(() => this.file()?.rentals ?? []);
+  readonly roundTripRates = computed<RoundTripRate[]>(() => this.file()?.roundTrip ?? []);
 
   /** "from|to" -> fare, for instant lookups while typing. */
   private readonly routeIndex = computed(() => {

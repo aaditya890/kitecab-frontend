@@ -41,10 +41,7 @@ export class ToastService {
   private push(text: string, kind: Toast['kind']): void {
     const id = this.next++;
     this.items.update((l) => [...l, { id, text, kind }]);
-    setTimeout(
-      () => this.items.update((l) => l.filter((t) => t.id !== id)),
-      kind === 'error' ? 6000 : 2500,
-    );
+    setTimeout(() => this.items.update((l) => l.filter((t) => t.id !== id)), kind === 'error' ? 6000 : 2500);
   }
 }
 
@@ -58,9 +55,7 @@ function friendly(msg: string): string {
   }
   if (/violates row-level security|permission denied/i.test(msg))
     return 'You do not have access to do this. Ask the admin.';
-  if (/Failed to fetch|NetworkError/i.test(msg))
-    return 'No internet or the server is not reachable. Try again.';
-  if (/JWT expired|invalid JWT/i.test(msg))
-    return 'Your login expired. Please log in again.';
+  if (/Failed to fetch|NetworkError/i.test(msg)) return 'No internet or the server is not reachable. Try again.';
+  if (/JWT expired|invalid JWT/i.test(msg)) return 'Your login expired. Please log in again.';
   return msg;
 }

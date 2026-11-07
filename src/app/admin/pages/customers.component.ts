@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { RouterLink } from '@angular/router';
@@ -38,19 +33,11 @@ interface Trip {
 
 @Component({
   selector: 'kc-admin-customers',
-  imports: [
-    FormsModule,
-    RouterLink,
-    BadgeComponent,
-    ContactActionsComponent,
-    PagerComponent,
-  ],
+  imports: [FormsModule, RouterLink, BadgeComponent, ContactActionsComponent, PagerComponent],
   template: `
     <div class="flex flex-wrap items-center justify-between gap-3">
       <h1 class="kc-adm-h1">Customers</h1>
-      <button type="button" class="kc-adm-btn" (click)="exportCsv()">
-        Export CSV
-      </button>
+      <button type="button" class="kc-adm-btn" (click)="exportCsv()">Export CSV</button>
     </div>
     <div class="mt-4 flex flex-wrap gap-2">
       <input
@@ -61,22 +48,14 @@ interface Trip {
         (ngModelChange)="list.debounce()"
         aria-label="Search customers"
       />
-      <select
-        class="kc-adm-input"
-        [(ngModel)]="sort"
-        (ngModelChange)="list.reset()"
-        aria-label="Sort"
-      >
+      <select class="kc-adm-input" [(ngModel)]="sort" (ngModelChange)="list.reset()" aria-label="Sort">
         <option value="id">Newest first</option>
         <option value="bookings">Most bookings</option>
         <option value="total_fare">Most spent</option>
         <option value="last_trip">Recent trip</option>
       </select>
     </div>
-    <div
-      class="kc-adm-card mt-4 overflow-hidden"
-      [class.opacity-60]="list.loading()"
-    >
+    <div class="kc-adm-card mt-4 overflow-hidden" [class.opacity-60]="list.loading()">
       <div class="overflow-x-auto">
         <table class="kc-adm-table">
           <thead>
@@ -92,10 +71,7 @@ interface Trip {
             @for (c of list.rows(); track c.id) {
               <tr class="cursor-pointer" (click)="toggle(c.id)">
                 <td class="font-medium">
-                  {{ c.full_name }}<br /><span
-                    class="text-xs font-normal text-kc-muted"
-                    >{{ c.email }}</span
-                  >
+                  {{ c.full_name }}<br /><span class="text-xs font-normal text-kc-muted">{{ c.email }}</span>
                 </td>
                 <td>
                   <kc-contact [mobile]="c.mobile" />
@@ -108,18 +84,13 @@ interface Trip {
                 <tr>
                   <td colspan="5" class="bg-kc-surface">
                     @for (t of trips(); track t.id) {
-                      <div
-                        class="flex flex-wrap items-center gap-3 py-1 text-sm"
-                      >
-                        <a
-                          class="font-medium text-kc-teal hover:underline"
-                          [routerLink]="['/admin/bookings', t.id]"
+                      <div class="flex flex-wrap items-center gap-3 py-1 text-sm">
+                        <a class="font-medium text-kc-teal hover:underline" [routerLink]="['/admin/bookings', t.id]"
                           >#{{ t.id }}</a
                         >
                         <span>{{ day(t.pickup_date) }}</span>
                         <span
-                          >{{ typeLabel(t.booking_type) }}:
-                          {{ t.pickup_location }} →
+                          >{{ typeLabel(t.booking_type) }}: {{ t.pickup_location }} →
                           {{ t.drop_location || t.rental_package }}</span
                         >
                         <span>{{ rs(t.fare) }}</span>
@@ -167,18 +138,10 @@ export class CustomersComponent {
   private query(db: SupabaseClient, count: boolean) {
     let q = db
       .from('admin_customers')
-      .select(
-        'id,full_name,mobile,email,bookings,total_fare,last_trip',
-        count ? { count: 'exact' } : undefined,
-      );
+      .select('id,full_name,mobile,email,bookings,total_fare,last_trip', count ? { count: 'exact' } : undefined);
     const t = searchTerm(this.q);
-    if (t)
-      q = /^\d+$/.test(t)
-        ? q.like('mobile', `${t}%`)
-        : q.ilike('full_name', `%${t}%`);
-    return q
-      .order(this.sort, { ascending: false, nullsFirst: false })
-      .order('id', { ascending: false });
+    if (t) q = /^\d+$/.test(t) ? q.like('mobile', `${t}%`) : q.ilike('full_name', `%${t}%`);
+    return q.order(this.sort, { ascending: false, nullsFirst: false }).order('id', { ascending: false });
   }
 
   protected async toggle(id: number): Promise<void> {
@@ -192,9 +155,7 @@ export class CustomersComponent {
       await this.db.db()
     )
       .from('bookings')
-      .select(
-        'id,booking_type,pickup_location,drop_location,rental_package,pickup_date,fare,status',
-      )
+      .select('id,booking_type,pickup_location,drop_location,rental_package,pickup_date,fare,status')
       .eq('customer_id', id)
       .order('pickup_date', { ascending: false })
       .limit(50);

@@ -53,24 +53,10 @@ const TYPE_LABEL: Record<string, string> = {
   'round-trip': 'Round trip',
   'local-rental': 'Local rental',
 };
-const MONTHS = [
-  'Jan',
-  'Feb',
-  'Mar',
-  'Apr',
-  'May',
-  'Jun',
-  'Jul',
-  'Aug',
-  'Sep',
-  'Oct',
-  'Nov',
-  'Dec',
-];
+const MONTHS = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'];
 
 /** jsPDF's built-in fonts have no ₹ glyph, so amounts use "Rs." */
-const money = (n: number) =>
-  `Rs. ${Math.round(n || 0).toLocaleString('en-IN')}`;
+const money = (n: number) => `Rs. ${Math.round(n || 0).toLocaleString('en-IN')}`;
 const longDate = (iso: string) => {
   const [y, m, d] = (iso || '').slice(0, 10).split('-').map(Number);
   return y ? `${d} ${MONTHS[m - 1]} ${y}` : '-';
@@ -90,14 +76,8 @@ async function dataUrl(url: string): Promise<string> {
   });
 }
 
-export async function downloadInvoice(
-  b: InvoiceBooking,
-  x: InvoiceExtras,
-): Promise<void> {
-  const [{ jsPDF }, { default: autoTable }] = await Promise.all([
-    import('jspdf'),
-    import('jspdf-autotable'),
-  ]);
+export async function downloadInvoice(b: InvoiceBooking, x: InvoiceExtras): Promise<void> {
+  const [{ jsPDF }, { default: autoTable }] = await Promise.all([import('jspdf'), import('jspdf-autotable')]);
   const doc = new jsPDF({ unit: 'mm', format: 'a4', compress: true });
   const W = 210;
   const M = 14; // page margin
@@ -176,11 +156,7 @@ export async function downloadInvoice(
       doc.text(k, cx + 5, ly);
       ink(INK);
       font(k === '' ? 'bold' : 'normal', k === '' ? 11 : 9);
-      doc.text(
-        doc.splitTextToSize(v, cardW - 30)[0],
-        cx + (k === '' ? 5 : 27),
-        ly,
-      );
+      doc.text(doc.splitTextToSize(v, cardW - 30)[0], cx + (k === '' ? 5 : 27), ly);
       ly += k === '' ? 6.5 : 5.2;
     }
   };
@@ -212,17 +188,12 @@ export async function downloadInvoice(
   doc.text(clean(b.pickup_location), M + 12, y + 14);
   ink(MUTED);
   font('normal', 8.5);
-  const addr =
-    doc.splitTextToSize(clean(b.pickup_address), W - M * 2 - 20)[0] ?? '';
+  const addr = doc.splitTextToSize(clean(b.pickup_address), W - M * 2 - 20)[0] ?? '';
   doc.text(addr, M + 12, y + 18.5);
   if (rental) {
     ink(INK);
     font('normal', 9);
-    doc.text(
-      `Package: ${clean(b.rental_package) || 'Local rental'}`,
-      M + 12,
-      y + 21.5 + 0,
-    );
+    doc.text(`Package: ${clean(b.rental_package) || 'Local rental'}`, M + 12, y + 21.5 + 0);
   } else {
     stroke(LINE);
     doc.setLineDashPattern([0.8, 0.8], 0);
@@ -235,12 +206,8 @@ export async function downloadInvoice(
     doc.text(clean(b.drop_location), M + 12, y + 25);
     const facts = [
       b.distance_km ? `${b.distance_km} km one way` : '',
-      b.booking_type === 'round-trip' && clean(b.waiting_time)
-        ? `waiting ${b.waiting_time}`
-        : '',
-      b.booking_type === 'round-trip' && b.approx_distance_km
-        ? `${b.approx_distance_km} km total`
-        : '',
+      b.booking_type === 'round-trip' && clean(b.waiting_time) ? `waiting ${b.waiting_time}` : '',
+      b.booking_type === 'round-trip' && b.approx_distance_km ? `${b.approx_distance_km} km total` : '',
     ].filter(Boolean);
     ink(MUTED);
     font('normal', 8.5);
@@ -257,8 +224,7 @@ export async function downloadInvoice(
     body.push([tripText, money(b.fare + discount)]);
     body.push(['Discount', '- ' + money(discount)]);
   } else body.push([tripText, money(b.fare)]);
-  if (extra > 0)
-    body.push(['Extra charges (toll, parking, extra km)', money(extra)]);
+  if (extra > 0) body.push(['Extra charges (toll, parking, extra km)', money(extra)]);
   autoTable(doc, {
     startY: y,
     head: [['Description', 'Amount']],
@@ -281,19 +247,13 @@ export async function downloadInvoice(
     columnStyles: { 1: { halign: 'right', cellWidth: 40 } },
     bodyStyles: { lineWidth: { bottom: 0.2 } },
   });
-  y =
-    (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable
-      .finalY + 6;
+  y = (doc as unknown as { lastAutoTable: { finalY: number } }).lastAutoTable.finalY + 6;
 
   // ---------- payment summary (right) + driver (left) ----------
   const sx = W - M - 78;
   const rows: [string, string, RGB?][] = [
     ['Total fare', money(total)],
-    [
-      'Advance paid online',
-      paid ? '- ' + money(paid) : money(0),
-      paid ? GREEN : undefined,
-    ],
+    ['Advance paid online', paid ? '- ' + money(paid) : money(0), paid ? GREEN : undefined],
   ];
   fill(SURFACE);
   doc.roundedRect(sx, y, 78, 34, 2.5, 2.5, 'F');
@@ -310,21 +270,10 @@ export async function downloadInvoice(
   doc.line(sx + 5, ry - 2.5, sx + 73, ry - 2.5);
   ink(INK);
   font('bold', 10);
-  doc.text(
-    x.status === 'completed'
-      ? 'Balance paid to driver'
-      : 'Balance to pay driver',
-    sx + 5,
-    ry + 4,
-  );
+  doc.text(x.status === 'completed' ? 'Balance paid to driver' : 'Balance to pay driver', sx + 5, ry + 4);
   ink(fullyPaid ? GREEN : RED);
   font('bold', 13);
-  doc.text(
-    money(x.status === 'completed' ? total - paid : balance),
-    sx + 73,
-    ry + 4.5,
-    { align: 'right' },
-  );
+  doc.text(money(x.status === 'completed' ? total - paid : balance), sx + 73, ry + 4.5, { align: 'right' });
 
   if (clean(x.driver)) {
     ink(TEAL);

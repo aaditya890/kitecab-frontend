@@ -1,10 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  inject,
-  input,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { SupabaseClient } from '@supabase/supabase-js';
 import { RouterLink } from '@angular/router';
@@ -39,9 +33,7 @@ const COLS =
   template: `
     <div class="flex flex-wrap items-center justify-between gap-3">
       <h1 class="kc-adm-h1">Advance payments</h1>
-      <button type="button" class="kc-adm-btn" (click)="exportCsv()">
-        Export CSV
-      </button>
+      <button type="button" class="kc-adm-btn" (click)="exportCsv()">Export CSV</button>
     </div>
     <div class="mt-4 flex flex-wrap gap-2">
       <input
@@ -52,25 +44,14 @@ const COLS =
         (ngModelChange)="list.debounce()"
         aria-label="Search payments"
       />
-      <select
-        class="kc-adm-input"
-        [(ngModel)]="status"
-        (ngModelChange)="list.reset()"
-        aria-label="Status"
-      >
+      <select class="kc-adm-input" [(ngModel)]="status" (ngModelChange)="list.reset()" aria-label="Status">
         <option value="">All</option>
-        @for (
-          s of ['PAID', 'PENDING', 'EXPIRED', 'CANCELLED', 'FAILED'];
-          track s
-        ) {
+        @for (s of ['PAID', 'PENDING', 'EXPIRED', 'CANCELLED', 'FAILED']; track s) {
           <option [value]="s">{{ s }}</option>
         }
       </select>
     </div>
-    <div
-      class="kc-adm-card mt-4 overflow-hidden"
-      [class.opacity-60]="list.loading()"
-    >
+    <div class="kc-adm-card mt-4 overflow-hidden" [class.opacity-60]="list.loading()">
       <div class="overflow-x-auto">
         <table class="kc-adm-table">
           <thead>
@@ -92,21 +73,15 @@ const COLS =
                   {{ stamp(p.created_at) }}
                 </td>
                 <td>
-                  <a
-                    class="font-medium text-kc-teal hover:underline"
-                    [routerLink]="['/admin/bookings', p.booking_id]"
+                  <a class="font-medium text-kc-teal hover:underline" [routerLink]="['/admin/bookings', p.booking_id]"
                     >#{{ p.booking_id }}</a
                   >
                   @if (p.attempt > 1) {
-                    <span class="text-xs text-kc-muted">
-                      · link {{ p.attempt }}</span
-                    >
+                    <span class="text-xs text-kc-muted"> · link {{ p.attempt }}</span>
                   }
                 </td>
                 <td>
-                  {{ p.customer_name }}<br /><span class="text-kc-muted">{{
-                    p.mobile
-                  }}</span>
+                  {{ p.customer_name }}<br /><span class="text-kc-muted">{{ p.mobile }}</span>
                 </td>
                 <td>{{ rs(p.booking_amount) }}</td>
                 <td class="font-medium">
@@ -151,13 +126,10 @@ export class PaymentsComponent implements OnInit {
   }
 
   private query(db: SupabaseClient, count: boolean) {
-    let q = db
-      .from('booking_payments')
-      .select(COLS, count ? { count: 'exact' } : undefined);
+    let q = db.from('booking_payments').select(COLS, count ? { count: 'exact' } : undefined);
     const t = searchTerm(this.q);
     if (t) {
-      if (/^\d{6,7}$/.test(t) && Number(t) > 900000)
-        q = q.eq('booking_id', Number(t));
+      if (/^\d{6,7}$/.test(t) && Number(t) > 900000) q = q.eq('booking_id', Number(t));
       else if (/^\d+$/.test(t)) q = q.like('mobile', `${t}%`);
       else if (t.startsWith('pay_')) q = q.eq('razorpay_payment_id', t);
       else q = q.ilike('customer_name', `%${t}%`);

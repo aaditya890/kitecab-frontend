@@ -1,12 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  OnInit,
-  computed,
-  inject,
-  input,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, OnInit, computed, inject, input, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
@@ -55,13 +47,11 @@ function to12h(v: string): string {
   selector: 'kc-admin-booking-new',
   imports: [FormsModule, RouterLink],
   template: `
-    <a routerLink="/admin/bookings" class="text-sm text-kc-teal hover:underline"
-      >← All bookings</a
-    >
+    <a routerLink="/admin/bookings" class="text-sm text-kc-teal hover:underline">← All bookings</a>
     <h1 class="kc-adm-h1 mt-2">New booking</h1>
     <p class="text-sm text-kc-muted">
-      For phone, WhatsApp and walk-in customers. The fare comes from your price
-      list; change it only if you agreed a different price.
+      For phone, WhatsApp and walk-in customers. The fare comes from your price list; change it only if you agreed a
+      different price.
     </p>
 
     <form class="mt-5 grid gap-5 xl:grid-cols-[1fr_360px]" (ngSubmit)="save()">
@@ -81,11 +71,7 @@ function to12h(v: string): string {
                 [attr.aria-checked]="type() === t.value"
                 (click)="setType(t.value)"
                 class="h-10 rounded-lg text-sm font-semibold"
-                [class]="
-                  type() === t.value
-                    ? 'bg-kc-teal text-white'
-                    : 'hover:bg-white'
-                "
+                [class]="type() === t.value ? 'bg-kc-teal text-white' : 'hover:bg-white'"
               >
                 {{ t.label }}
               </button>
@@ -115,9 +101,7 @@ function to12h(v: string): string {
                 >
                   <option [ngValue]="0">Choose</option>
                   @for (r of rentals(); track r.id) {
-                    <option [ngValue]="r.id">
-                      {{ r.hours }} hours · {{ r.km }} km
-                    </option>
+                    <option [ngValue]="r.id">{{ r.hours }} hours · {{ r.km }} km</option>
                   }
                 </select>
               </label>
@@ -130,11 +114,7 @@ function to12h(v: string): string {
                   list="kc-drops"
                   [ngModel]="drop()"
                   (ngModelChange)="drop.set($event)"
-                  [placeholder]="
-                    drops().length
-                      ? drops().length + ' places from ' + pickup()
-                      : 'Choose pickup first'
-                  "
+                  [placeholder]="drops().length ? drops().length + ' places from ' + pickup() : 'Choose pickup first'"
                   autocomplete="off"
                 />
               </label>
@@ -165,9 +145,7 @@ function to12h(v: string): string {
                   min="1"
                   [ngModel]="approxKm()"
                   (ngModelChange)="approxKm.set(+$event)"
-                  [placeholder]="
-                    route() ? 'one way is ' + route()!.distance_km + ' km' : ''
-                  "
+                  [placeholder]="route() ? 'one way is ' + route()!.distance_km + ' km' : ''"
                 />
               </label>
             }
@@ -184,8 +162,7 @@ function to12h(v: string): string {
           </datalist>
           @if (pickup() && type() !== 'local-rental' && drop() && !route()) {
             <p class="mt-2 text-sm text-red-700">
-              No price for {{ pickup() }} → {{ drop() }}. Add it in Routes and
-              fares, or type the fare yourself below.
+              No price for {{ pickup() }} → {{ drop() }}. Add it in Routes and fares, or type the fare yourself below.
             </p>
           }
 
@@ -197,15 +174,11 @@ function to12h(v: string): string {
                 (click)="car.set(c)"
                 class="rounded-xl border p-3 text-left"
                 [class]="
-                  car() === c
-                    ? 'border-kc-teal bg-kc-teal/5 ring-2 ring-kc-teal'
-                    : 'border-kc-line hover:bg-kc-surface'
+                  car() === c ? 'border-kc-teal bg-kc-teal/5 ring-2 ring-kc-teal' : 'border-kc-line hover:bg-kc-surface'
                 "
               >
                 <span class="block text-sm font-semibold">{{ c }}</span>
-                <span class="block text-lg font-semibold">{{
-                  priceFor(c) ? rs(priceFor(c)) : '—'
-                }}</span>
+                <span class="block text-lg font-semibold">{{ priceFor(c) ? rs(priceFor(c)) : '—' }}</span>
               </button>
             }
           </div>
@@ -227,35 +200,21 @@ function to12h(v: string): string {
               />
               @if (known()) {
                 <span class="mt-1 block text-xs text-emerald-700"
-                  >★ Returning customer · {{ known()!.bookings }} past
-                  booking(s)</span
+                  >★ Returning customer · {{ known()!.bookings }} past booking(s)</span
                 >
               }
             </label>
             <label class="text-sm"
               ><span class="kc-adm-label">Name *</span
-              ><input
-                class="kc-adm-input w-full"
-                name="name"
-                [(ngModel)]="name"
+              ><input class="kc-adm-input w-full" name="name" [(ngModel)]="name"
             /></label>
             <label class="text-sm"
               ><span class="kc-adm-label">Email (for invoice)</span
-              ><input
-                class="kc-adm-input w-full"
-                name="email"
-                type="email"
-                [(ngModel)]="email"
+              ><input class="kc-adm-input w-full" name="email" type="email" [(ngModel)]="email"
             /></label>
             <label class="text-sm"
               ><span class="kc-adm-label">Passengers</span
-              ><input
-                class="kc-adm-input w-full"
-                name="pax"
-                type="number"
-                min="1"
-                max="20"
-                [(ngModel)]="passengers"
+              ><input class="kc-adm-input w-full" name="pax" type="number" min="1" max="20" [(ngModel)]="passengers"
             /></label>
           </div>
         </section>
@@ -266,28 +225,15 @@ function to12h(v: string): string {
           <div class="mt-3 grid gap-3 sm:grid-cols-3">
             <label class="text-sm"
               ><span class="kc-adm-label">Date *</span
-              ><input
-                class="kc-adm-input w-full"
-                name="date"
-                type="date"
-                [min]="today"
-                [(ngModel)]="date"
+              ><input class="kc-adm-input w-full" name="date" type="date" [min]="today" [(ngModel)]="date"
             /></label>
             <label class="text-sm"
               ><span class="kc-adm-label">Time *</span
-              ><input
-                class="kc-adm-input w-full"
-                name="time"
-                type="time"
-                [(ngModel)]="time"
+              ><input class="kc-adm-input w-full" name="time" type="time" [(ngModel)]="time"
             /></label>
             <label class="text-sm"
               ><span class="kc-adm-label">Booking came from</span>
-              <select
-                class="kc-adm-input w-full"
-                name="src"
-                [(ngModel)]="source"
-              >
+              <select class="kc-adm-input w-full" name="src" [(ngModel)]="source">
                 <option value="phone">Phone call</option>
                 <option value="whatsapp">WhatsApp</option>
                 <option value="walk_in">Walk-in</option>
@@ -305,12 +251,8 @@ function to12h(v: string): string {
                 placeholder="House / landmark / area"
             /></label>
             <label class="text-sm sm:col-span-3"
-              ><span class="kc-adm-label"
-                >Office note (only staff see this)</span
-              ><input
-                class="kc-adm-input w-full"
-                name="note"
-                [(ngModel)]="note"
+              ><span class="kc-adm-label">Office note (only staff see this)</span
+              ><input class="kc-adm-input w-full" name="note" [(ngModel)]="note"
             /></label>
           </div>
         </section>
@@ -337,51 +279,34 @@ function to12h(v: string): string {
             type="number"
             min="0"
             [ngModel]="fare()"
-            (ngModelChange)="
-              fareOverride.set(
-                $event === '' || $event === null ? null : +$event
-              )
-            "
+            (ngModelChange)="fareOverride.set($event === '' || $event === null ? null : +$event)"
           />
         </label>
         @if (discount() > 0) {
-          <p class="mt-1 text-xs text-emerald-700">
-            ₹{{ discount() }} less than the price list
-          </p>
+          <p class="mt-1 text-xs text-emerald-700">₹{{ discount() }} less than the price list</p>
         }
         @if (discount() < 0) {
-          <p class="mt-1 text-xs text-amber-700">
-            ₹{{ -discount() }} more than the price list
-          </p>
+          <p class="mt-1 text-xs text-amber-700">₹{{ -discount() }} more than the price list</p>
         }
         <div class="mt-3 flex justify-between text-sm">
-          <span class="text-kc-muted">Advance ({{ advancePct() }}%)</span
-          ><b>{{ rs(advance()) }}</b>
+          <span class="text-kc-muted">Advance ({{ advancePct() }}%)</span><b>{{ rs(advance()) }}</b>
         </div>
         <div class="flex justify-between text-sm">
-          <span class="text-kc-muted">Balance to driver</span
-          ><b>{{ rs(fare() - advance()) }}</b>
+          <span class="text-kc-muted">Balance to driver</span><b>{{ rs(fare() - advance()) }}</b>
         </div>
 
         @if (errors().length && tried()) {
-          <ul
-            class="mt-3 list-disc rounded-lg bg-red-50 py-2 pr-2 pl-6 text-sm text-red-800"
-          >
+          <ul class="mt-3 list-disc rounded-lg bg-red-50 py-2 pr-2 pl-6 text-sm text-red-800">
             @for (e of errors(); track e) {
               <li>{{ e }}</li>
             }
           </ul>
         }
-        <button
-          class="kc-adm-btn-primary mt-4 w-full !py-3"
-          type="submit"
-          [disabled]="saving()"
-        >
+        <button class="kc-adm-btn-primary mt-4 w-full !py-3" type="submit" [disabled]="saving()">
           {{ saving() ? 'Saving…' : 'Create booking' }}
         </button>
         <p class="mt-2 text-xs text-kc-muted">
-          After saving you can send the payment link and booking details on
-          WhatsApp from the booking page.
+          After saving you can send the payment link and booking details on WhatsApp from the booking page.
         </p>
       </aside>
     </form>
@@ -424,9 +349,7 @@ export class BookingNewComponent implements OnInit {
   protected readonly drops = signal<RouteFare[]>([]);
   protected readonly rentals = signal<Rental[]>([]);
   protected readonly roundTrip = signal<RoundTrip[]>([]);
-  protected readonly known = signal<{ id: number; bookings: number } | null>(
-    null,
-  );
+  protected readonly known = signal<{ id: number; bookings: number } | null>(null);
 
   protected name = '';
   protected email = '';
@@ -437,12 +360,8 @@ export class BookingNewComponent implements OnInit {
   protected source = 'phone';
   protected note = '';
 
-  protected readonly route = computed(
-    () => this.drops().find((r) => r.drop === this.drop()) ?? null,
-  );
-  protected readonly rental = computed(
-    () => this.rentals().find((r) => r.id === this.rentalId()) ?? null,
-  );
+  protected readonly route = computed(() => this.drops().find((r) => r.drop === this.drop()) ?? null);
+  protected readonly rental = computed(() => this.rentals().find((r) => r.id === this.rentalId()) ?? null);
 
   protected priceFor(c: Car): number {
     const k = key(c);
@@ -450,9 +369,7 @@ export class BookingNewComponent implements OnInit {
     if (t === 'local-rental') return this.rental()?.[`${k}_price`] ?? 0;
     if (t === 'oneway') return this.route()?.[`${k}_price`] ?? 0;
     const r = this.roundTrip().find((x) => x.waiting_slot === this.waiting());
-    return r && this.approxKm() > 0
-      ? r[`${k}_per_km`] * this.approxKm() + r[`${k}_base`]
-      : 0;
+    return r && this.approxKm() > 0 ? r[`${k}_per_km`] * this.approxKm() + r[`${k}_base`] : 0;
   }
 
   protected readonly listFare = computed(() => {
@@ -465,15 +382,9 @@ export class BookingNewComponent implements OnInit {
     this.roundTrip();
     return this.priceFor(this.car());
   });
-  protected readonly fare = computed(
-    () => this.fareOverride() ?? this.listFare(),
-  );
-  protected readonly discount = computed(() =>
-    this.fareOverride() === null ? 0 : this.listFare() - this.fare(),
-  );
-  protected readonly advance = computed(() =>
-    Math.round((this.fare() * this.advancePct()) / 100),
-  );
+  protected readonly fare = computed(() => this.fareOverride() ?? this.listFare());
+  protected readonly discount = computed(() => (this.fareOverride() === null ? 0 : this.listFare() - this.fare()));
+  protected readonly advance = computed(() => Math.round((this.fare() * this.advancePct()) / 100));
 
   protected readonly summary = computed(() => {
     const t = this.types.find((x) => x.value === this.type())?.label;
@@ -486,19 +397,12 @@ export class BookingNewComponent implements OnInit {
 
   protected readonly errors = computed(() => {
     const e: string[] = [];
-    if (!this.places().includes(this.pickup()))
-      e.push('Choose the pickup city from the list');
-    if (this.type() !== 'local-rental' && !this.drop().trim())
-      e.push('Enter the drop city');
-    if (this.type() === 'local-rental' && !this.rental())
-      e.push('Choose a rental package');
-    if (
-      this.type() === 'round-trip' &&
-      (!this.waiting() || !(this.approxKm() > 0))
-    )
+    if (!this.places().includes(this.pickup())) e.push('Choose the pickup city from the list');
+    if (this.type() !== 'local-rental' && !this.drop().trim()) e.push('Enter the drop city');
+    if (this.type() === 'local-rental' && !this.rental()) e.push('Choose a rental package');
+    if (this.type() === 'round-trip' && (!this.waiting() || !(this.approxKm() > 0)))
       e.push('Choose waiting time and total km');
-    if (!/^[6-9]\d{9}$/.test(this.mobile()))
-      e.push('Enter a valid 10-digit mobile');
+    if (!/^[6-9]\d{9}$/.test(this.mobile())) e.push('Enter a valid 10-digit mobile');
     if (!(this.fare() > 0)) e.push('Fare must be more than 0');
     return e;
   });
@@ -512,16 +416,8 @@ export class BookingNewComponent implements OnInit {
         .select('id,hours,km,hatchback_price,sedan_price,suv_price')
         .eq('is_active', true)
         .order('hours'),
-      db
-        .from('round_trip_rates')
-        .select('*')
-        .eq('is_active', true)
-        .order('sort_order'),
-      db
-        .from('settings')
-        .select('value')
-        .eq('key', 'advance_percent')
-        .maybeSingle(),
+      db.from('round_trip_rates').select('*').eq('is_active', true).order('sort_order'),
+      db.from('settings').select('value').eq('key', 'advance_percent').maybeSingle(),
     ]);
     this.places.set((p.data ?? []).map((x) => x.name as string));
     this.rentals.set((r.data ?? []) as Rental[]);
@@ -531,8 +427,7 @@ export class BookingNewComponent implements OnInit {
     if (this.copyParam()) await this.copyFrom(Number(this.copyParam()));
     else {
       const ty = this.typeParam() as BookingType;
-      if (['oneway', 'round-trip', 'local-rental'].includes(ty))
-        this.type.set(ty);
+      if (['oneway', 'round-trip', 'local-rental'].includes(ty)) this.type.set(ty);
       if (this.pickupParam()) await this.setPickup(this.pickupParam());
       if (this.dropParam()) this.drop.set(this.dropParam());
       if (this.nameParam()) this.name = this.nameParam();
@@ -543,13 +438,7 @@ export class BookingNewComponent implements OnInit {
 
   /** "Book again": same trip and customer, new date. */
   private async copyFrom(id: number): Promise<void> {
-    const { data: b } = await (
-      await this.db.db()
-    )
-      .from('bookings')
-      .select('*')
-      .eq('id', id)
-      .maybeSingle();
+    const { data: b } = await (await this.db.db()).from('bookings').select('*').eq('id', id).maybeSingle();
     if (!b) return;
     this.type.set(b.booking_type);
     await this.setPickup(b.pickup_location);
@@ -613,11 +502,9 @@ export class BookingNewComponent implements OnInit {
     this.tried.set(true);
     const missing = [...this.errors()];
     if (this.name.trim().length < 2) missing.push('Enter the customer name');
-    if (!this.date || this.date < this.today)
-      missing.push('Choose today or a later date');
+    if (!this.date || this.date < this.today) missing.push('Choose today or a later date');
     if (!this.time) missing.push('Choose the pickup time');
-    if (this.address.trim().length < 3)
-      missing.push('Enter the pickup address');
+    if (this.address.trim().length < 3) missing.push('Enter the pickup address');
     if (missing.length) {
       this.toast.error(missing[0]);
       return;
@@ -653,10 +540,7 @@ export class BookingNewComponent implements OnInit {
           rental_package: rental ? `${rental.hours}hour ${rental.km}km` : null,
           waiting_time: t === 'round-trip' ? this.waiting() : null,
           approx_distance_km: t === 'round-trip' ? this.approxKm() : null,
-          distance_km:
-            t === 'local-rental'
-              ? (rental?.km ?? null)
-              : (route?.distance_km ?? null),
+          distance_km: t === 'local-rental' ? (rental?.km ?? null) : (route?.distance_km ?? null),
           fare: Math.round(this.fare()),
           fare_before_discount: this.discount() > 0 ? this.listFare() : null,
           discount_amount: Math.max(0, this.discount()),
@@ -666,10 +550,7 @@ export class BookingNewComponent implements OnInit {
           customer_name: this.name.trim(),
           mobile: this.mobile(),
           email: this.email.trim() || null,
-          passengers: Math.min(
-            20,
-            Math.max(1, Math.round(Number(this.passengers) || 1)),
-          ),
+          passengers: Math.min(20, Math.max(1, Math.round(Number(this.passengers) || 1))),
           pickup_address: this.address.trim(),
           pickup_date: this.date,
           pickup_time: to12h(this.time),

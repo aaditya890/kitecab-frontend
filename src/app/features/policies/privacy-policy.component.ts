@@ -17,10 +17,21 @@ import { PolicyPageComponent } from './policy-page.component';
 
       <h2>What we collect</h2>
       <ul>
-        <li><strong>Booking details:</strong> your name, mobile number, email, pickup address, pickup and drop locations, date, time and number of passengers.</li>
-        <li><strong>Enquiries:</strong> the route or package and the mobile number you enter when you check a price.</li>
-        <li><strong>Payment status:</strong> whether your advance was paid and its reference number. Card, UPI and bank details are handled by Razorpay; we never see or store them.</li>
-        <li><strong>Website usage:</strong> pages visited, device and browser type, collected through Google Analytics and Google Ads cookies.</li>
+        <li>
+          <strong>Booking details:</strong> your name, mobile number, email, pickup address, pickup and drop locations,
+          date, time and number of passengers.
+        </li>
+        <li>
+          <strong>Enquiries:</strong> the route or package and the mobile number you enter when you check a price.
+        </li>
+        <li>
+          <strong>Payment status:</strong> whether your advance was paid and its reference number. Card, UPI and bank
+          details are handled by Razorpay; we never see or store them.
+        </li>
+        <li>
+          <strong>Website usage:</strong> pages visited, device and browser type, collected through Google Analytics and
+          Google Ads cookies.
+        </li>
       </ul>
 
       <h2>Why we use it</h2>
@@ -75,7 +86,12 @@ export class PrivacyPolicyComponent {
       description:
         'How KiteCab collects, uses and protects your data when you book a taxi in Chhattisgarh, and your rights under the DPDP Act, 2023.',
       path: '/privacy-policies',
-      jsonLd: graph(breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Privacy Policy', path: '/privacy-policies' }])),
+      jsonLd: graph(
+        breadcrumbs([
+          { name: 'Home', path: '/' },
+          { name: 'Privacy Policy', path: '/privacy-policies' },
+        ]),
+      ),
     });
   }
 }

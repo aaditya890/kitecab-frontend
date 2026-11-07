@@ -1,74 +1,87 @@
 # KiteCab frontend
 
-Website (prerendered for SEO) and admin panel for [kitecab.com](https://kitecab.com).
-Angular 21 · zoneless · Tailwind CSS 4 · Angular Material (date picker, dialogs, autocomplete only).
+Website (prerendered for SEO) and office admin panel for [kitecab.com](https://kitecab.com).
+Angular 21 · zoneless · signals · Tailwind CSS 4 · Vitest. No UI library.
 
 ## Run
 
 ```bash
 npm install
-npm start          # http://localhost:4200
-npm test           # unit tests (Vitest)
-npm run build      # static site + sitemap.xml in dist/kitecab-frontend/browser
+npm start          # http://localhost:4200  (website + /admin)
+npm test           # unit tests
+npm run build      # static site + sitemap.xml → dist/kitecab-frontend/browser
 ```
 
-## Fare data
+Node 22.12 or newer. Code style: Prettier (`.prettierrc.json`, 120 columns).
 
-Fares, locations and SEO routes come from the database. Until the website reads Supabase
-directly, refresh them from a fresh export of the live `kitecab` table:
+## Settings in one place
 
-```bash
-npm run build:data -- path/to/kitecab_rows.csv
-```
+| What | Where |
+|---|---|
+| Phone, WhatsApp, email, address, social links, Google tag IDs | `src/app/core/config/site.config.ts` |
+| API URL, Supabase URL + **public** key | `src/environments/` (no secrets here) |
+| Brand colors, fonts, shared form/admin styles | `src/styles.css` |
+| City pages, route pages, service pages | `src/app/data/` |
 
-This writes `public/data/catalog.json` (booking form) and `src/app/data/*.json`
-(SEO route pages, rental and round-trip prices). Commit the result and rebuild.
+Phone, email, advance % and admin WhatsApp numbers can also be changed live in **Admin → Settings**.
 
-## Pages (all prerendered)
+## Website pages (all prerendered)
 
 | URL | What |
 |---|---|
-| `/` | Home with booking form |
+| `/` | Home: booking form in the first screen |
 | `/taxi/<from>-to-<to>` | 60 most booked Chhattisgarh/Nagpur routes |
-| `/taxi-service/<city>` | City pages (`src/app/data/places.ts`) |
-| `/raipur-airport-taxi` | Airport page |
-| `/one-way-taxi`, `/round-trip-cab`, `/local-taxi-rental` | Service pages (`src/app/data/services.ts`) |
+| `/taxi-service/<city>`, `/raipur-airport-taxi` | City pages (`data/places.ts`) |
+| `/one-way-taxi`, `/round-trip-cab`, `/local-taxi-rental` | Service pages (`data/services.ts`) |
 | `/taxi-routes`, `/about-us`, `/contact-us`, policies, `/404` | Other pages |
 
-To add a city: add it to `places.ts` with a `hub` block. To change how many routes get pages:
-`SEO_ROUTE_COUNT` in `scripts/build-catalog.py`.
+The booking form reads live fares from the backend (`GET /api/catalog`, cached 60 s), so price
+changes and on/off switches in the admin show within a minute. If the API is down it uses
+`public/data/catalog.json` (rebuild with `npm run build:data -- kitecab_rows.csv`).
 
-Node 22.12 or newer.
+Google tags in `src/index.html` are the live site's IDs and events, unchanged. Their script files
+load on the first tap/scroll or after 3.5 s; anything tracked before that waits in `dataLayer`.
+
+## Admin panel (`/admin`, browser-only, noindex)
+
+Login with a Supabase Auth user whose `profiles.role` is `admin` or `staff`
+(Admin → Staff & performance gives access by email).
+
+| Page | For |
+|---|---|
+| Dashboard | Today, this month vs last, advance received, conversion, bookings chart, top routes |
+| Enquiries / leads | Call now list, call/WhatsApp/copy, follow-up outcome + next call, history, create booking |
+| Bookings, New booking | Search/filters, office bookings with price-list fare, driver, payment link, cancel, complete, timeline, invoice PDF |
+| Customers, Payments, Activity log | Lists with search and CSV export; who did what |
+| Staff & performance *(admin)* | Calls, bookings, late follow-ups per person; give or remove access |
+| Drivers & cars, Routes & fares, Locations, Rental & round trip, Settings *(admin)* | Business data |
+
+Lists load one page at a time from the database. supabase-js and jsPDF load only inside `/admin`.
 
 ## Folders
 
 ```
 src/
-  environments/        public settings (API URL, Supabase public key). No secrets here.
-  styles.css           Tailwind + KiteCab brand colors (bg-kc-yellow, text-kc-teal …)
-  material-theme.scss  Angular Material theme
+  environments/   public settings
+  styles.css      Tailwind theme, fonts (self-hosted Poppins), shared component classes
   app/
-    core/config/       site.config.ts — phone, address, social links, tracking IDs (one place)
-    core/services/     API, Supabase, SEO, analytics
-    core/guards/       admin login check
-    core/interceptors/ HTTP error handling
-    models/            TypeScript types shared with the database
-    shared/            reusable components and pipes
-    layout/            header, footer, admin sidebar
-    features/          one folder per page area (home, booking, routes, cities, policies, admin …)
-public/                files copied as-is (favicon, robots.txt, assets/)
+    core/         config, SEO + schema, services (API, catalog, settings, analytics), utils
+    data/         places, SEO routes, services (+ generated JSON)
+    features/     website pages (home, booking form, routes, cities, services, pages, policies)
+    layout/       header, footer, phone call/WhatsApp bar
+    shared/       logo, icons, breadcrumbs, FAQ, fare table, route links, CTA
+    admin/        office panel: core (db, invoice, formatting), ui, pages
+public/           favicon/icons, fonts, robots.txt, data/catalog.json
+scripts/          build-catalog.py, build-sitemap.mjs
 ```
 
-## How pages are built
+## Deploy (S3 + CloudFront)
 
-- `outputMode: static` — every public page is prerendered to HTML at build time, so Google
-  sees the full content. The output is plain files for S3 + CloudFront; no server needed.
-- `src/app/app.routes.server.ts` decides prerender (public pages) vs client-only (admin).
-- `dist/kitecab-frontend/browser/index.csr.html` is the fallback for pages that are not
-  prerendered (CloudFront serves it for unknown paths).
-
-## Rules
-
-- Google tags in `src/index.html` are copied unchanged from the live site — do not edit.
-- New components: `ng g c features/<area>/<name>` (OnPush + SCSS by default).
-- Business details (phone, address, IDs) only in `core/config/site.config.ts`.
+1. `npm run build`, upload `dist/kitecab-frontend/browser/` to the S3 bucket.
+2. CloudFront:
+   - **Compress objects automatically: ON** (without it pages are 3–4× slower).
+   - Cache: `*.js`, `*.css`, `/fonts/*` 1 year (file names change on every build); HTML `no-cache`.
+   - Directory URLs → `index.html` (CloudFront Function adding `index.html` to paths ending in `/` or without a dot).
+   - `/admin*` → `/index.csr.html` (the admin is not prerendered).
+   - Error 403/404 → `/404/index.html` with status 404.
+3. Invalidate `/*` after each upload.

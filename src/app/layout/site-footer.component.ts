@@ -17,17 +17,13 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
       <div
         class="mx-auto grid max-w-6xl grid-cols-2 gap-x-6 gap-y-8 px-4 py-10 sm:gap-10 sm:py-12 lg:grid-cols-[1.4fr_1fr_1fr_1fr]"
       >
-        <section
-          aria-labelledby="footer-about"
-          class="col-span-2 sm:col-span-1"
-        >
+        <section aria-labelledby="footer-about" class="col-span-2 sm:col-span-1">
           <h2 id="footer-about" class="sr-only">About KiteCab</h2>
           <kc-logo tone="onDark" [size]="48" [tagline]="true" />
           <p class="mt-4 max-w-md text-sm leading-relaxed sm:mt-5">
-            KiteCab is a Raipur-based taxi service for all of Chhattisgarh. Book
-            one way drops, round trips, airport transfers and local rentals
-            across {{ cityList }} — with clear fares shown before you book and
-            drivers who know local roads.
+            KiteCab is a Raipur-based taxi service for all of Chhattisgarh. Book one way drops, round trips, airport
+            transfers and local rentals across {{ cityList }} — with clear fares shown before you book and drivers who
+            know local roads.
           </p>
           <div class="mt-5 flex gap-2">
             <a
@@ -57,21 +53,10 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
           </div>
         </section>
 
-        <section
-          aria-labelledby="footer-contact"
-          class="col-span-2 sm:col-span-1"
-        >
-          <h2
-            id="footer-contact"
-            class="text-sm font-semibold tracking-wide text-white uppercase"
-          >
-            Contact
-          </h2>
+        <section aria-labelledby="footer-contact" class="col-span-2 sm:col-span-1">
+          <h2 id="footer-contact" class="text-sm font-semibold tracking-wide text-white uppercase">Contact</h2>
           <address class="mt-4 flex flex-col gap-3 text-sm not-italic">
-            <a
-              [href]="settings.telHref()"
-              class="flex items-center gap-3 hover:text-kc-yellow"
-            >
+            <a [href]="settings.telHref()" class="flex items-center gap-3 hover:text-kc-yellow">
               <kc-icon name="phone" [size]="18" class="text-kc-yellow" />
               {{ settings.contact().phoneDisplay }}
             </a>
@@ -92,29 +77,18 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
               {{ settings.contact().email }}
             </a>
             <span class="flex items-start gap-3">
-              <kc-icon
-                name="mapPin"
-                [size]="18"
-                class="mt-0.5 text-kc-yellow"
-              />
+              <kc-icon name="mapPin" [size]="18" class="mt-0.5 text-kc-yellow" />
               {{ settings.addressText() }}
             </span>
           </address>
         </section>
 
         <nav aria-labelledby="footer-routes">
-          <h2
-            id="footer-routes"
-            class="text-sm font-semibold tracking-wide text-white uppercase"
-          >
-            Popular routes
-          </h2>
+          <h2 id="footer-routes" class="text-sm font-semibold tracking-wide text-white uppercase">Popular routes</h2>
           <ul class="mt-3 flex flex-col text-sm sm:mt-4 sm:gap-1">
             @for (r of routes; track r.slug) {
               <li>
-                <a
-                  [routerLink]="routePath(r)"
-                  class="inline-block py-1 hover:text-kc-yellow sm:py-1.5"
+                <a [routerLink]="routePath(r)" class="inline-block py-1 hover:text-kc-yellow sm:py-1.5"
                   >{{ r.fromName }} to {{ r.toName }}</a
                 >
               </li>
@@ -123,38 +97,23 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
         </nav>
 
         <nav aria-labelledby="footer-cities">
-          <h2
-            id="footer-cities"
-            class="text-sm font-semibold tracking-wide text-white uppercase"
-          >
-            Cities
-          </h2>
+          <h2 id="footer-cities" class="text-sm font-semibold tracking-wide text-white uppercase">Cities</h2>
           <ul class="mt-3 flex flex-col text-sm sm:mt-4 sm:gap-1">
             @for (h of hubs; track h.slug) {
               <li>
-                <a
-                  [routerLink]="cityPath(h.slug)"
-                  class="inline-block py-1 hover:text-kc-yellow sm:py-1.5"
-                  >{{
-                    h.slug === 'raipur-airport' ? 'Raipur Airport' : h.name
-                  }}</a
-                >
+                <a [routerLink]="cityPath(h.slug)" class="inline-block py-1 hover:text-kc-yellow sm:py-1.5">{{
+                  h.slug === 'raipur-airport' ? 'Raipur Airport' : h.name
+                }}</a>
               </li>
             }
           </ul>
-          <h2
-            class="mt-6 text-sm font-semibold tracking-wide text-white uppercase"
-          >
-            Company
-          </h2>
+          <h2 class="mt-6 text-sm font-semibold tracking-wide text-white uppercase">Company</h2>
           <ul class="mt-3 flex flex-col text-sm sm:gap-1">
             @for (link of links; track link.path) {
               <li>
-                <a
-                  [routerLink]="link.path"
-                  class="inline-block py-1 hover:text-kc-yellow sm:py-1.5"
-                  >{{ link.label }}</a
-                >
+                <a [routerLink]="link.path" class="inline-block py-1 hover:text-kc-yellow sm:py-1.5">{{
+                  link.label
+                }}</a>
               </li>
             }
           </ul>
@@ -162,12 +121,8 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
       </div>
 
       <div class="border-t border-white/10">
-        <p
-          class="mx-auto max-w-6xl px-4 pt-5 pb-24 text-xs text-white/60 md:pb-5"
-        >
-          © {{ year }} {{ site.legalName }},
-          {{ settings.contact().address.city }}, Chhattisgarh. All rights
-          reserved.
+        <p class="mx-auto max-w-6xl px-4 pt-5 pb-24 text-xs text-white/60 md:pb-5">
+          © {{ year }} {{ site.legalName }}, {{ settings.contact().address.city }}, Chhattisgarh. All rights reserved.
         </p>
       </div>
     </footer>
@@ -183,6 +138,5 @@ export class SiteFooterComponent {
   protected readonly routePath = routePath;
   protected readonly cityPath = cityPath;
   protected readonly year = new Date().getFullYear();
-  protected readonly cityList =
-    SITE.keyCities.slice(0, -1).join(', ') + ' and ' + SITE.keyCities.at(-1);
+  protected readonly cityList = SITE.keyCities.slice(0, -1).join(', ') + ' and ' + SITE.keyCities.at(-1);
 }

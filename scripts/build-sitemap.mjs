@@ -11,7 +11,11 @@ const EXCLUDE = new Set(['/404']);
 const priority = (path) => {
   if (path === '/') return '1.0';
   if (path.startsWith('/taxi-service/') || path === '/raipur-airport-taxi') return '0.9';
-  if (path.startsWith('/taxi/') || ['/one-way-taxi', '/round-trip-cab', '/local-taxi-rental', '/taxi-routes'].includes(path)) return '0.8';
+  if (
+    path.startsWith('/taxi/') ||
+    ['/one-way-taxi', '/round-trip-cab', '/local-taxi-rental', '/taxi-routes'].includes(path)
+  )
+    return '0.8';
   return '0.4';
 };
 
@@ -19,7 +23,10 @@ const today = new Date().toISOString().slice(0, 10);
 const urls = Object.keys(routes)
   .filter((p) => !EXCLUDE.has(p))
   .sort((a, b) => Number(priority(b)) - Number(priority(a)) || a.localeCompare(b))
-  .map((p) => `  <url><loc>${SITE}${p === '/' ? '/' : p}</loc><lastmod>${today}</lastmod><priority>${priority(p)}</priority></url>`);
+  .map(
+    (p) =>
+      `  <url><loc>${SITE}${p === '/' ? '/' : p}</loc><lastmod>${today}</lastmod><priority>${priority(p)}</priority></url>`,
+  );
 
 const xml = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${urls.join('\n')}\n</urlset>\n`;
 writeFileSync(join(dist, 'browser', 'sitemap.xml'), xml);

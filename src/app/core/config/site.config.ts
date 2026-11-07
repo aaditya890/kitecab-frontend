@@ -43,7 +43,18 @@ export const SITE = {
   serviceArea: ['Chhattisgarh', 'Nagpur'],
 
   /** Main cities named across the site (SEO). Order = importance. */
-  keyCities: ['Raipur', 'Bilaspur', 'Durg', 'Bhilai', 'Raigarh', 'Korba', 'Ambikapur', 'Jagdalpur', 'Rajnandgaon', 'Nagpur'],
+  keyCities: [
+    'Raipur',
+    'Bilaspur',
+    'Durg',
+    'Bhilai',
+    'Raigarh',
+    'Korba',
+    'Ambikapur',
+    'Jagdalpur',
+    'Rajnandgaon',
+    'Nagpur',
+  ],
 
   images: {
     /** Vector mark (any size). Raster badge for places that need PNG (invoice, social). */

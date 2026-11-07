@@ -1,9 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  inject,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, inject, signal } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import { RouterLink } from '@angular/router';
 
@@ -42,22 +37,15 @@ interface StaffRow {
       <div>
         <h1 class="kc-adm-h1">Staff and performance</h1>
         <p class="text-sm text-kc-muted">
-          Calls, conversions and bookings per person. Late = follow-up time has
-          passed.
+          Calls, conversions and bookings per person. Late = follow-up time has passed.
         </p>
       </div>
-      <div
-        class="flex rounded-lg border border-kc-line bg-white p-0.5"
-        role="group"
-        aria-label="Period"
-      >
+      <div class="flex rounded-lg border border-kc-line bg-white p-0.5" role="group" aria-label="Period">
         @for (d of [1, 7, 30]; track d) {
           <button
             type="button"
             class="rounded-md px-3 py-1 text-sm font-medium"
-            [class]="
-              days() === d ? 'bg-kc-teal text-white' : 'hover:bg-kc-surface'
-            "
+            [class]="days() === d ? 'bg-kc-teal text-white' : 'hover:bg-kc-surface'"
             (click)="setDays(d)"
           >
             {{ d === 1 ? 'Today' : d + ' days' }}
@@ -87,9 +75,7 @@ interface StaffRow {
               <tr>
                 <td>
                   <span class="font-medium">{{ p.name }}</span
-                  ><br /><span class="text-xs text-kc-muted capitalize">{{
-                    p.role
-                  }}</span>
+                  ><br /><span class="text-xs text-kc-muted capitalize">{{ p.role }}</span>
                 </td>
                 <td class="text-right font-semibold">{{ p.follow_ups }}</td>
                 <td class="text-right">{{ p.not_reached }}</td>
@@ -97,11 +83,7 @@ interface StaffRow {
                 <td class="text-right">{{ p.bookings_created }}</td>
                 <td class="text-right">{{ p.drivers_assigned }}</td>
                 <td class="text-right">{{ p.open_leads }}</td>
-                <td
-                  class="text-right"
-                  [class.font-semibold]="p.overdue"
-                  [class.text-red-700]="p.overdue"
-                >
+                <td class="text-right" [class.font-semibold]="p.overdue" [class.text-red-700]="p.overdue">
                   {{ p.overdue }}
                 </td>
                 <td class="text-sm text-kc-muted whitespace-nowrap">
@@ -120,9 +102,7 @@ interface StaffRow {
       </div>
       <p class="border-t border-kc-line px-4 py-2 text-xs text-kc-muted">
         See every action in the
-        <a routerLink="/admin/activity" class="text-kc-teal hover:underline"
-          >activity log</a
-        >.
+        <a routerLink="/admin/activity" class="text-kc-teal hover:underline">activity log</a>.
       </p>
     </div>
 
@@ -131,54 +111,35 @@ interface StaffRow {
         <h2 class="font-semibold">Add or change a person</h2>
         <ol class="mt-2 list-decimal space-y-1 pl-5 text-sm text-kc-muted">
           <li>
-            In Supabase → Authentication → Users → <b>Add user</b>: their email
-            and a password (tick Auto Confirm).
+            In Supabase → Authentication → Users → <b>Add user</b>: their email and a password (tick Auto Confirm).
           </li>
           <li>Enter the same email here and choose the access.</li>
         </ol>
         <form class="mt-4 grid gap-3 sm:grid-cols-2" (ngSubmit)="save()">
           <label class="text-sm"
             ><span class="kc-adm-label">Email *</span
-            ><input
-              class="kc-adm-input w-full"
-              type="email"
-              name="e"
-              [(ngModel)]="email"
+            ><input class="kc-adm-input w-full" type="email" name="e" [(ngModel)]="email"
           /></label>
           <label class="text-sm"
             ><span class="kc-adm-label">Name</span
-            ><input
-              class="kc-adm-input w-full"
-              name="n"
-              [(ngModel)]="name"
-              placeholder="Shown in follow-ups"
+            ><input class="kc-adm-input w-full" name="n" [(ngModel)]="name" placeholder="Shown in follow-ups"
           /></label>
           <label class="text-sm"
             ><span class="kc-adm-label">Access</span>
             <select class="kc-adm-input w-full" name="r" [(ngModel)]="role">
               <option value="staff">Staff — leads, bookings, customers</option>
-              <option value="admin">
-                Admin — everything incl. prices and settings
-              </option>
+              <option value="admin">Admin — everything incl. prices and settings</option>
               <option value="customer">Remove office access</option>
             </select>
           </label>
           <div class="flex items-end">
-            <button
-              class="kc-adm-btn-primary"
-              type="submit"
-              [disabled]="busy()"
-            >
-              Save
-            </button>
+            <button class="kc-adm-btn-primary" type="submit" [disabled]="busy()">Save</button>
           </div>
         </form>
       </section>
 
       <section class="kc-adm-card overflow-hidden">
-        <h2 class="border-b border-kc-line px-4 py-3 font-semibold">
-          Office logins
-        </h2>
+        <h2 class="border-b border-kc-line px-4 py-3 font-semibold">Office logins</h2>
         <table class="kc-adm-table">
           <thead>
             <tr>
@@ -193,18 +154,14 @@ interface StaffRow {
               <tr>
                 <td>
                   <span class="font-medium">{{ s.full_name || '—' }}</span
-                  ><br /><span class="text-xs text-kc-muted">{{
-                    s.email
-                  }}</span>
+                  ><br /><span class="text-xs text-kc-muted">{{ s.email }}</span>
                 </td>
                 <td class="capitalize">{{ s.role }}</td>
                 <td class="text-sm text-kc-muted">
                   {{ s.last_sign_in_at ? ago(s.last_sign_in_at) : 'never' }}
                 </td>
                 <td>
-                  <button type="button" class="kc-adm-btn" (click)="pick(s)">
-                    Edit
-                  </button>
+                  <button type="button" class="kc-adm-btn" (click)="pick(s)">Edit</button>
                 </td>
               </tr>
             }
@@ -243,11 +200,7 @@ export class StaffComponent {
     const db = await this.db.db();
     const [p, s] = await Promise.all([
       db.rpc('staff_performance', { p_days: this.days() }),
-      db
-        .from('admin_staff')
-        .select('id,role,full_name,email,last_sign_in_at')
-        .order('role')
-        .order('full_name'),
+      db.from('admin_staff').select('id,role,full_name,email,last_sign_in_at').order('role').order('full_name'),
     ]);
     this.loading.set(false);
     if (p.error) this.toast.error(p.error);

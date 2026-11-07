@@ -1,11 +1,4 @@
-import {
-  ChangeDetectionStrategy,
-  Component,
-  computed,
-  input,
-  model,
-  signal,
-} from '@angular/core';
+import { ChangeDetectionStrategy, Component, computed, input, model, signal } from '@angular/core';
 
 let nextId = 0;
 
@@ -17,13 +10,8 @@ let nextId = 0;
       <div class="relative">
         <label [for]="id" class="kc-label">{{ label() }}</label>
         @if (icon() === 'pickup') {
-          <span
-            class="pointer-events-none absolute bottom-0 left-4 z-10 flex h-12 items-center"
-            aria-hidden="true"
-          >
-            <span
-              class="size-2.5 rounded-full bg-kc-teal ring-4 ring-kc-teal/15"
-            ></span>
+          <span class="pointer-events-none absolute bottom-0 left-4 z-10 flex h-12 items-center" aria-hidden="true">
+            <span class="size-2.5 rounded-full bg-kc-teal ring-4 ring-kc-teal/15"></span>
           </span>
         } @else if (icon() === 'drop') {
           <span
@@ -45,9 +33,7 @@ let nextId = 0;
           aria-autocomplete="list"
           [attr.aria-expanded]="open()"
           [attr.aria-controls]="id + '-list'"
-          [attr.aria-activedescendant]="
-            open() && active() >= 0 ? id + '-opt-' + active() : null
-          "
+          [attr.aria-activedescendant]="open() && active() >= 0 ? id + '-opt-' + active() : null"
           [attr.aria-invalid]="invalid() || null"
           [attr.aria-describedby]="invalid() ? id + '-err' : null"
           [placeholder]="placeholder()"
@@ -76,12 +62,7 @@ let nextId = 0;
               class="flex cursor-pointer items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-kc-surface"
               [class.bg-kc-surface]="i === active()"
             >
-              <svg
-                viewBox="0 0 24 24"
-                class="size-4 shrink-0 text-kc-muted/70"
-                fill="currentColor"
-                aria-hidden="true"
-              >
+              <svg viewBox="0 0 24 24" class="size-4 shrink-0 text-kc-muted/70" fill="currentColor" aria-hidden="true">
                 <path
                   d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"
                 />
@@ -119,9 +100,7 @@ export class PlaceInputComponent {
     const all = this.options();
     if (!q) return all.slice(0, 8);
     const starts = all.filter((o) => o.toLowerCase().startsWith(q));
-    const contains = all.filter(
-      (o) => !o.toLowerCase().startsWith(q) && o.toLowerCase().includes(q),
-    );
+    const contains = all.filter((o) => !o.toLowerCase().startsWith(q) && o.toLowerCase().includes(q));
     return [...starts, ...contains].slice(0, 8);
   });
 

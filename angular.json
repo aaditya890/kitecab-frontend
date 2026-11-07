@@ -55,8 +55,7 @@
               }
             ],
             "styles": [
-              "src/styles.css",
-              "src/material-theme.scss"
+              "src/styles.css"
             ],
             "allowedCommonJsDependencies": [
               "canvg",
@@ -74,7 +73,7 @@
               "budgets": [
                 {
                   "type": "initial",
-                  "maximumWarning": "450kB",
+                  "maximumWarning": "430kB",
                   "maximumError": "800kB"
                 },
                 {

@@ -20,78 +20,46 @@ export const ADMIN_ROUTES: Routes = [
   {
     path: 'login',
     canActivate: [noindex],
-    ...page(() =>
-      import('./login.component').then((m) => m.AdminLoginComponent),
-    ),
+    ...page(() => import('./login.component').then((m) => m.AdminLoginComponent)),
   },
   {
     path: '',
     canActivate: [noindex, adminGuard],
     canActivateChild: [adminGuard],
-    ...page(() =>
-      import('./admin-layout.component').then((m) => m.AdminLayoutComponent),
-    ),
+    ...page(() => import('./admin-layout.component').then((m) => m.AdminLayoutComponent)),
     children: [
       // admin + staff
       {
         path: '',
-        ...page(() =>
-          import('./pages/dashboard.component').then(
-            (m) => m.DashboardComponent,
-          ),
-        ),
+        ...page(() => import('./pages/dashboard.component').then((m) => m.DashboardComponent)),
       },
       {
         path: 'enquiries',
-        ...page(() =>
-          import('./pages/enquiries.component').then(
-            (m) => m.EnquiriesComponent,
-          ),
-        ),
+        ...page(() => import('./pages/enquiries.component').then((m) => m.EnquiriesComponent)),
       },
       {
         path: 'bookings',
-        ...page(() =>
-          import('./pages/bookings-list.component').then(
-            (m) => m.BookingsListComponent,
-          ),
-        ),
+        ...page(() => import('./pages/bookings-list.component').then((m) => m.BookingsListComponent)),
       },
       {
         path: 'bookings/new',
-        ...page(() =>
-          import('./pages/booking-new.component').then(
-            (m) => m.BookingNewComponent,
-          ),
-        ),
+        ...page(() => import('./pages/booking-new.component').then((m) => m.BookingNewComponent)),
       },
       {
         path: 'activity',
-        ...page(() =>
-          import('./pages/activity.component').then((m) => m.ActivityComponent),
-        ),
+        ...page(() => import('./pages/activity.component').then((m) => m.ActivityComponent)),
       },
       {
         path: 'bookings/:id',
-        ...page(() =>
-          import('./pages/booking-detail.component').then(
-            (m) => m.BookingDetailComponent,
-          ),
-        ),
+        ...page(() => import('./pages/booking-detail.component').then((m) => m.BookingDetailComponent)),
       },
       {
         path: 'customers',
-        ...page(() =>
-          import('./pages/customers.component').then(
-            (m) => m.CustomersComponent,
-          ),
-        ),
+        ...page(() => import('./pages/customers.component').then((m) => m.CustomersComponent)),
       },
       {
         path: 'payments',
-        ...page(() =>
-          import('./pages/payments.component').then((m) => m.PaymentsComponent),
-        ),
+        ...page(() => import('./pages/payments.component').then((m) => m.PaymentsComponent)),
       },
       // admin only
       {
@@ -100,45 +68,27 @@ export const ADMIN_ROUTES: Routes = [
         children: [
           {
             path: 'staff',
-            ...page(() =>
-              import('./pages/staff.component').then((m) => m.StaffComponent),
-            ),
+            ...page(() => import('./pages/staff.component').then((m) => m.StaffComponent)),
           },
           {
             path: 'drivers',
-            ...page(() =>
-              import('./pages/drivers.component').then(
-                (m) => m.DriversComponent,
-              ),
-            ),
+            ...page(() => import('./pages/drivers.component').then((m) => m.DriversComponent)),
           },
           {
             path: 'routes',
-            ...page(() =>
-              import('./pages/routes.component').then((m) => m.RoutesComponent),
-            ),
+            ...page(() => import('./pages/routes.component').then((m) => m.RoutesComponent)),
           },
           {
             path: 'locations',
-            ...page(() =>
-              import('./pages/locations.component').then(
-                (m) => m.LocationsComponent,
-              ),
-            ),
+            ...page(() => import('./pages/locations.component').then((m) => m.LocationsComponent)),
           },
           {
             path: 'rates',
-            ...page(() =>
-              import('./pages/rates.component').then((m) => m.RatesComponent),
-            ),
+            ...page(() => import('./pages/rates.component').then((m) => m.RatesComponent)),
           },
           {
             path: 'settings',
-            ...page(() =>
-              import('./pages/settings.component').then(
-                (m) => m.SettingsComponent,
-              ),
-            ),
+            ...page(() => import('./pages/settings.component').then((m) => m.SettingsComponent)),
           },
         ],
       },

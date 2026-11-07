@@ -11,8 +11,8 @@ import { PolicyPageComponent } from './policy-page.component';
   template: `
     <kc-policy-page heading="Terms and conditions" updated="26 October 2026">
       <p>
-        These terms apply when you book a cab with KiteCab Taxi Service through kitecab.com, by phone or on WhatsApp.
-        By booking, you agree to them.
+        These terms apply when you book a cab with KiteCab Taxi Service through kitecab.com, by phone or on WhatsApp. By
+        booking, you agree to them.
       </p>
 
       <h2>Our service</h2>
@@ -25,8 +25,13 @@ import { PolicyPageComponent } from './policy-page.component';
       <h2>Booking and confirmation</h2>
       <ul>
         <li>All bookings depend on car and driver availability.</li>
-        <li>A booking is confirmed once the advance payment is received. We may still contact you to confirm details.</li>
-        <li>Please give correct pickup and drop details, mobile number and pickup time. Wrong details can delay or cancel the trip.</li>
+        <li>
+          A booking is confirmed once the advance payment is received. We may still contact you to confirm details.
+        </li>
+        <li>
+          Please give correct pickup and drop details, mobile number and pickup time. Wrong details can delay or cancel
+          the trip.
+        </li>
       </ul>
 
       <h2>Fares and payment</h2>
@@ -49,7 +54,9 @@ import { PolicyPageComponent } from './policy-page.component';
       <ul>
         <li>Be ready at the pickup point at the booked time.</li>
         <li>Do not carry more passengers or luggage than the car can safely take.</li>
-        <li>Treat the driver and the car with respect. Smoking, alcohol and illegal items are not allowed in the car.</li>
+        <li>
+          Treat the driver and the car with respect. Smoking, alcohol and illegal items are not allowed in the car.
+        </li>
         <li>Any damage to the car caused by passengers may be charged.</li>
       </ul>
 
@@ -87,7 +94,12 @@ export class TermsAndConditionsComponent {
       description:
         'Terms for booking a KiteCab taxi in Raipur, Bilaspur and across Chhattisgarh: bookings, fares, advance payment and cancellations.',
       path: '/terms-and-conditions',
-      jsonLd: graph(breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Terms and Conditions', path: '/terms-and-conditions' }])),
+      jsonLd: graph(
+        breadcrumbs([
+          { name: 'Home', path: '/' },
+          { name: 'Terms and Conditions', path: '/terms-and-conditions' },
+        ]),
+      ),
     });
   }
 }

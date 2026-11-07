@@ -54,10 +54,7 @@ export class AdminDbService {
       .select('role, full_name')
       .eq('id', data.session.user.id)
       .maybeSingle();
-    const role =
-      profile?.role === 'admin' || profile?.role === 'staff'
-        ? profile.role
-        : null;
+    const role = profile?.role === 'admin' || profile?.role === 'staff' ? profile.role : null;
     this.role.set(role);
     this.name.set(profile?.full_name || data.session.user.email || '');
     return role !== null;
@@ -66,10 +63,7 @@ export class AdminDbService {
   async login(email: string, password: string): Promise<string | null> {
     const db = await this.db();
     const { error } = await db.auth.signInWithPassword({ email, password });
-    if (error)
-      return error.message === 'Invalid login credentials'
-        ? 'Wrong email or password.'
-        : error.message;
+    if (error) return error.message === 'Invalid login credentials' ? 'Wrong email or password.' : error.message;
     if (!(await this.check())) {
       await db.auth.signOut();
       return 'This login has no office access. Ask the admin to add you in Staff.';
@@ -90,10 +84,7 @@ export class AdminDbService {
   }
 
   /** POST to kitecab-backend as the admin (WhatsApp resend, payment links). */
-  async api<T = Record<string, unknown>>(
-    path: string,
-    body: unknown,
-  ): Promise<T> {
+  async api<T = Record<string, unknown>>(path: string, body: unknown): Promise<T> {
     const res = await fetch(`${environment.apiUrl}${path}`, {
       method: 'POST',
       headers: {
@@ -103,11 +94,7 @@ export class AdminDbService {
       body: JSON.stringify(body),
     });
     const json = await res.json().catch(() => ({}));
-    if (!res.ok)
-      throw new Error(
-        (json as { message?: string }).message ??
-          `Request failed (${res.status})`,
-      );
+    if (!res.ok) throw new Error((json as { message?: string }).message ?? `Request failed (${res.status})`);
     return json as T;
   }
 }

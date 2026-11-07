@@ -1,7 +1,11 @@
 <!-- Hero + booking: on phones the form is in the first screen (headline → form → trust → text). -->
 <section
   class="relative overflow-hidden bg-kc-night text-white"
-  style="background-image: radial-gradient(520px circle at 100% 0%, rgb(7 88 105 / 0.55), transparent 70%), radial-gradient(420px circle at 0% 100%, rgb(252 185 36 / 0.1), transparent 70%)"
+  style="
+    background-image:
+      radial-gradient(520px circle at 100% 0%, rgb(7 88 105 / 0.55), transparent 70%),
+      radial-gradient(420px circle at 0% 100%, rgb(252 185 36 / 0.1), transparent 70%);
+  "
 >
   <div
     class="relative mx-auto grid max-w-6xl gap-x-12 gap-y-5 px-4 pt-5 pb-8 lg:grid-cols-[1fr_470px] lg:grid-rows-[auto_auto_1fr] lg:py-16"
@@ -25,10 +29,16 @@
     </div>
 
     <!-- 3. trust points -->
-    <ul class="grid grid-cols-2 gap-x-3 gap-y-2.5 text-sm lg:col-start-1 lg:row-start-2 lg:mt-2 lg:max-w-xl lg:text-base">
+    <ul
+      class="grid grid-cols-2 gap-x-3 gap-y-2.5 text-sm lg:col-start-1 lg:row-start-2 lg:mt-2 lg:max-w-xl lg:text-base"
+    >
       @for (t of trust; track t) {
         <li class="flex items-start gap-2">
-          <span class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-kc-yellow text-xs font-bold text-kc-night" aria-hidden="true">✓</span>
+          <span
+            class="mt-0.5 grid size-5 shrink-0 place-items-center rounded-full bg-kc-yellow text-xs font-bold text-kc-night"
+            aria-hidden="true"
+            >✓</span
+          >
           {{ t }}
         </li>
       }
@@ -50,7 +60,11 @@
     <ol class="mt-5 grid gap-3 sm:mt-8 sm:grid-cols-3 sm:gap-5">
       @for (s of steps; track s.title; let i = $index) {
         <li class="flex gap-4 rounded-2xl border border-kc-line bg-white p-4 sm:block sm:p-6">
-          <span class="grid size-9 shrink-0 place-items-center rounded-full bg-kc-teal font-bold text-white sm:size-10 sm:text-lg" aria-hidden="true">{{ i + 1 }}</span>
+          <span
+            class="grid size-9 shrink-0 place-items-center rounded-full bg-kc-teal font-bold text-white sm:size-10 sm:text-lg"
+            aria-hidden="true"
+            >{{ i + 1 }}</span
+          >
           <div>
             <h3 class="font-semibold sm:mt-4 sm:text-lg">{{ s.title }}</h3>
             <p class="mt-1 text-sm leading-relaxed text-kc-muted sm:mt-2">{{ s.text }}</p>
@@ -58,7 +72,11 @@
         </li>
       }
     </ol>
-    <a href="#book" class="mt-5 flex h-12 w-full justify-center sm:mt-6 sm:inline-flex sm:w-auto items-center rounded-xl bg-kc-yellow px-6 font-bold text-kc-night hover:bg-kc-yellow-dark">Check your fare</a>
+    <a
+      href="#book"
+      class="mt-5 flex h-12 w-full justify-center sm:mt-6 sm:inline-flex sm:w-auto items-center rounded-xl bg-kc-yellow px-6 font-bold text-kc-night hover:bg-kc-yellow-dark"
+      >Check your fare</a
+    >
   </section>
 
   <!-- Services -->
@@ -67,20 +85,36 @@
     <p class="mt-2 max-w-2xl text-kc-muted">Whatever the trip, the fare is fixed before you travel.</p>
     <ul class="mt-5 grid grid-cols-2 gap-3 sm:mt-8 sm:gap-5 lg:grid-cols-4">
       <li class="rounded-2xl border border-kc-line bg-white p-4 sm:p-6">
-        <h3 class="font-semibold sm:text-lg"><a routerLink="/one-way-taxi" class="hover:text-kc-teal">One way taxi</a></h3>
-        <p class="mt-1.5 text-[13px] leading-snug text-kc-muted sm:mt-2 sm:text-sm sm:leading-relaxed">City to city drops from {{ inr(lowest) }}. Pay only for your drop, never the car’s return.</p>
+        <h3 class="font-semibold sm:text-lg">
+          <a routerLink="/one-way-taxi" class="hover:text-kc-teal">One way taxi</a>
+        </h3>
+        <p class="mt-1.5 text-[13px] leading-snug text-kc-muted sm:mt-2 sm:text-sm sm:leading-relaxed">
+          City to city drops from {{ inr(lowest) }}. Pay only for your drop, never the car’s return.
+        </p>
       </li>
       <li class="rounded-2xl border border-kc-line bg-white p-4 sm:p-6">
-        <h3 class="font-semibold sm:text-lg"><a routerLink="/round-trip-cab" class="hover:text-kc-teal">Round trip cab</a></h3>
-        <p class="mt-1.5 text-[13px] leading-snug text-kc-muted sm:mt-2 sm:text-sm sm:leading-relaxed">The car waits for you — a few hours or up to three days — and brings you home.</p>
+        <h3 class="font-semibold sm:text-lg">
+          <a routerLink="/round-trip-cab" class="hover:text-kc-teal">Round trip cab</a>
+        </h3>
+        <p class="mt-1.5 text-[13px] leading-snug text-kc-muted sm:mt-2 sm:text-sm sm:leading-relaxed">
+          The car waits for you — a few hours or up to three days — and brings you home.
+        </p>
       </li>
       <li class="rounded-2xl border border-kc-line bg-white p-4 sm:p-6">
-        <h3 class="font-semibold sm:text-lg"><a routerLink="/raipur-airport-taxi" class="hover:text-kc-teal">Raipur Airport taxi</a></h3>
-        <p class="mt-1.5 text-[13px] leading-snug text-kc-muted sm:mt-2 sm:text-sm sm:leading-relaxed">Pickup and drop at Swami Vivekananda Airport for Raipur, Bhilai, Durg, Bilaspur and Korba.</p>
+        <h3 class="font-semibold sm:text-lg">
+          <a routerLink="/raipur-airport-taxi" class="hover:text-kc-teal">Raipur Airport taxi</a>
+        </h3>
+        <p class="mt-1.5 text-[13px] leading-snug text-kc-muted sm:mt-2 sm:text-sm sm:leading-relaxed">
+          Pickup and drop at Swami Vivekananda Airport for Raipur, Bhilai, Durg, Bilaspur and Korba.
+        </p>
       </li>
       <li class="rounded-2xl border border-kc-line bg-white p-4 sm:p-6">
-        <h3 class="font-semibold sm:text-lg"><a routerLink="/local-taxi-rental" class="hover:text-kc-teal">Local rental</a></h3>
-        <p class="mt-1.5 text-[13px] leading-snug text-kc-muted sm:mt-2 sm:text-sm sm:leading-relaxed">A cab with driver by the hour — {{ rentalText }}.</p>
+        <h3 class="font-semibold sm:text-lg">
+          <a routerLink="/local-taxi-rental" class="hover:text-kc-teal">Local rental</a>
+        </h3>
+        <p class="mt-1.5 text-[13px] leading-snug text-kc-muted sm:mt-2 sm:text-sm sm:leading-relaxed">
+          A cab with driver by the hour — {{ rentalText }}.
+        </p>
       </li>
     </ul>
   </section>
@@ -103,10 +137,15 @@
     <ul class="mt-5 grid grid-cols-2 gap-3 sm:mt-8 sm:grid-cols-3 sm:gap-4 lg:grid-cols-4">
       @for (c of cities; track c.slug) {
         <li>
-          <a [routerLink]="cityPath(c.slug)" class="block h-full rounded-2xl border border-kc-line bg-white p-5 hover:border-kc-teal">
+          <a
+            [routerLink]="cityPath(c.slug)"
+            class="block h-full rounded-2xl border border-kc-line bg-white p-5 hover:border-kc-teal"
+          >
             <span class="block text-lg font-semibold">{{ c.name }}</span>
             @if (c.from) {
-              <span class="mt-3 block text-sm">Cabs from <b class="text-kc-teal">{{ inr(c.from) }}</b></span>
+              <span class="mt-3 block text-sm"
+                >Cabs from <b class="text-kc-teal">{{ inr(c.from) }}</b></span
+              >
             }
           </a>
         </li>
@@ -121,21 +160,26 @@
       <li class="rounded-2xl border border-kc-line bg-white p-3 sm:p-6">
         <h3 class="font-semibold sm:text-lg">Hatchback</h3>
         <p class="text-xs text-kc-muted sm:text-sm">Up to {{ seats.Hatchback }} passengers</p>
-        <p class="mt-3 hidden text-sm leading-relaxed sm:block">The lowest fare — ideal for one or two people with light bags, airport drops and city rentals.</p>
+        <p class="mt-3 hidden text-sm leading-relaxed sm:block">
+          The lowest fare — ideal for one or two people with light bags, airport drops and city rentals.
+        </p>
       </li>
       <li class="rounded-2xl border-2 border-kc-yellow bg-white p-3 sm:p-6">
         <h3 class="font-semibold sm:text-lg">Sedan</h3>
         <p class="text-xs text-kc-muted sm:text-sm">Up to {{ seats.Sedan }} passengers</p>
-        <p class="mt-3 hidden text-sm leading-relaxed sm:block">More legroom and boot space for longer trips like Raipur to Bilaspur, Raigarh or Jagdalpur.</p>
+        <p class="mt-3 hidden text-sm leading-relaxed sm:block">
+          More legroom and boot space for longer trips like Raipur to Bilaspur, Raigarh or Jagdalpur.
+        </p>
       </li>
       <li class="rounded-2xl border border-kc-line bg-white p-3 sm:p-6">
         <h3 class="font-semibold sm:text-lg">SUV</h3>
         <p class="text-xs text-kc-muted sm:text-sm">Up to {{ seats.SUV }} passengers</p>
-        <p class="mt-3 hidden text-sm leading-relaxed sm:block">For families and groups, weddings and long drives with lots of luggage.</p>
+        <p class="mt-3 hidden text-sm leading-relaxed sm:block">
+          For families and groups, weddings and long drives with lots of luggage.
+        </p>
       </li>
     </ul>
   </section>
-
 
   <!-- About text for SEO -->
   <section aria-labelledby="why-h" class="kc-prose max-w-3xl">
@@ -143,8 +187,8 @@
     <p>
       KiteCab is based in Raipur and drives across the whole state every day. Our busiest routes are Raipur to Bilaspur,
       Raipur Airport to Bhilai and Durg, Bilaspur to Korba and Raigarh, and Raipur to Jagdalpur through Kanker and
-      Kondagaon. Because we work only in Chhattisgarh and nearby Nagpur, our drivers know the highways, the short cuts and
-      the right pickup points at railway stations and the airport.
+      Kondagaon. Because we work only in Chhattisgarh and nearby Nagpur, our drivers know the highways, the short cuts
+      and the right pickup points at railway stations and the airport.
     </p>
     <p>
       Every fare on this website comes from our live price list, for each car type. Book online in a minute, or

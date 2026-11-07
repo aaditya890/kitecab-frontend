@@ -12,10 +12,8 @@ import { PagedList } from '../core/paged-list';
     >
       <span>
         @if (l.total()) {
-          {{ l.page() * l.size + 1 }}–{{
-            min(l.total(), (l.page() + 1) * l.size)
-          }}
-          of {{ l.total().toLocaleString('en-IN') }}
+          {{ l.page() * l.size + 1 }}–{{ min(l.total(), (l.page() + 1) * l.size) }} of
+          {{ l.total().toLocaleString('en-IN') }}
         } @else if (!l.loading()) {
           Nothing found
         }

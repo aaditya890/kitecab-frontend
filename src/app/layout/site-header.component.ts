@@ -22,7 +22,6 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
             <a
               [routerLink]="link.path"
               routerLinkActive="bg-kc-surface text-kc-teal"
-              
               class="rounded-lg px-3 py-2 text-sm font-medium text-kc-ink hover:bg-kc-surface"
               >{{ link.label }}</a
             >

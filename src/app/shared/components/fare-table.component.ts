@@ -11,7 +11,11 @@ import { CAR_TYPES } from '../../models/common.model';
   template: `
     <div class="overflow-x-auto rounded-2xl border border-kc-line bg-white">
       <table class="w-full min-w-[420px] text-left">
-        <caption class="sr-only">{{ caption() }}</caption>
+        <caption class="sr-only">
+          {{
+            caption()
+          }}
+        </caption>
         <thead class="bg-kc-surface text-sm text-kc-muted">
           <tr>
             <th scope="col" class="px-5 py-3 font-medium">Car</th>

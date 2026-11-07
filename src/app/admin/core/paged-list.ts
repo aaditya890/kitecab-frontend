@@ -41,8 +41,7 @@ export class PagedList<T> {
       this.total.set(res.total);
       this.page.set(page);
     } catch (e) {
-      if (mine === this.seq)
-        this.error.set(e instanceof Error ? e.message : String(e));
+      if (mine === this.seq) this.error.set(e instanceof Error ? e.message : String(e));
     } finally {
       if (mine === this.seq) this.loading.set(false);
     }

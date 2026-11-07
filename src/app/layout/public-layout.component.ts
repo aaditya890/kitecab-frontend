@@ -10,7 +10,9 @@ import { SiteHeaderComponent } from './site-header.component';
   selector: 'kc-public-layout',
   imports: [RouterOutlet, SiteHeaderComponent, SiteFooterComponent, MobileActionBarComponent],
   template: `
-    <a href="#main" class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2"
+    <a
+      href="#main"
+      class="sr-only focus:not-sr-only focus:fixed focus:top-2 focus:left-2 focus:z-50 focus:rounded-lg focus:bg-white focus:px-4 focus:py-2"
       >Skip to content</a
     >
     <kc-site-header />

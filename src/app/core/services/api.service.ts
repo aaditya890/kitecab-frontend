@@ -3,12 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import {
-  BookingRequest,
-  BookingResponse,
-  EnquiryRequest,
-  EnquiryResponse,
-} from '../../models/booking.model';
+import { BookingRequest, BookingResponse, EnquiryRequest, EnquiryResponse } from '../../models/booking.model';
 
 /** An API failure with a message that is safe to show the customer. */
 export class ApiError extends Error {
