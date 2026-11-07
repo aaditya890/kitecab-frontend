@@ -27,9 +27,11 @@ interface NavItem {
 const NAV: NavItem[] = [
   { label: 'Dashboard', path: '/admin', exact: true, section: 'Daily work' },
   { label: 'Enquiries / leads', path: '/admin/enquiries' },
-  { label: 'Bookings', path: '/admin/bookings' },
+  { label: 'Bookings', path: '/admin/bookings', exact: true },
+  { label: '+ New booking', path: '/admin/bookings/new', exact: true },
   { label: 'Customers', path: '/admin/customers' },
   { label: 'Payments', path: '/admin/payments' },
+  { label: 'Activity log', path: '/admin/activity' },
   {
     label: 'Drivers & cars',
     path: '/admin/drivers',

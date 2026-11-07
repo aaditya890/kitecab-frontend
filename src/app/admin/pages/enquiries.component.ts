@@ -528,7 +528,7 @@ export class EnquiriesComponent {
   ];
 
   protected readonly tab = signal<Tab>('due');
-  protected readonly counts = signal<Record<string, number>>({});
+  protected readonly counts = signal<Partial<Record<string, number>>>({});
   protected readonly sel = signal<Lead | null>(null);
   protected readonly history = signal<FollowUp[]>([]);
   protected readonly fare = signal<Fare | null>(null);

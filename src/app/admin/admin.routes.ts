@@ -58,6 +58,20 @@ export const ADMIN_ROUTES: Routes = [
         ),
       },
       {
+        path: 'bookings/new',
+        ...page(() =>
+          import('./pages/booking-new.component').then(
+            (m) => m.BookingNewComponent,
+          ),
+        ),
+      },
+      {
+        path: 'activity',
+        ...page(() =>
+          import('./pages/activity.component').then((m) => m.ActivityComponent),
+        ),
+      },
+      {
         path: 'bookings/:id',
         ...page(() =>
           import('./pages/booking-detail.component').then(
@@ -84,6 +98,12 @@ export const ADMIN_ROUTES: Routes = [
         path: '',
         canActivateChild: [adminOnlyGuard],
         children: [
+          {
+            path: 'staff',
+            ...page(() =>
+              import('./pages/staff.component').then((m) => m.StaffComponent),
+            ),
+          },
           {
             path: 'drivers',
             ...page(() =>
