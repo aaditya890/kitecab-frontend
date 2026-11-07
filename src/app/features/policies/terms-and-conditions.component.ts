@@ -1,6 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
+import { breadcrumbs, graph } from '../../core/seo/schema';
 import { SeoService } from '../../core/services/seo.service';
 import { PolicyPageComponent } from './policy-page.component';
 
@@ -86,6 +87,7 @@ export class TermsAndConditionsComponent {
       description:
         'Terms for booking a KiteCab taxi in Raipur, Bilaspur and across Chhattisgarh: bookings, fares, advance payment and cancellations.',
       path: '/terms-and-conditions',
+      jsonLd: graph(breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Terms and Conditions', path: '/terms-and-conditions' }])),
     });
   }
 }

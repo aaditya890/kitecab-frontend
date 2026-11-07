@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
+import { breadcrumbs, graph } from '../../core/seo/schema';
 import { SeoService } from '../../core/services/seo.service';
 import { PolicyPageComponent } from './policy-page.component';
 
@@ -74,6 +75,7 @@ export class PrivacyPolicyComponent {
       description:
         'How KiteCab collects, uses and protects your data when you book a taxi in Chhattisgarh, and your rights under the DPDP Act, 2023.',
       path: '/privacy-policies',
+      jsonLd: graph(breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Privacy Policy', path: '/privacy-policies' }])),
     });
   }
 }

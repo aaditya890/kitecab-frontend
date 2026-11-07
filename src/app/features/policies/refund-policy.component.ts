@@ -1,5 +1,6 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 
+import { breadcrumbs, graph } from '../../core/seo/schema';
 import { SeoService } from '../../core/services/seo.service';
 import { PolicyPageComponent } from './policy-page.component';
 
@@ -71,6 +72,7 @@ export class RefundPolicyComponent {
       description:
         'KiteCab taxi cancellation and refund rules for Chhattisgarh trips: free cancellation before the driver is dispatched, refunds in 5–7 working days.',
       path: '/refund-policy',
+      jsonLd: graph(breadcrumbs([{ name: 'Home', path: '/' }, { name: 'Cancellation and Refund Policy', path: '/refund-policy' }])),
     });
   }
 }

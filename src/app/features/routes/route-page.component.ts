@@ -5,7 +5,7 @@ import { SITE } from '../../core/config/site.config';
 import { breadcrumbs, Crumb, faqPage, graph, localBusiness, taxiService } from '../../core/seo/schema';
 import { SeoService } from '../../core/services/seo.service';
 import { highestFare, inr, lowestFare, travelTime } from '../../core/utils/fare';
-import { PLACE_BY_KEY } from '../../data/places';
+import { cityPath, PLACE_BY_KEY } from '../../data/places';
 import { routeContent } from '../../data/route-content';
 import { relatedRoutes, routePath, SEO_ROUTE_BY_SLUG } from '../../data/seo-routes';
 import { BookingWidgetComponent } from '../booking/booking-widget.component';
@@ -76,7 +76,7 @@ import { RouteLinksComponent } from '../../shared/components/route-links.compone
             <li>Free cancellation before the driver is dispatched</li>
           </ul>
           @if (fromHub(); as hub) {
-            <p>More trips from {{ hub.name }}: see our <a [routerLink]="'/taxi-service/' + hub.slug">taxi service in {{ hub.name }}</a>.</p>
+            <p>More trips from {{ hub.name }}: see our <a [routerLink]="cityPath(hub.slug)">taxi service in {{ hub.name }}</a>.</p>
           }
         </section>
 
@@ -102,6 +102,7 @@ export class RoutePageComponent {
 
   private readonly seo = inject(SeoService);
   protected readonly advance = SITE.fares.advancePercent;
+  protected readonly cityPath = cityPath;
 
   protected readonly route = computed(() => SEO_ROUTE_BY_SLUG.get(this.slug()) ?? null);
   protected readonly content = computed(() => (this.route() ? routeContent(this.route()!) : null));
