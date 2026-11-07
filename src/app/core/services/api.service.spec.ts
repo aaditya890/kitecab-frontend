@@ -12,8 +12,13 @@ describe('toApiError', () => {
     expect(err.status).toBe(400);
     expect(err.message).toContain('valid 10-digit mobile');
   });
-  it('explains offline errors', () => {
+  it('says "no internet" only when the device is offline', () => {
+    const online = vi.spyOn(navigator, 'onLine', 'get');
+    online.mockReturnValue(false);
     expect(toApiError(new HttpErrorResponse({ status: 0 })).message).toContain('No internet');
+    online.mockReturnValue(true);
+    expect(toApiError(new HttpErrorResponse({ status: 0 })).message).toContain('could not reach our booking system');
+    online.mockRestore();
   });
   it('falls back to a call/WhatsApp message', () => {
     expect(toApiError(new Error('x')).message).toContain('call or WhatsApp');

@@ -39,7 +39,16 @@ export class ApiService {
 /** Exported for tests. */
 export function toApiError(err: unknown): ApiError {
   if (err instanceof HttpErrorResponse) {
-    if (err.status === 0) return new ApiError('No internet connection. Please check and try again.', 0);
+    if (err.status === 0) {
+      // status 0 = the request never got an answer: either the phone is offline or our server is unreachable
+      const offline = typeof navigator !== 'undefined' && navigator.onLine === false;
+      return new ApiError(
+        offline
+          ? 'No internet connection. Please check and try again.'
+          : 'We could not reach our booking system just now. Send the booking on WhatsApp or call us — we will confirm it.',
+        0,
+      );
+    }
     const message = typeof err.error?.message === 'string' ? err.error.message : FALLBACK_MESSAGE;
     return new ApiError(message, err.status);
   }
