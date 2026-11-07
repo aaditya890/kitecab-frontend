@@ -15,7 +15,13 @@ export class AdminDbService {
   private client?: Promise<SupabaseClient>;
 
   readonly session = signal<Session | null>(null);
-  readonly isAdmin = signal(false);
+  /** 'admin' (everything) or 'staff' (leads, bookings, customers); null = not office staff. */
+  readonly role = signal<'admin' | 'staff' | null>(null);
+  readonly isAdmin = computed(() => this.role() === 'admin');
+  readonly isStaff = computed(() => this.role() !== null);
+  readonly userId = computed(() => this.session()?.user.id ?? '');
+  /** Name shown in follow-ups and the activity log. */
+  readonly name = signal('');
   readonly email = computed(() => this.session()?.user.email ?? '');
 
   /** The Supabase client (created once, on first use). */
@@ -30,14 +36,14 @@ export class AdminDbService {
       });
       c.auth.onAuthStateChange((_event, s) => {
         this.session.set(s);
-        if (!s) this.isAdmin.set(false);
+        if (!s) this.role.set(null);
       });
       return c;
     });
     return this.client;
   }
 
-  /** Restores the saved login and checks the admin role. */
+  /** Restores the saved login and checks the office role. */
   async check(): Promise<boolean> {
     const db = await this.db();
     const { data } = await db.auth.getSession();
@@ -45,11 +51,16 @@ export class AdminDbService {
     if (!data.session) return false;
     const { data: profile } = await db
       .from('profiles')
-      .select('role')
+      .select('role, full_name')
       .eq('id', data.session.user.id)
       .maybeSingle();
-    this.isAdmin.set(profile?.role === 'admin');
-    return this.isAdmin();
+    const role =
+      profile?.role === 'admin' || profile?.role === 'staff'
+        ? profile.role
+        : null;
+    this.role.set(role);
+    this.name.set(profile?.full_name || data.session.user.email || '');
+    return role !== null;
   }
 
   async login(email: string, password: string): Promise<string | null> {
@@ -61,7 +72,7 @@ export class AdminDbService {
         : error.message;
     if (!(await this.check())) {
       await db.auth.signOut();
-      return 'This login is not an admin.';
+      return 'This login has no office access. Ask the admin to add you in Staff.';
     }
     return null;
   }
@@ -69,7 +80,7 @@ export class AdminDbService {
   async logout(): Promise<void> {
     await (await this.db()).auth.signOut();
     this.session.set(null);
-    this.isAdmin.set(false);
+    this.role.set(null);
   }
 
   /** Bearer token for kitecab-backend admin endpoints. */

@@ -1,6 +1,7 @@
 import {
   ChangeDetectionStrategy,
   Component,
+  computed,
   inject,
   signal,
 } from '@angular/core';
@@ -15,17 +16,30 @@ import { LogoComponent } from '../shared/components/logo/logo.component';
 import { AdminDbService } from './core/admin-db.service';
 import { ToastService } from './core/toast.service';
 
-const NAV = [
-  { label: 'Dashboard', path: '/admin', exact: true },
+interface NavItem {
+  label: string;
+  path: string;
+  exact?: boolean;
+  admin?: boolean;
+  section?: string;
+}
+
+const NAV: NavItem[] = [
+  { label: 'Dashboard', path: '/admin', exact: true, section: 'Daily work' },
+  { label: 'Enquiries / leads', path: '/admin/enquiries' },
   { label: 'Bookings', path: '/admin/bookings' },
-  { label: 'Enquiries', path: '/admin/enquiries' },
-  { label: 'Payments', path: '/admin/payments' },
   { label: 'Customers', path: '/admin/customers' },
-  { label: 'Drivers & cars', path: '/admin/drivers' },
-  { label: 'Routes & fares', path: '/admin/routes' },
-  { label: 'Locations', path: '/admin/locations' },
-  { label: 'Rental & round trip', path: '/admin/rates' },
-  { label: 'Settings', path: '/admin/settings' },
+  { label: 'Payments', path: '/admin/payments' },
+  {
+    label: 'Drivers & cars',
+    path: '/admin/drivers',
+    admin: true,
+    section: 'Manage',
+  },
+  { label: 'Routes & fares', path: '/admin/routes', admin: true },
+  { label: 'Locations', path: '/admin/locations', admin: true },
+  { label: 'Rental & round trip', path: '/admin/rates', admin: true },
+  { label: 'Settings', path: '/admin/settings', admin: true },
 ];
 
 @Component({
@@ -53,7 +67,14 @@ const NAV = [
       >
         <div class="hidden px-5 py-5 lg:block"><kc-logo /></div>
         <nav class="flex flex-col gap-0.5 px-3 py-2" aria-label="Admin">
-          @for (n of nav; track n.path) {
+          @for (n of nav(); track n.path) {
+            @if (n.section) {
+              <p
+                class="mt-3 px-3 pb-1 text-[11px] font-semibold tracking-wide text-kc-muted uppercase first:mt-0"
+              >
+                {{ n.section }}
+              </p>
+            }
             <a
               [routerLink]="n.path"
               routerLinkActive="bg-kc-teal text-white hover:bg-kc-teal"
@@ -65,7 +86,8 @@ const NAV = [
           }
         </nav>
         <div class="border-t border-kc-line px-5 py-4 text-xs text-kc-muted">
-          <p class="truncate">{{ db.email() }}</p>
+          <p class="truncate font-medium text-kc-ink">{{ db.name() }}</p>
+          <p class="truncate">{{ db.email() }} · {{ db.role() }}</p>
           <button
             type="button"
             class="mt-2 font-medium text-kc-teal hover:underline"
@@ -99,7 +121,9 @@ export class AdminLayoutComponent {
   protected readonly db = inject(AdminDbService);
   protected readonly toast = inject(ToastService);
   private readonly router = inject(Router);
-  protected readonly nav = NAV;
+  protected readonly nav = computed(() =>
+    NAV.filter((n) => !n.admin || this.db.isAdmin()),
+  );
   protected readonly open = signal(false);
 
   protected async logout(): Promise<void> {

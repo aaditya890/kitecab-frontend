@@ -125,6 +125,12 @@
   .kc-adm-table tbody tr:hover {
     @apply bg-kc-surface/60;
   }
+  .kc-icon-btn {
+    @apply inline-grid size-8 shrink-0 place-items-center rounded-lg transition-colors;
+  }
+  .kc-adm-label {
+    @apply mb-1 block text-xs font-medium text-kc-muted;
+  }
   .kc-adm-h1 {
     @apply text-2xl font-semibold text-kc-ink;
   }

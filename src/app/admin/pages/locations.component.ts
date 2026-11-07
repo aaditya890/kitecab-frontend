@@ -189,17 +189,13 @@ export class LocationsComponent {
     if (name.length < 2) return;
     const label = this.newState === 'CG' ? name : `${name} (${this.newState})`;
     const done = await this.toast.run(async () => {
-      const res = await (
-        await this.db.db()
-      )
-        .from('locations')
-        .insert({
-          name: label,
-          slug:
-            slugify(name) +
-            (this.newState === 'CG' ? '' : '-' + this.newState.toLowerCase()),
-          state: this.newState,
-        });
+      const res = await (await this.db.db()).from('locations').insert({
+        name: label,
+        slug:
+          slugify(name) +
+          (this.newState === 'CG' ? '' : '-' + this.newState.toLowerCase()),
+        state: this.newState,
+      });
       if (res.error?.code === '23505')
         throw new Error(`${label} already exists.`);
       ok(res);
