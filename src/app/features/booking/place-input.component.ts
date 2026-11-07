@@ -1,4 +1,11 @@
-import { ChangeDetectionStrategy, Component, computed, input, model, signal } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  input,
+  model,
+  signal,
+} from '@angular/core';
 
 let nextId = 0;
 
@@ -7,34 +14,58 @@ let nextId = 0;
   selector: 'kc-place-input',
   template: `
     <div class="relative">
-      <label [for]="id" class="mb-1 block text-sm font-medium text-kc-ink">{{ label() }}</label>
-      <input
-        [id]="id"
-        type="text"
-        role="combobox"
-        autocomplete="off"
-        aria-autocomplete="list"
-        [attr.aria-expanded]="open()"
-        [attr.aria-controls]="id + '-list'"
-        [attr.aria-activedescendant]="open() && active() >= 0 ? id + '-opt-' + active() : null"
-        [attr.aria-invalid]="invalid() || null"
-        [attr.aria-describedby]="invalid() ? id + '-err' : null"
-        [placeholder]="placeholder()"
-        [value]="value()"
-        (input)="onInput($any($event.target).value)"
-        (focus)="open.set(true)"
-        (blur)="onBlur()"
-        (keydown)="onKey($event)"
-        class="h-12 w-full rounded-xl border bg-white px-4 text-base text-kc-ink placeholder:text-kc-muted/70 focus:border-kc-teal focus:outline-none"
-        [class.border-kc-line]="!invalid()"
-        [class.border-red-600]="invalid()"
-      />
+      <div class="relative">
+        <label [for]="id" class="kc-label">{{ label() }}</label>
+        @if (icon() === 'pickup') {
+          <span
+            class="pointer-events-none absolute bottom-0 left-4 z-10 flex h-12 items-center"
+            aria-hidden="true"
+          >
+            <span
+              class="size-2.5 rounded-full bg-kc-teal ring-4 ring-kc-teal/15"
+            ></span>
+          </span>
+        } @else if (icon() === 'drop') {
+          <span
+            class="pointer-events-none absolute bottom-0 left-3.5 z-10 flex h-12 items-center text-kc-yellow-dark"
+            aria-hidden="true"
+          >
+            <svg viewBox="0 0 24 24" class="size-4" fill="currentColor">
+              <path
+                d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"
+              />
+            </svg>
+          </span>
+        }
+        <input
+          [id]="id"
+          type="text"
+          role="combobox"
+          autocomplete="off"
+          aria-autocomplete="list"
+          [attr.aria-expanded]="open()"
+          [attr.aria-controls]="id + '-list'"
+          [attr.aria-activedescendant]="
+            open() && active() >= 0 ? id + '-opt-' + active() : null
+          "
+          [attr.aria-invalid]="invalid() || null"
+          [attr.aria-describedby]="invalid() ? id + '-err' : null"
+          [placeholder]="placeholder()"
+          [value]="value()"
+          (input)="onInput($any($event.target).value)"
+          (focus)="open.set(true)"
+          (blur)="onBlur()"
+          (keydown)="onKey($event)"
+          class="kc-field"
+          [class.pl-10]="!!icon()"
+        />
+      </div>
       @if (open() && matches().length) {
         <ul
           [id]="id + '-list'"
           role="listbox"
           [attr.aria-label]="label()"
-          class="absolute inset-x-0 top-full z-30 mt-1 max-h-64 overflow-auto rounded-xl border border-kc-line bg-white py-1 shadow-lg"
+          class="kc-enter absolute inset-x-0 top-full z-30 mt-2 max-h-64 overflow-auto rounded-2xl bg-white p-1.5 shadow-[0_20px_40px_-12px_rgba(0,0,0,0.25)] ring-1 ring-black/5"
         >
           @for (opt of matches(); track opt; let i = $index) {
             <li
@@ -42,16 +73,28 @@ let nextId = 0;
               role="option"
               [attr.aria-selected]="i === active()"
               (mousedown)="$event.preventDefault(); choose(opt)"
-              class="cursor-pointer px-4 py-2.5 text-sm"
+              class="flex cursor-pointer items-center gap-2.5 rounded-xl px-3 py-2.5 text-sm transition-colors hover:bg-kc-surface"
               [class.bg-kc-surface]="i === active()"
             >
+              <svg
+                viewBox="0 0 24 24"
+                class="size-4 shrink-0 text-kc-muted/70"
+                fill="currentColor"
+                aria-hidden="true"
+              >
+                <path
+                  d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"
+                />
+              </svg>
               {{ opt }}
             </li>
           }
         </ul>
       }
       @if (invalid()) {
-        <p [id]="id + '-err'" class="mt-1 text-sm text-red-700">{{ errorText() }}</p>
+        <p [id]="id + '-err'" class="mt-1.5 text-[13px] text-red-700">
+          {{ errorText() }}
+        </p>
       }
     </div>
   `,
@@ -59,6 +102,8 @@ let nextId = 0;
 })
 export class PlaceInputComponent {
   readonly label = input.required<string>();
+  /** Leading marker: teal dot for pickup, pin for drop. */
+  readonly icon = input<'pickup' | 'drop' | ''>('');
   readonly placeholder = input('Type a city or area');
   readonly options = input<readonly string[]>([]);
   readonly invalid = input(false);
@@ -74,7 +119,9 @@ export class PlaceInputComponent {
     const all = this.options();
     if (!q) return all.slice(0, 8);
     const starts = all.filter((o) => o.toLowerCase().startsWith(q));
-    const contains = all.filter((o) => !o.toLowerCase().startsWith(q) && o.toLowerCase().includes(q));
+    const contains = all.filter(
+      (o) => !o.toLowerCase().startsWith(q) && o.toLowerCase().includes(q),
+    );
     return [...starts, ...contains].slice(0, 8);
   });
 

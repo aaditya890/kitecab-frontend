@@ -99,6 +99,45 @@
   }
 }
 
+/* Booking form: fields, labels, main button, step animation. */
+@layer components {
+  .kc-field {
+    @apply h-12 w-full rounded-xl border border-kc-line bg-kc-surface/60 px-4 text-base text-kc-ink transition-[border-color,background-color,box-shadow] duration-200 placeholder:text-kc-muted/60 hover:border-kc-muted/40 focus:border-kc-teal focus:bg-white focus:ring-4 focus:ring-kc-teal/10 focus:outline-none focus-visible:outline-none;
+  }
+  .kc-field[aria-invalid='true'] {
+    @apply border-red-500 bg-red-50/40 focus:ring-red-500/10;
+  }
+  .kc-label {
+    @apply mb-1.5 block text-[13px] font-medium tracking-wide text-kc-muted;
+  }
+  .kc-cta {
+    @apply inline-flex h-13 w-full items-center justify-center gap-2 rounded-xl bg-linear-to-b from-[#ffc845] to-kc-yellow text-base font-bold text-kc-night shadow-[0_10px_24px_-10px_rgba(234,168,19,0.9)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-10px_rgba(234,168,19,1)] active:translate-y-0 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-60;
+  }
+  .kc-enter {
+    animation: kc-enter 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+}
+
+@keyframes kc-enter {
+  from {
+    opacity: 0;
+    transform: translateY(8px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .kc-enter {
+    animation: none;
+  }
+  .kc-cta {
+    transition: none;
+  }
+}
+
 /* Admin panel controls (tiny; shared by every admin page). */
 @layer components {
   .kc-adm-input {
