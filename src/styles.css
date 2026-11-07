@@ -141,36 +141,69 @@
 /* Admin panel controls (tiny; shared by every admin page). */
 @layer components {
   .kc-adm-input {
-    @apply rounded-lg border border-kc-line bg-white px-3 py-2 text-sm outline-none focus:border-kc-teal focus:ring-2 focus:ring-kc-teal/20 disabled:bg-kc-surface;
+    @apply rounded-xl border border-kc-line bg-white px-3 py-2 text-sm shadow-[0_1px_0_rgba(0,0,0,0.02)] transition-[border-color,box-shadow] duration-150 outline-none hover:border-kc-muted/40 focus:border-kc-teal focus:ring-4 focus:ring-kc-teal/10 disabled:bg-kc-surface;
   }
   .kc-adm-btn {
-    @apply inline-flex items-center justify-center gap-1 rounded-lg border border-kc-line bg-white px-3 py-1.5 text-sm font-medium hover:bg-kc-surface disabled:cursor-not-allowed disabled:opacity-50;
+    @apply inline-flex items-center justify-center gap-1.5 rounded-xl border border-kc-line bg-white px-3 py-1.5 text-sm font-medium text-kc-ink shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition duration-150 hover:border-kc-muted/40 hover:bg-kc-surface active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
   }
   .kc-adm-btn-primary {
-    @apply inline-flex items-center justify-center gap-1 rounded-lg bg-kc-teal px-4 py-2 text-sm font-semibold text-white hover:bg-kc-teal-dark disabled:cursor-not-allowed disabled:opacity-60;
+    @apply inline-flex items-center justify-center gap-1.5 rounded-xl bg-kc-teal px-4 py-2 text-sm font-semibold text-white shadow-[0_6px_16px_-8px_rgba(7,88,105,0.8)] transition duration-150 hover:-translate-y-px hover:bg-kc-teal-dark active:translate-y-0 active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-60;
   }
   .kc-adm-card {
-    @apply rounded-xl border border-kc-line bg-white;
+    @apply rounded-2xl border border-black/[0.06] bg-white shadow-[0_1px_3px_rgba(16,24,40,0.05),0_1px_2px_rgba(16,24,40,0.03)];
+  }
+  a.kc-adm-card {
+    @apply transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_12px_24px_-12px_rgba(16,24,40,0.18)];
   }
   .kc-adm-table {
     @apply w-full text-left text-sm;
   }
   .kc-adm-table th {
-    @apply border-b border-kc-line bg-kc-surface px-3 py-2 text-xs font-semibold tracking-wide text-kc-muted uppercase;
+    @apply border-b border-kc-line bg-kc-surface/70 px-4 py-2.5 text-[11px] font-semibold tracking-wider whitespace-nowrap text-kc-muted uppercase;
   }
   .kc-adm-table td {
-    @apply border-b border-kc-line px-3 py-2 align-top;
+    @apply border-b border-kc-line/70 px-4 py-3 align-top;
+  }
+  .kc-adm-table tbody tr {
+    @apply transition-colors duration-150;
   }
   .kc-adm-table tbody tr:hover {
-    @apply bg-kc-surface/60;
+    @apply bg-kc-teal/[0.03];
+  }
+  .kc-adm-table tbody tr:last-child td {
+    @apply border-b-0;
   }
   .kc-icon-btn {
-    @apply inline-grid size-8 shrink-0 place-items-center rounded-lg transition-colors;
+    @apply inline-grid size-8 shrink-0 place-items-center rounded-lg transition duration-150 hover:-translate-y-px active:scale-95;
   }
   .kc-adm-label {
     @apply mb-1 block text-xs font-medium text-kc-muted;
   }
   .kc-adm-h1 {
-    @apply text-2xl font-semibold text-kc-ink;
+    @apply text-2xl font-semibold tracking-tight text-kc-ink;
+  }
+  .kc-nav-active {
+    @apply bg-white/10 text-white;
+  }
+  .kc-nav-active::before {
+    content: '';
+    @apply absolute top-2 bottom-2 left-0 w-1 rounded-full bg-kc-yellow;
+  }
+  .kc-nav-active svg {
+    @apply text-kc-yellow;
+  }
+  .kc-toast {
+    animation: kc-toast 0.25s cubic-bezier(0.2, 0.8, 0.2, 1) both;
+  }
+}
+
+@keyframes kc-toast {
+  from {
+    opacity: 0;
+    transform: translateY(10px) scale(0.98);
+  }
+  to {
+    opacity: 1;
+    transform: none;
   }
 }

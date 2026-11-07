@@ -687,7 +687,11 @@ const ACTION_LABEL: Record<string, string> = {
               }
             </ul>
             <div class="mt-3 grid gap-2">
-              @if (paid() === 0 && b.status !== 'cancelled') {
+              @if (
+                paid() === 0 &&
+                b.status !== 'cancelled' &&
+                b.status !== 'completed'
+              ) {
                 <button
                   type="button"
                   class="kc-adm-btn-primary"
