@@ -780,8 +780,9 @@ export class BookingDetailComponent implements OnInit {
     void this.update(patch, `Marked ${status}`);
   }
 
-  protected cancel(): void {
-    void this.update(
+  protected async cancel(): Promise<void> {
+    const hadUnpaidLink = this.payments().some((p) => p.status === 'PENDING');
+    const done = await this.update(
       {
         status: 'cancelled',
         cancel_reason: this.cancelReason.trim(),
@@ -789,6 +790,14 @@ export class BookingDetailComponent implements OnInit {
       },
       'Booking cancelled',
     );
+    // so the customer can no longer pay an advance for a cancelled trip
+    if (done && hadUnpaidLink) {
+      await this.toast.run(
+        () => this.db.api('/admin/resend', { bookingId: this.bookingId, action: 'cancel-payment-links' }),
+        'Payment link cancelled',
+      );
+      await this.load();
+    }
   }
 
   protected complete(): void {
