@@ -30,14 +30,20 @@ Phone, email, advance % and admin WhatsApp numbers can also be changed live in *
 | URL | What |
 |---|---|
 | `/` | Home: booking form in the first screen |
-| `/taxi/<from>-to-<to>` | 60 most booked Chhattisgarh/Nagpur routes |
-| `/taxi-service/<city>`, `/raipur-airport-taxi` | City pages (`data/places.ts`) |
+| `/taxi/<from>-to-<to>` | Every Chhattisgarh/Nagpur route in the price list (780): fares, distance, per-km, round trip estimate, FAQs |
+| `/taxi-service/<city>`, `/raipur-airport-taxi` | 10 hand-written city pages (`data/places.ts`) + 77 data-built town pages (`data/towns.json`) |
 | `/one-way-taxi`, `/round-trip-cab`, `/local-taxi-rental` | Service pages (`data/services.ts`) |
 | `/taxi-routes`, `/about-us`, `/contact-us`, policies, `/404` | Other pages |
 
 The booking form reads live fares from the backend (`GET /api/catalog`, cached 60 s), so price
 changes and on/off switches in the admin show within a minute. If the API is down it uses
-`public/data/catalog.json` (rebuild with `npm run build:data -- kitecab_rows.csv`).
+`public/data/catalog.json`.
+
+`npm run build:data -- kitecab_rows.csv` rebuilds the fare files from a database export:
+`public/data/catalog.json`, `src/app/data/seo-routes.json` (all route pages, compact),
+`popular-routes.json` (top 60 for home/footer), `place-stats.json`, `towns.json`, rentals and
+round-trip rates. Then `npm run build` prerenders ~880 pages and writes `sitemap.xml`
+(priorities: home 1.0, city pages 0.9, popular routes 0.8, towns 0.7, other routes 0.6).
 
 Google tags in `src/index.html` are the live site's IDs and events, unchanged. Their script files
 load on the first tap/scroll or after 3.5 s; anything tracked before that waits in `dataLayer`.

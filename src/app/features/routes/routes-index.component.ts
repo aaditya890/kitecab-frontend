@@ -32,25 +32,29 @@ interface Group {
         </p>
       </header>
 
-      @for (g of groups; track g.name) {
-        <section [attr.aria-label]="'Taxi from ' + g.name">
-          <h2 class="mb-3 text-xl font-semibold">
-            Taxi from {{ g.name }} <span class="text-sm font-normal text-kc-muted">· {{ g.routes.length }} routes</span>
-          </h2>
-          <ul class="grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2 lg:grid-cols-3">
-            @for (r of g.routes; track r.slug) {
-              <li>
-                <a
-                  [routerLink]="routePath(r)"
-                  class="flex items-center justify-between gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-white hover:text-kc-teal"
-                >
-                  <span>{{ r.fromName }} to {{ r.toName }}</span>
-                  <span class="shrink-0 font-semibold text-kc-teal">{{ inr(low(r)) }}</span>
-                </a>
-              </li>
-            }
-          </ul>
-        </section>
+      <!-- Static list of ~800 links: rendered at build time, never hydrated (no JS cost). -->
+      @defer (hydrate never) {
+        @for (g of groups; track g.name) {
+          <section [attr.aria-label]="'Taxi from ' + g.name">
+            <h2 class="mb-3 text-xl font-semibold">
+              Taxi from {{ g.name }}
+              <span class="text-sm font-normal text-kc-muted">· {{ g.routes.length }} routes</span>
+            </h2>
+            <ul class="grid gap-x-6 gap-y-1 text-sm sm:grid-cols-2 lg:grid-cols-3">
+              @for (r of g.routes; track r.slug) {
+                <li>
+                  <a
+                    [routerLink]="routePath(r)"
+                    class="flex items-center justify-between gap-3 rounded-lg px-2 py-1.5 transition-colors hover:bg-white hover:text-kc-teal"
+                  >
+                    <span>{{ r.fromName }} to {{ r.toName }}</span>
+                    <span class="shrink-0 font-semibold text-kc-teal">{{ inr(low(r)) }}</span>
+                  </a>
+                </li>
+              }
+            </ul>
+          </section>
+        }
       }
 
       <section aria-labelledby="cities-h">
