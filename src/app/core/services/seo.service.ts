@@ -47,6 +47,12 @@ export class SeoService {
     this.tag('property', 'og:description', seo.description);
     this.tag('property', 'og:url', url);
     this.tag('property', 'og:image', image);
+    if (!seo.image) {
+      // the default share card is 1200×630
+      this.tag('property', 'og:image:width', '1200');
+      this.tag('property', 'og:image:height', '630');
+      this.tag('property', 'og:image:alt', 'KiteCab — taxi service in Chhattisgarh');
+    }
 
     this.tag('name', 'twitter:card', 'summary_large_image');
     this.tag('name', 'twitter:title', fullTitle);

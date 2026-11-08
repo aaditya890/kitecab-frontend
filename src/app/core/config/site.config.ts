@@ -60,7 +60,7 @@ export const SITE = {
     /** Vector mark (any size). Raster badge for places that need PNG (invoice, social). */
     logo: '/assets/brand/kitecab-mark.svg',
     logoPng: '/assets/logo-badge.png',
-    ogDefault: '/assets/20241024_121332.png',
+    ogDefault: '/assets/og-kitecab.jpg',
   },
 
   social: {
