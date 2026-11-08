@@ -92,6 +92,22 @@ function townIntro(name: string, blurb: string | null, from: SeoRoute[]): string
           </section>
         }
 
+        @if (outstation(); as o) {
+          <section aria-labelledby="outstation-h" class="kc-prose max-w-3xl">
+            <h2 id="outstation-h">Outstation cab and car rental {{ where() }}</h2>
+            <p>
+              Hire a car with driver {{ where() }} for any outstation trip. We have fixed one way fares to
+              {{ o.count }} places, from {{ inr(o.cheapest.fare) }} for {{ o.cheapest.to }} ({{ o.cheapest.km }} km) up
+              to {{ inr(o.longest.fare) }} for {{ o.longest.to }} ({{ o.longest.km }} km). Every fare covers the full
+              trip with no return charge, and the price is the same whether you book online, by phone or on WhatsApp.
+            </p>
+            <p>
+              For a same-day return, book a round trip: the car waits while you finish your work and drives you back.
+              For longer stays the car can wait for one to three days.
+            </p>
+          </section>
+        }
+
         <section aria-labelledby="services-h">
           <h2 id="services-h" class="text-2xl font-semibold">Cab services {{ where() }}</h2>
           <ul class="mt-5 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
@@ -249,6 +265,17 @@ export class CityPageComponent implements OnInit {
     if (!p) return [];
     return p.hub ? routesFor(p.key, 12) : routesFrom(p.key).slice(0, 30);
   });
+  /** Shortest and longest outstation trip from here, with the lowest (Hatchback) fare. */
+  protected readonly outstation = computed(() => {
+    const p = this.place();
+    if (!p || this.isAirport()) return null;
+    const from = routesFrom(p.key);
+    if (from.length < 2) return null;
+    const pick = (r: SeoRoute) => ({ to: r.toName, km: r.km, fare: lowestFare(r.fares) });
+    const byKm = [...from].sort((a, b) => a.km - b.km);
+    return { count: from.length, cheapest: pick(byKm[0]), longest: pick(byKm[byKm.length - 1]) };
+  });
+
   /** Other towns, for internal links on town pages. */
   protected readonly nearbyTowns = computed(() => TOWNS.filter((t) => t.slug !== this.city()).slice(0, 24));
   protected readonly otherHubs = computed(() => HUBS.filter((h) => h.slug !== this.city()));

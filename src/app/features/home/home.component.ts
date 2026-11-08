@@ -8,6 +8,7 @@ import { inr, lowestFare, rentalDisplay } from '../../core/utils/fare';
 import { cityPath, HUBS } from '../../data/places';
 import { placeStats, POPULAR_ROUTES, ROUTE_PAGE_COUNT } from '../../data/popular-routes';
 import { RENTALS } from '../../data/services';
+import { TOWNS } from '../../data/towns';
 import { BookingWidgetComponent } from '../booking/booking-widget.component';
 import { CtaBandComponent } from '../../shared/components/cta-band.component';
 import { FaqComponent } from '../../shared/components/faq.component';
@@ -25,6 +26,8 @@ export class HomeComponent {
   protected readonly seats = SITE.fares.seats;
   protected readonly advance = SITE.fares.advancePercent;
   protected readonly popular = POPULAR_ROUTES.slice(0, 9);
+  /** Data-built town pages, most routes first (internal links for Google). */
+  protected readonly towns = TOWNS.slice(0, 24);
   protected readonly routeCount = Math.round(ROUTE_PAGE_COUNT);
   protected readonly steps = [
     {

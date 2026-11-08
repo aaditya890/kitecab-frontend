@@ -151,6 +151,23 @@
         </li>
       }
     </ul>
+    <h3 class="mt-8 text-sm font-semibold tracking-wide text-kc-muted uppercase">More towns</h3>
+    <ul class="mt-3 flex flex-wrap gap-2">
+      @for (t of towns; track t.slug) {
+        <li>
+          <a
+            [routerLink]="cityPath(t.slug)"
+            class="inline-block rounded-full border border-kc-line bg-white px-3 py-1.5 text-sm transition-colors hover:border-kc-teal hover:text-kc-teal"
+            >{{ t.name }}</a
+          >
+        </li>
+      }
+      <li>
+        <a routerLink="/taxi-routes" class="inline-block px-3 py-1.5 text-sm font-medium text-kc-teal hover:underline"
+          >All {{ routeCount }} routes →</a
+        >
+      </li>
+    </ul>
   </section>
 
   <!-- Cars -->
