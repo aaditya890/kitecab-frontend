@@ -39,7 +39,11 @@ The booking form reads live fares from the backend (`GET /api/catalog`, cached 6
 changes and on/off switches in the admin show within a minute. If the API is down it uses
 `public/data/catalog.json`.
 
-`npm run build:data -- kitecab_rows.csv` rebuilds the fare files from a database export:
+**After changing prices or switching routes on/off in the admin:** `npm run build:data:db`
+(reads the current fares from the database — public data only), then `npm run build` and deploy,
+so the route pages show the same prices as the booking form.
+
+`npm run build:data -- kitecab_rows.csv` rebuilds the same files from an old-site export:
 `public/data/catalog.json`, `src/app/data/seo-routes.json` (all route pages, compact),
 `popular-routes.json` (top 60 for home/footer), `place-stats.json`, `towns.json`, rentals and
 round-trip rates. Then `npm run build` prerenders ~880 pages and writes `sitemap.xml`

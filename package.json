@@ -7,7 +7,8 @@
     "build": "ng build && node scripts/build-sitemap.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test --watch=false",
-    "build:data": "python scripts/build-catalog.py"
+    "build:data": "python scripts/build-catalog.py",
+    "build:data:db": "node scripts/sync-fares.mjs"
   },
   "private": true,
   "dependencies": {
