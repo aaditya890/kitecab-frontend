@@ -121,6 +121,19 @@
   .kc-cta {
     @apply inline-flex h-13 w-full items-center justify-center gap-2 rounded-xl bg-linear-to-b from-[#ffc845] to-kc-yellow text-base font-bold text-kc-night shadow-[0_10px_24px_-10px_rgba(234,168,19,0.9)] transition duration-200 hover:-translate-y-0.5 hover:shadow-[0_14px_28px_-10px_rgba(234,168,19,1)] active:translate-y-0 active:scale-[0.99] disabled:pointer-events-none disabled:opacity-60;
   }
+  /* mobile menu items slide in one after another */
+  .kc-drawer-item {
+    opacity: 0;
+    transform: translateX(16px);
+    transition:
+      opacity 0.3s ease,
+      transform 0.35s cubic-bezier(0.2, 0.8, 0.2, 1),
+      background-color 0.15s;
+  }
+  .kc-drawer-item-in {
+    opacity: 1;
+    transform: none;
+  }
   .kc-enter {
     animation: kc-enter 0.32s cubic-bezier(0.2, 0.8, 0.2, 1) both;
   }
@@ -140,6 +153,11 @@
 @media (prefers-reduced-motion: reduce) {
   .kc-enter {
     animation: none;
+  }
+  .kc-drawer-item {
+    opacity: 1;
+    transform: none;
+    transition: none;
   }
   .kc-cta {
     transition: none;
