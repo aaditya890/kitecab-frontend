@@ -7,45 +7,87 @@ let nextId = 0;
   selector: 'kc-place-input',
   template: `
     <div class="relative">
-      <div class="relative">
-        <label [for]="id" class="kc-label">{{ label() }}</label>
-        @if (icon() === 'pickup') {
-          <span class="pointer-events-none absolute bottom-0 left-4 z-10 flex h-12 items-center" aria-hidden="true">
-            <span class="size-2.5 rounded-full bg-kc-teal ring-4 ring-kc-teal/15"></span>
+      @if (variant() === 'row') {
+        <!-- row inside a grouped card: marker · small label · large borderless input -->
+        <div class="flex items-center gap-3 px-4 py-2.5">
+          <span class="grid w-5 shrink-0 place-items-center" aria-hidden="true">
+            @if (icon() === 'drop') {
+              <svg viewBox="0 0 24 24" class="size-[18px] text-kc-yellow-dark" fill="currentColor">
+                <path
+                  d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"
+                />
+              </svg>
+            } @else {
+              <span class="size-3 rounded-full border-[3px] border-kc-teal bg-white"></span>
+            }
           </span>
-        } @else if (icon() === 'drop') {
-          <span
-            class="pointer-events-none absolute bottom-0 left-3.5 z-10 flex h-12 items-center text-kc-yellow-dark"
-            aria-hidden="true"
-          >
-            <svg viewBox="0 0 24 24" class="size-4" fill="currentColor">
-              <path
-                d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"
-              />
-            </svg>
+          <span class="min-w-0 flex-1">
+            <label [for]="id" class="block text-[11px] font-semibold tracking-[0.08em] text-kc-muted uppercase">{{
+              label()
+            }}</label>
+            <input
+              [id]="id"
+              type="text"
+              role="combobox"
+              autocomplete="off"
+              aria-autocomplete="list"
+              [attr.aria-expanded]="open()"
+              [attr.aria-controls]="id + '-list'"
+              [attr.aria-activedescendant]="open() && active() >= 0 ? id + '-opt-' + active() : null"
+              [attr.aria-invalid]="invalid() || null"
+              [attr.aria-describedby]="invalid() ? id + '-err' : null"
+              [placeholder]="placeholder()"
+              [value]="value()"
+              (input)="onInput($any($event.target).value)"
+              (focus)="open.set(true)"
+              (blur)="onBlur()"
+              (keydown)="onKey($event)"
+              class="block h-7 w-full truncate bg-transparent p-0 text-[17px] font-medium text-kc-ink placeholder:font-normal placeholder:text-kc-muted/55 focus:outline-none focus-visible:outline-none"
+              [class.pr-12]="padEnd()"
+            />
           </span>
-        }
-        <input
-          [id]="id"
-          type="text"
-          role="combobox"
-          autocomplete="off"
-          aria-autocomplete="list"
-          [attr.aria-expanded]="open()"
-          [attr.aria-controls]="id + '-list'"
-          [attr.aria-activedescendant]="open() && active() >= 0 ? id + '-opt-' + active() : null"
-          [attr.aria-invalid]="invalid() || null"
-          [attr.aria-describedby]="invalid() ? id + '-err' : null"
-          [placeholder]="placeholder()"
-          [value]="value()"
-          (input)="onInput($any($event.target).value)"
-          (focus)="open.set(true)"
-          (blur)="onBlur()"
-          (keydown)="onKey($event)"
-          class="kc-field"
-          [class.pl-10]="!!icon()"
-        />
-      </div>
+        </div>
+      } @else {
+        <div class="relative">
+          <label [for]="id" class="kc-label">{{ label() }}</label>
+          @if (icon() === 'pickup') {
+            <span class="pointer-events-none absolute bottom-0 left-4 z-10 flex h-12 items-center" aria-hidden="true">
+              <span class="size-2.5 rounded-full bg-kc-teal ring-4 ring-kc-teal/15"></span>
+            </span>
+          } @else if (icon() === 'drop') {
+            <span
+              class="pointer-events-none absolute bottom-0 left-3.5 z-10 flex h-12 items-center text-kc-yellow-dark"
+              aria-hidden="true"
+            >
+              <svg viewBox="0 0 24 24" class="size-4" fill="currentColor">
+                <path
+                  d="M12 2a7 7 0 0 0-7 7c0 5.25 7 13 7 13s7-7.75 7-13a7 7 0 0 0-7-7zm0 9.5A2.5 2.5 0 1 1 12 6.5a2.5 2.5 0 0 1 0 5z"
+                />
+              </svg>
+            </span>
+          }
+          <input
+            [id]="id"
+            type="text"
+            role="combobox"
+            autocomplete="off"
+            aria-autocomplete="list"
+            [attr.aria-expanded]="open()"
+            [attr.aria-controls]="id + '-list'"
+            [attr.aria-activedescendant]="open() && active() >= 0 ? id + '-opt-' + active() : null"
+            [attr.aria-invalid]="invalid() || null"
+            [attr.aria-describedby]="invalid() ? id + '-err' : null"
+            [placeholder]="placeholder()"
+            [value]="value()"
+            (input)="onInput($any($event.target).value)"
+            (focus)="open.set(true)"
+            (blur)="onBlur()"
+            (keydown)="onKey($event)"
+            class="kc-field"
+            [class.pl-10]="!!icon()"
+          />
+        </div>
+      }
       @if (open() && matches().length) {
         <ul
           [id]="id + '-list'"
@@ -72,7 +114,7 @@ let nextId = 0;
           }
         </ul>
       }
-      @if (invalid()) {
+      @if (invalid() && variant() !== 'row') {
         <p [id]="id + '-err'" class="mt-1.5 text-[13px] text-red-700">
           {{ errorText() }}
         </p>
@@ -90,6 +132,10 @@ export class PlaceInputComponent {
   readonly invalid = input(false);
   readonly errorText = input('Choose a place from the list');
   readonly value = model('');
+  /** 'field' = boxed input with label above; 'row' = row inside a grouped card (errors shown by the parent). */
+  readonly variant = input<'field' | 'row'>('field');
+  /** Leave room on the right (e.g. for a swap button). */
+  readonly padEnd = input(false);
 
   protected readonly id = `kc-place-${nextId++}`;
   protected readonly open = signal(false);

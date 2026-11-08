@@ -3,7 +3,7 @@ import { Injectable, inject } from '@angular/core';
 import { Observable, catchError, throwError } from 'rxjs';
 
 import { environment } from '../../../environments/environment';
-import { BookingRequest, BookingResponse, EnquiryRequest, EnquiryResponse } from '../../models/booking.model';
+import { BookingRequest, BookingResponse, EnquiryRequest, EnquiryResponse, PayLinkResponse } from '../../models/booking.model';
 
 /** An API failure with a message that is safe to show the customer. */
 export class ApiError extends Error {
@@ -29,6 +29,10 @@ export class ApiService {
 
   createBooking(body: BookingRequest): Observable<BookingResponse> {
     return this.post<BookingResponse>('/booking', body);
+  }
+
+  payLink(bookingId: number, token: string): Observable<PayLinkResponse> {
+    return this.http.get<PayLinkResponse>(`${this.base}/pay-link`, { params: { id: bookingId, t: token } });
   }
 
   private post<T>(path: string, body: unknown): Observable<T> {

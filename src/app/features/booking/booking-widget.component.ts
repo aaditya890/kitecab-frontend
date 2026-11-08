@@ -248,6 +248,32 @@ export class BookingWidgetComponent implements OnInit {
     this.submitError.set('');
   }
 
+  /** 'waiting' while the advance link is being created, 'failed' if it did not come. */
+  protected readonly payLinkState = signal<'idle' | 'waiting' | 'failed'>('idle');
+  private payPoll?: ReturnType<typeof setTimeout>;
+
+  /** Asks every second (up to ~20 s) until the Razorpay link exists, then shows the Pay button. */
+  private waitForPayLink(bookingId: number, token: string, attempt = 0): void {
+    this.payLinkState.set('waiting');
+    clearTimeout(this.payPoll);
+    this.payPoll = setTimeout(
+      () =>
+        this.api.payLink(bookingId, token).subscribe({
+          next: (r) => {
+            if (this.result()?.bookingId !== bookingId) return;
+            if (r.status === 'ready' && r.paymentLink) {
+              this.result.update((x) => (x ? { ...x, paymentLink: r.paymentLink ?? null } : x));
+              this.payLinkState.set('idle');
+            } else if (attempt < 20) this.waitForPayLink(bookingId, token, attempt + 1);
+            else this.payLinkState.set('failed');
+          },
+          error: () =>
+            attempt < 20 ? this.waitForPayLink(bookingId, token, attempt + 1) : this.payLinkState.set('failed'),
+        }),
+      attempt === 0 ? 600 : 1000,
+    );
+  }
+
   protected submit(event: Event): void {
     event.preventDefault();
     this.detailsTried.set(true);
@@ -279,6 +305,7 @@ export class BookingWidgetComponent implements OnInit {
           this.result.set(res);
           this.step.set('done');
           this.submitting.set(false);
+          if (!res.paymentLink && res.payToken) this.waitForPayLink(res.bookingId, res.payToken);
           this.analytics.event('booking_created', {
             trip: q.type,
             car,
@@ -314,6 +341,8 @@ export class BookingWidgetComponent implements OnInit {
     this.quote.set(null);
     this.car.set(null);
     this.result.set(null);
+    clearTimeout(this.payPoll);
+    this.payLinkState.set('idle');
     this.detailsTried.set(false);
     this.searchTried.set(false);
   }

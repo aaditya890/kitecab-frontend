@@ -46,6 +46,14 @@ export interface BookingResponse {
   bookingId: number;
   fare: number;
   advanceAmount: number;
-  /** null when the payment link could not be created; staff will follow up. */
+  /** Filled in a moment after booking (see payToken); null if it could not be created. */
   paymentLink: string | null;
+  /** Lets the page fetch its payment link from GET /api/pay-link. */
+  payToken?: string | null;
+}
+
+export interface PayLinkResponse {
+  ok: true;
+  status: 'preparing' | 'ready' | 'paid';
+  paymentLink?: string | null;
 }
