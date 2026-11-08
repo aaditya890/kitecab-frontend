@@ -2,7 +2,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 import { RouterLink } from '@angular/router';
 
 import { inr, lowestFare } from '../../core/utils/fare';
-import { routePath } from '../../data/seo-routes';
+import { routePath } from '../../data/popular-routes';
 import { SeoRoute } from '../../models/catalog.model';
 
 /** Grid of route links with "from ₹" prices — internal linking for SEO and quick booking. */

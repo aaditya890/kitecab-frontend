@@ -5,7 +5,7 @@ import { breadcrumbs, Crumb, faqPage, graph, localBusiness, taxiService } from '
 import { SeoService } from '../../core/services/seo.service';
 import { inr, rentalDisplay } from '../../core/utils/fare';
 import { cityPath, HUBS } from '../../data/places';
-import { SEO_ROUTES } from '../../data/seo-routes';
+import { POPULAR_ROUTES } from '../../data/popular-routes';
 import { RENTALS, ROUND_TRIP_RATES, SERVICES } from '../../data/services';
 import { BookingWidgetComponent } from '../booking/booking-widget.component';
 import { BreadcrumbsComponent } from '../../shared/components/breadcrumbs.component';
@@ -142,7 +142,7 @@ export class ServicePageComponent implements OnInit {
 
   private readonly seo = inject(SeoService);
   protected readonly page = computed(() => SERVICES[this.service()]);
-  protected readonly topRoutes = SEO_ROUTES.slice(0, 12);
+  protected readonly topRoutes = POPULAR_ROUTES.slice(0, 12);
   protected readonly rates = ROUND_TRIP_RATES;
   protected readonly rentals = RENTALS;
   protected readonly hubs = HUBS;

@@ -6,7 +6,7 @@ import { FaqItem, faqPage, graph, localBusiness, website } from '../../core/seo/
 import { SeoService } from '../../core/services/seo.service';
 import { inr, lowestFare, rentalDisplay } from '../../core/utils/fare';
 import { cityPath, HUBS } from '../../data/places';
-import { routesFor, SEO_ROUTES } from '../../data/seo-routes';
+import { placeStats, POPULAR_ROUTES, ROUTE_PAGE_COUNT } from '../../data/popular-routes';
 import { RENTALS } from '../../data/services';
 import { BookingWidgetComponent } from '../booking/booking-widget.component';
 import { CtaBandComponent } from '../../shared/components/cta-band.component';
@@ -24,7 +24,8 @@ export class HomeComponent {
   protected readonly cityPath = cityPath;
   protected readonly seats = SITE.fares.seats;
   protected readonly advance = SITE.fares.advancePercent;
-  protected readonly popular = SEO_ROUTES.slice(0, 9);
+  protected readonly popular = POPULAR_ROUTES.slice(0, 9);
+  protected readonly routeCount = Math.round(ROUTE_PAGE_COUNT);
   protected readonly steps = [
     {
       title: 'Enter pickup and drop',
@@ -47,16 +48,10 @@ export class HomeComponent {
   ];
   protected readonly firstRental = RENTALS[0];
   protected readonly rentalText = RENTALS[0] ? `${rentalDisplay(RENTALS[0])} from ${inr(RENTALS[0].hatchback)}` : '';
-  protected readonly lowest = Math.min(...SEO_ROUTES.map((r) => lowestFare(r.fares)));
+  protected readonly lowest = Math.min(...POPULAR_ROUTES.map((r) => lowestFare(r.fares)));
 
   /** City cards with the cheapest route from each city. */
-  protected readonly cities = HUBS.map((h) => {
-    const routes = routesFor(h.key, 50);
-    return {
-      ...h,
-      from: routes.length ? Math.min(...routes.map((r) => lowestFare(r.fares))) : null,
-    };
-  });
+  protected readonly cities = HUBS.map((h) => ({ ...h, from: placeStats(h.key)?.from ?? null }));
 
   protected readonly faqs: FaqItem[] = [
     {
@@ -103,7 +98,7 @@ export class HomeComponent {
   }
 
   private fare(slug: string): string {
-    const r = SEO_ROUTES.find((x) => x.slug === slug);
+    const r = POPULAR_ROUTES.find((x) => x.slug === slug);
     return r
       ? `${inr(r.fares.Hatchback)} for a Hatchback, ${inr(r.fares.Sedan)} for a Sedan and ${inr(r.fares.SUV)} for an SUV`
       : 'see the booking form for the latest fare';

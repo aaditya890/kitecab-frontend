@@ -8,14 +8,26 @@ const dist = join(import.meta.dirname, '..', 'dist', 'kitecab-frontend');
 const { routes } = JSON.parse(readFileSync(join(dist, 'prerendered-routes.json'), 'utf8'));
 
 const EXCLUDE = new Set(['/404']);
+
+// Hand-written city pages and the most booked routes rank first; data-built town and
+// long-tail route pages follow.
+const data = (f) => JSON.parse(readFileSync(join(import.meta.dirname, '..', 'src', 'app', 'data', f), 'utf8'));
+const popular = new Set(data('popular-routes.json').map((r) => `/taxi/${r.slug}`));
+const hubCities = new Set(
+  [
+    ...readFileSync(join(import.meta.dirname, '..', 'src', 'app', 'data', 'places.ts'), 'utf8').matchAll(
+      /slug: '([a-z-]+)',\s+blurb:[^}]*?hub: \{/g,
+    ),
+  ].map((m) => `/taxi-service/${m[1]}`),
+);
+
 const priority = (path) => {
   if (path === '/') return '1.0';
-  if (path.startsWith('/taxi-service/') || path === '/raipur-airport-taxi') return '0.9';
-  if (
-    path.startsWith('/taxi/') ||
-    ['/one-way-taxi', '/round-trip-cab', '/local-taxi-rental', '/taxi-routes'].includes(path)
-  )
+  if (path === '/raipur-airport-taxi' || hubCities.has(path)) return '0.9';
+  if (popular.has(path) || ['/one-way-taxi', '/round-trip-cab', '/local-taxi-rental', '/taxi-routes'].includes(path))
     return '0.8';
+  if (path.startsWith('/taxi-service/')) return '0.7';
+  if (path.startsWith('/taxi/')) return '0.6';
   return '0.4';
 };
 

@@ -7,6 +7,7 @@ import { SeoService } from '../../core/services/seo.service';
 import { highestFare, inr, lowestFare, travelTime } from '../../core/utils/fare';
 import { cityPath, PLACE_BY_KEY } from '../../data/places';
 import { routeContent } from '../../data/route-content';
+import { TOWN_BY_KEY } from '../../data/towns';
 import { relatedRoutes, routePath, SEO_ROUTE_BY_SLUG } from '../../data/seo-routes';
 import { BookingWidgetComponent } from '../booking/booking-widget.component';
 import { NotFoundComponent } from '../not-found/not-found.component';
@@ -75,11 +76,13 @@ import { RouteLinksComponent } from '../../shared/components/route-links.compone
             <li>Fare confirmed before you book, {{ advance }}% advance online, rest to the driver</li>
             <li>Free cancellation before the driver is dispatched</li>
           </ul>
-          @if (fromHub(); as hub) {
+          @if (cityLinks().length) {
             <p>
-              More trips from {{ hub.name }}: see our
-              <a [routerLink]="cityPath(hub.slug)">taxi service in {{ hub.name }}</a
-              >.
+              More trips:
+              @for (c of cityLinks(); track c.slug; let last = $last) {
+                <a [routerLink]="cityPath(c.slug)">taxi service in {{ c.name }}</a
+                >{{ last ? '.' : ' · ' }}
+              }
             </p>
           }
         </section>
@@ -115,10 +118,19 @@ export class RoutePageComponent {
   protected readonly time = computed(() => travelTime(this.route()?.km ?? 0));
   protected readonly low = computed(() => inr(lowestFare(this.route()!.fares)));
   protected readonly related = computed(() => relatedRoutes(this.route()!));
-  protected readonly fromHub = computed(() => {
-    const p = PLACE_BY_KEY.get(this.route()!.from);
-    return p?.hub ? p : null;
+  /** City pages for the pickup and drop (hand-written hub or data-built town page). */
+  protected readonly cityLinks = computed(() => {
+    const r = this.route()!;
+    return [r.from, r.to]
+      .map((key) => {
+        const p = PLACE_BY_KEY.get(key);
+        if (p?.hub) return { name: p.name, slug: p.slug };
+        const t = TOWN_BY_KEY.get(key);
+        return t ? { name: t.name, slug: t.slug } : null;
+      })
+      .filter((c): c is { name: string; slug: string } => !!c);
   });
+
   protected readonly crumbs = computed<Crumb[]>(() => {
     const r = this.route()!;
     return [

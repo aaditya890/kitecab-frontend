@@ -3,7 +3,7 @@ import { RouterLink } from '@angular/router';
 
 import { COMPANY_NAV, POLICY_NAV } from '../core/config/navigation';
 import { cityPath, HUBS } from '../data/places';
-import { routePath, SEO_ROUTES } from '../data/seo-routes';
+import { POPULAR_ROUTES, routePath } from '../data/popular-routes';
 import { SITE } from '../core/config/site.config';
 import { SiteSettingsService } from '../core/services/site-settings.service';
 import { IconComponent } from '../shared/components/icon/icon.component';
@@ -133,7 +133,7 @@ export class SiteFooterComponent {
   protected readonly settings = inject(SiteSettingsService);
   protected readonly site = SITE;
   protected readonly links = [...COMPANY_NAV, ...POLICY_NAV];
-  protected readonly routes = SEO_ROUTES.slice(0, 8);
+  protected readonly routes = POPULAR_ROUTES.slice(0, 8);
   protected readonly hubs = HUBS;
   protected readonly routePath = routePath;
   protected readonly cityPath = cityPath;

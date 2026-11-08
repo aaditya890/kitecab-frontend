@@ -6,8 +6,13 @@ Builds the website's fare data from a backup of the live database.
 Writes:
   public/data/catalog.json        every active location, route, rental package and round-trip
                                   rate (loaded by the booking form in the browser)
-  src/app/data/seo-routes.json    the most-booked Chhattisgarh/Nagpur routes that get their own
-                                  SEO page (prerendered at build time)
+  src/app/data/seo-routes.json    EVERY Chhattisgarh/Nagpur route in the price list, most booked
+                                  first, compact: [from, to, km, hatchback, sedan, suv]. Each gets
+                                  its own prerendered page /taxi/<from>-to-<to>.
+  src/app/data/popular-routes.json the top routes as full objects (home, footer, service pages)
+  src/app/data/place-stats.json   per place: [number of routes, cheapest one way fare]
+  src/app/data/towns.json         places with at least TOWN_MIN_ROUTES routes that have no
+                                  hand-written city page: get a data-built /taxi-service/<town>
   src/app/data/rentals.json       local rental packages (shown as text on city/service pages)
   src/app/data/round-trip.json    round-trip rates (shown on the round trip page)
 
@@ -24,7 +29,8 @@ import sys
 from datetime import date
 from pathlib import Path
 
-SEO_ROUTE_COUNT = 60
+POPULAR_ROUTE_COUNT = 60
+TOWN_MIN_ROUTES = 3
 ROOT = Path(__file__).resolve().parent.parent
 
 # Round-trip fare = per_km * approx_km + base (same as round_trip_rates in the database).
@@ -124,19 +130,53 @@ def main(csv_path):
         demand[(place(b.get('pickupLocation')), place(b.get('dropLocation')))] += 3
 
     eligible = [k for k in routes if in_seo_area(k[0]) and in_seo_area(k[1])]
-    top = sorted(eligible, key=lambda k: (-demand[k], k))[:SEO_ROUTE_COUNT]
-    seo = []
-    for a, b in top:
-        km, h, s, suv = routes[(a, b)]
+    ranked = sorted(eligible, key=lambda k: (-demand[k], k))
+
+    slugs = collections.Counter(f'{slugify(display_name(a))}-to-{slugify(display_name(b))}' for a, b in ranked)
+    clashes = [s for s, n in slugs.items() if n > 1]
+    if clashes:
+        sys.exit(f'Duplicate route slugs: {clashes}')
+
+    out = ROOT / 'src' / 'app' / 'data' / 'seo-routes.json'
+    out.write_text(json.dumps([[a, b, *routes[(a, b)]] for a, b in ranked], separators=(',', ':'), ensure_ascii=False) + chr(10), encoding='utf-8')
+    print(f'{out.relative_to(ROOT)}: {len(ranked)} route pages')
+
+    popular = []
+    for a, b in ranked[:POPULAR_ROUTE_COUNT]:
+        km, h, s_, suv = routes[(a, b)]
         from_name, to_name = display_name(a), display_name(b)
-        seo.append({
+        popular.append({
             'slug': f'{slugify(from_name)}-to-{slugify(to_name)}',
             'from': a, 'to': b, 'fromName': from_name, 'toName': to_name,
-            'km': km, 'fares': {'Hatchback': h, 'Sedan': s, 'SUV': suv},
+            'km': km, 'fares': {'Hatchback': h, 'Sedan': s_, 'SUV': suv},
         })
-    out = ROOT / 'src' / 'app' / 'data' / 'seo-routes.json'
-    out.write_text(json.dumps(seo, indent=1, ensure_ascii=False) + '\n', encoding='utf-8')
-    print(f'{out.relative_to(ROOT)}: {len(seo)} routes')
+    out = ROOT / 'src' / 'app' / 'data' / 'popular-routes.json'
+    out.write_text(json.dumps(popular, indent=1, ensure_ascii=False) + chr(10), encoding='utf-8')
+    print(f'{out.relative_to(ROOT)}: {len(popular)} routes')
+
+    # ---- towns: places with enough routes for a data-built city page --------
+    count = collections.Counter()
+    for a, b in eligible:
+        count[a] += 1
+        count[b] += 1
+    towns = sorted(
+        (k for k, n in count.items() if n >= TOWN_MIN_ROUTES and 'airport' not in k.lower()),
+        key=lambda k: (-count[k], k),
+    )
+    out = ROOT / 'src' / 'app' / 'data' / 'towns.json'
+    out.write_text(json.dumps(towns, indent=1, ensure_ascii=False) + chr(10), encoding='utf-8')
+    print(f'{out.relative_to(ROOT)}: {len(towns)} towns')
+
+    # ---- per place: number of routes and the cheapest one way fare ---------
+    stats = {}
+    for a, b in eligible:
+        low = min(routes[(a, b)][1:])
+        for k in (a, b):
+            n, m = stats.get(k, (0, low))
+            stats[k] = (n + 1, min(m, low))
+    out = ROOT / 'src' / 'app' / 'data' / 'place-stats.json'
+    out.write_text(json.dumps({k: list(v) for k, v in sorted(stats.items())}, separators=(',', ':'), ensure_ascii=False) + chr(10), encoding='utf-8')
+    print(f'{out.relative_to(ROOT)}: {len(stats)} places')
 
 
 if __name__ == '__main__':

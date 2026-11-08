@@ -5,7 +5,7 @@ import { RentalPackage, RoundTripRate } from '../models/catalog.model';
 import { BookingType } from '../models/common.model';
 import rentalsJson from './rentals.json';
 import roundTripJson from './round-trip.json';
-import { SEO_ROUTE_BY_SLUG, SEO_ROUTES } from './seo-routes';
+import { CHEAPEST_FARE, POPULAR_ROUTES } from './popular-routes';
 
 export const RENTALS = rentalsJson as RentalPackage[];
 export const ROUND_TRIP_RATES = roundTripJson as RoundTripRate[];
@@ -21,12 +21,12 @@ export interface ServicePage {
   faqs: FaqItem[];
 }
 
-const cheapestRoute = Math.min(...SEO_ROUTES.map((r) => lowestFare(r.fares)));
+const cheapestRoute = CHEAPEST_FARE;
 const exampleRate = ROUND_TRIP_RATES.find((r) => r.slot === '1 day') ?? ROUND_TRIP_RATES[0];
 const exampleKm = 250;
 const example = roundTripFares(exampleRate, exampleKm);
 const advance = SITE.fares.advancePercent;
-const raipurBilaspur = SEO_ROUTE_BY_SLUG.get('raipur-to-bilaspur');
+const raipurBilaspur = POPULAR_ROUTES.find((r) => r.slug === 'raipur-to-bilaspur');
 
 export const SERVICES: Record<'one-way' | 'round-trip' | 'local-rental', ServicePage> = {
   'one-way': {
