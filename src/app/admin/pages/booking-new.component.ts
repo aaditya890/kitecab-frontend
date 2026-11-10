@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, OnInit, computed, inject, input, si
 import { FormsModule } from '@angular/forms';
 import { Router, RouterLink } from '@angular/router';
 
+import { PlaceInputComponent } from '../../features/booking/place-input.component';
 import { AdminDbService } from '../core/admin-db.service';
 import { BOOKING_TYPES, CAR_TYPES, rs, todayIst } from '../core/format';
 import { ToastService } from '../core/toast.service';
@@ -45,7 +46,7 @@ function to12h(v: string): string {
 
 @Component({
   selector: 'kc-admin-booking-new',
-  imports: [FormsModule, RouterLink],
+  imports: [FormsModule, RouterLink, PlaceInputComponent],
   template: `
     <a routerLink="/admin/bookings" class="text-sm text-kc-teal hover:underline">← All bookings</a>
     <h1 class="kc-adm-h1 mt-2">New booking</h1>
@@ -78,18 +79,13 @@ function to12h(v: string): string {
             }
           </div>
           <div class="mt-4 grid gap-3 sm:grid-cols-2">
-            <label class="text-sm"
-              ><span class="kc-adm-label">Pickup city *</span>
-              <input
-                class="kc-adm-input w-full"
-                name="pickup"
-                list="kc-places"
-                [ngModel]="pickup()"
-                (ngModelChange)="setPickup($event)"
-                placeholder="Type to search"
-                autocomplete="off"
-              />
-            </label>
+            <kc-place-input
+              label="Pickup city *"
+              placeholder="Type to search"
+              [options]="places()"
+              [value]="pickup()"
+              (valueChange)="setPickup($event)"
+            />
             @if (type() === 'local-rental') {
               <label class="text-sm"
                 ><span class="kc-adm-label">Package *</span>
@@ -106,18 +102,13 @@ function to12h(v: string): string {
                 </select>
               </label>
             } @else {
-              <label class="text-sm"
-                ><span class="kc-adm-label">Drop city *</span>
-                <input
-                  class="kc-adm-input w-full"
-                  name="drop"
-                  list="kc-drops"
-                  [ngModel]="drop()"
-                  (ngModelChange)="drop.set($event)"
-                  [placeholder]="drops().length ? drops().length + ' places from ' + pickup() : 'Choose pickup first'"
-                  autocomplete="off"
-                />
-              </label>
+              <kc-place-input
+                label="Drop city *"
+                [placeholder]="drops().length ? drops().length + ' places from ' + pickup() : 'Choose pickup first'"
+                [options]="dropNames()"
+                [value]="drop()"
+                (valueChange)="drop.set($event)"
+              />
             }
             @if (type() === 'round-trip') {
               <label class="text-sm"
@@ -150,16 +141,6 @@ function to12h(v: string): string {
               </label>
             }
           </div>
-          <datalist id="kc-places">
-            @for (p of places(); track p) {
-              <option [value]="p"></option>
-            }
-          </datalist>
-          <datalist id="kc-drops">
-            @for (r of drops(); track r.id) {
-              <option [value]="r.drop"></option>
-            }
-          </datalist>
           @if (pickup() && type() !== 'local-rental' && drop() && !route()) {
             <p class="mt-2 text-sm text-red-700">
               No price for {{ pickup() }} → {{ drop() }}. Add it in Routes and fares, or type the fare yourself below.
@@ -360,6 +341,7 @@ export class BookingNewComponent implements OnInit {
   protected source = 'phone';
   protected note = '';
 
+  protected readonly dropNames = computed(() => this.drops().map((r) => r.drop));
   protected readonly route = computed(() => this.drops().find((r) => r.drop === this.drop()) ?? null);
   protected readonly rental = computed(() => this.rentals().find((r) => r.id === this.rentalId()) ?? null);
 
