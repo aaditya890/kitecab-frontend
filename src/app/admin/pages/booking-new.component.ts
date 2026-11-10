@@ -59,7 +59,9 @@ function to12h(v: string): string {
       <div class="flex flex-col gap-5">
         <!-- trip -->
         <section class="kc-adm-card p-5">
-          <h2 class="font-semibold">1. Trip</h2>
+          <h2 class="flex items-center gap-2.5 font-semibold">
+            <span class="grid size-7 place-items-center rounded-full bg-kc-teal text-sm text-white">1</span>Trip
+          </h2>
           <div
             class="mt-3 grid grid-cols-3 gap-1 rounded-xl bg-kc-surface p-1"
             role="radiogroup"
@@ -71,7 +73,7 @@ function to12h(v: string): string {
                 role="radio"
                 [attr.aria-checked]="type() === t.value"
                 (click)="setType(t.value)"
-                class="h-10 rounded-lg text-sm font-semibold"
+                class="h-10 truncate rounded-lg px-1 text-[13px] font-semibold transition-colors sm:text-sm"
                 [class]="type() === t.value ? 'bg-kc-teal text-white' : 'hover:bg-white'"
               >
                 {{ t.label }}
@@ -80,6 +82,8 @@ function to12h(v: string): string {
           </div>
           <div class="mt-4 grid gap-3 sm:grid-cols-2">
             <kc-place-input
+              labelClass="kc-adm-label"
+              inputClass="kc-adm-input w-full"
               label="Pickup city *"
               placeholder="Type to search"
               [options]="places()"
@@ -103,6 +107,8 @@ function to12h(v: string): string {
               </label>
             } @else {
               <kc-place-input
+                labelClass="kc-adm-label"
+                inputClass="kc-adm-input w-full"
                 label="Drop city *"
                 [placeholder]="drops().length ? drops().length + ' places from ' + pickup() : 'Choose pickup first'"
                 [options]="dropNames()"
@@ -153,13 +159,13 @@ function to12h(v: string): string {
               <button
                 type="button"
                 (click)="car.set(c)"
-                class="rounded-xl border p-3 text-left"
+                class="min-w-0 rounded-xl border p-2.5 text-left transition sm:p-3"
                 [class]="
                   car() === c ? 'border-kc-teal bg-kc-teal/5 ring-2 ring-kc-teal' : 'border-kc-line hover:bg-kc-surface'
                 "
               >
-                <span class="block text-sm font-semibold">{{ c }}</span>
-                <span class="block text-lg font-semibold">{{ priceFor(c) ? rs(priceFor(c)) : '—' }}</span>
+                <span class="block truncate text-[13px] font-semibold sm:text-sm">{{ c }}</span>
+                <span class="block text-base font-semibold sm:text-lg">{{ priceFor(c) ? rs(priceFor(c)) : '—' }}</span>
               </button>
             }
           </div>
@@ -167,7 +173,9 @@ function to12h(v: string): string {
 
         <!-- customer -->
         <section class="kc-adm-card p-5">
-          <h2 class="font-semibold">2. Customer</h2>
+          <h2 class="flex items-center gap-2.5 font-semibold">
+            <span class="grid size-7 place-items-center rounded-full bg-kc-teal text-sm text-white">2</span>Customer
+          </h2>
           <div class="mt-3 grid gap-3 sm:grid-cols-2">
             <label class="text-sm"
               ><span class="kc-adm-label">Mobile *</span>
@@ -202,7 +210,9 @@ function to12h(v: string): string {
 
         <!-- pickup -->
         <section class="kc-adm-card p-5">
-          <h2 class="font-semibold">3. Pickup</h2>
+          <h2 class="flex items-center gap-2.5 font-semibold">
+            <span class="grid size-7 place-items-center rounded-full bg-kc-teal text-sm text-white">3</span>Pickup
+          </h2>
           <div class="mt-3 grid gap-3 sm:grid-cols-3">
             <label class="text-sm"
               ><span class="kc-adm-label">Date *</span

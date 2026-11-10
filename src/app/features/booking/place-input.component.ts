@@ -49,7 +49,7 @@ let nextId = 0;
         </div>
       } @else {
         <div class="relative">
-          <label [for]="id" class="kc-label">{{ label() }}</label>
+          <label [for]="id" [class]="labelClass()">{{ label() }}</label>
           @if (icon() === 'pickup') {
             <span class="pointer-events-none absolute bottom-0 left-4 z-10 flex h-12 items-center" aria-hidden="true">
               <span class="size-2.5 rounded-full bg-kc-teal ring-4 ring-kc-teal/15"></span>
@@ -83,7 +83,7 @@ let nextId = 0;
             (focus)="open.set(true)"
             (blur)="onBlur()"
             (keydown)="onKey($event)"
-            class="kc-field"
+            [class]="inputClass()"
             [class.pl-10]="!!icon()"
           />
         </div>
@@ -136,6 +136,9 @@ export class PlaceInputComponent {
   readonly variant = input<'field' | 'row'>('field');
   /** Leave room on the right (e.g. for a swap button). */
   readonly padEnd = input(false);
+  /** Boxed variant only: CSS classes for the label and input (e.g. the admin panel's styles). */
+  readonly labelClass = input('kc-label');
+  readonly inputClass = input('kc-field');
 
   protected readonly id = `kc-place-${nextId++}`;
   protected readonly open = signal(false);

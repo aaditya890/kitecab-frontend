@@ -167,7 +167,7 @@
 /* Admin panel controls (tiny; shared by every admin page). */
 @layer components {
   .kc-adm-input {
-    @apply rounded-xl border border-kc-line bg-white px-3 py-2 text-sm shadow-[0_1px_0_rgba(0,0,0,0.02)] transition-[border-color,box-shadow] duration-150 outline-none hover:border-kc-muted/40 focus:border-kc-teal focus:ring-4 focus:ring-kc-teal/10 disabled:bg-kc-surface;
+    @apply min-h-11 rounded-xl border border-kc-line bg-white px-3.5 py-2 text-[15px] shadow-[0_1px_0_rgba(0,0,0,0.02)] transition-[border-color,box-shadow] duration-150 outline-none hover:border-kc-muted/40 focus:border-kc-teal focus:ring-4 focus:ring-kc-teal/10 disabled:bg-kc-surface;
   }
   .kc-adm-btn {
     @apply inline-flex items-center justify-center gap-1.5 rounded-xl border border-kc-line bg-white px-3 py-1.5 text-sm font-medium text-kc-ink shadow-[0_1px_2px_rgba(0,0,0,0.04)] transition duration-150 hover:border-kc-muted/40 hover:bg-kc-surface active:scale-[0.98] disabled:cursor-not-allowed disabled:opacity-50;
