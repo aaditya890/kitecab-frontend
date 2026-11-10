@@ -202,6 +202,12 @@
   .kc-icon-btn {
     @apply inline-grid size-8 shrink-0 place-items-center rounded-lg transition duration-150 hover:-translate-y-px active:scale-95;
   }
+  .kc-adm-chip {
+    @apply inline-flex h-9 items-center gap-1.5 rounded-full border border-kc-line bg-white px-3.5 text-[13px] font-medium text-kc-muted capitalize transition duration-150 hover:border-kc-muted/40 hover:text-kc-ink;
+  }
+  .kc-adm-chip-on {
+    @apply border-kc-ink bg-kc-ink text-white hover:border-kc-ink hover:text-white;
+  }
   .kc-adm-label {
     @apply mb-1 block text-xs font-medium text-kc-muted;
   }

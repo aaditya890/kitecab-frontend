@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, OnInit, inject, input } from '@angular/core';
 import { FormsModule } from '@angular/forms';
 import type { SupabaseClient } from '@supabase/supabase-js';
-import { RouterLink } from '@angular/router';
+import { Router, RouterLink } from '@angular/router';
 
 import { AdminDbService } from '../core/admin-db.service';
 import { BOOKING_STATUSES, BOOKING_TYPES, day, downloadCsv, rs, stamp, typeLabel } from '../core/format';
@@ -36,42 +36,128 @@ const COLS =
   selector: 'kc-admin-bookings',
   imports: [FormsModule, RouterLink, BadgeComponent, ContactActionsComponent, PagerComponent],
   template: `
-    <div class="flex flex-wrap items-center justify-between gap-3">
-      <h1 class="kc-adm-h1">Bookings</h1>
-      <button type="button" class="kc-adm-btn" (click)="exportCsv()">Export CSV (this filter)</button>
+    <div class="flex flex-wrap items-end justify-between gap-3">
+      <div>
+        <h1 class="kc-adm-h1">Bookings</h1>
+        <p class="mt-0.5 text-sm text-kc-muted">
+          @if (list.total()) {
+            {{ list.total().toLocaleString('en-IN') }} {{ list.total() === 1 ? 'booking' : 'bookings' }}
+            {{ filtered() ? 'match these filters' : 'in total' }}
+          } @else {
+            &nbsp;
+          }
+        </p>
+      </div>
+      <div class="flex gap-2">
+        <button type="button" class="kc-adm-btn h-10" (click)="exportCsv()">
+          <svg
+            viewBox="0 0 24 24"
+            class="size-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+          </svg>
+          Export CSV
+        </button>
+        <a routerLink="/admin/bookings/new" class="kc-adm-btn-primary h-10">+ New booking</a>
+      </div>
     </div>
 
-    <div class="mt-4 flex flex-wrap gap-2">
-      <input
-        class="kc-adm-input w-full sm:w-72"
-        type="search"
-        placeholder="Search ID, name or mobile"
-        [(ngModel)]="q"
-        (ngModelChange)="list.debounce()"
-        aria-label="Search bookings"
-      />
-      <select class="kc-adm-input" [(ngModel)]="status" (ngModelChange)="list.reset()" aria-label="Status">
-        <option value="">All statuses</option>
-        @for (s of statuses; track s) {
-          <option [value]="s">{{ s }}</option>
-        }
-      </select>
-      <select class="kc-adm-input" [(ngModel)]="type" (ngModelChange)="list.reset()" aria-label="Trip type">
+    <!-- status chips -->
+    <div class="-mx-1 mt-5 flex gap-2 overflow-x-auto px-1 pb-1" role="tablist" aria-label="Status">
+      <button
+        type="button"
+        role="tab"
+        class="kc-adm-chip"
+        [class.kc-adm-chip-on]="!status"
+        [attr.aria-selected]="!status"
+        (click)="setStatus('')"
+      >
+        All
+      </button>
+      @for (s of statuses; track s) {
+        <button
+          type="button"
+          role="tab"
+          class="kc-adm-chip"
+          [class.kc-adm-chip-on]="status === s"
+          [attr.aria-selected]="status === s"
+          (click)="setStatus(s)"
+        >
+          <span class="size-1.5 rounded-full" [class]="dot[s]"></span>{{ s }}
+        </button>
+      }
+    </div>
+
+    <!-- filters -->
+    <div class="kc-adm-card mt-3 flex flex-wrap items-center gap-2 p-2">
+      <div class="relative min-w-56 flex-1">
+        <svg
+          viewBox="0 0 24 24"
+          class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-kc-muted"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" />
+        </svg>
+        <input
+          class="h-10 w-full rounded-xl bg-kc-surface pr-3 pl-9 text-sm outline-none placeholder:text-kc-muted focus:bg-white focus:ring-2 focus:ring-kc-teal/20"
+          type="search"
+          placeholder="Search booking ID, name or mobile"
+          [(ngModel)]="q"
+          (ngModelChange)="list.debounce()"
+          aria-label="Search bookings"
+        />
+      </div>
+      <select
+        class="h-10 rounded-xl border-0 bg-kc-surface px-3 text-sm outline-none focus:ring-2 focus:ring-kc-teal/20"
+        [(ngModel)]="type"
+        (ngModelChange)="list.reset()"
+        aria-label="Trip type"
+      >
         <option value="">All trips</option>
         @for (t of types; track t.value) {
           <option [value]="t.value">{{ t.label }}</option>
         }
       </select>
-      <label class="flex items-center gap-2 text-sm"
-        >Pickup date
-        <input class="kc-adm-input" type="date" [(ngModel)]="date" (ngModelChange)="list.reset()" />
-      </label>
-      <label class="flex items-center gap-2 text-sm">
-        <input type="checkbox" [ngModel]="noDriver" (ngModelChange)="noDriver = $event; list.reset()" />
+      <input
+        class="h-10 rounded-xl border-0 bg-kc-surface px-3 text-sm outline-none focus:ring-2 focus:ring-kc-teal/20"
+        [class.text-kc-muted]="!date"
+        type="date"
+        [(ngModel)]="date"
+        (ngModelChange)="list.reset()"
+        aria-label="Pickup date"
+        title="Pickup date"
+      />
+      <label
+        class="flex h-10 cursor-pointer items-center gap-2 rounded-xl px-3 text-sm transition select-none"
+        [class]="noDriver ? 'bg-amber-100 text-amber-900' : 'bg-kc-surface text-kc-muted hover:text-kc-ink'"
+      >
+        <input
+          type="checkbox"
+          class="accent-amber-600"
+          [ngModel]="noDriver"
+          (ngModelChange)="noDriver = $event; list.reset()"
+        />
         No driver yet
       </label>
-      @if (q || status || type || date || noDriver) {
-        <button type="button" class="kc-adm-btn" (click)="clear()">Clear</button>
+      @if (filtered()) {
+        <button
+          type="button"
+          class="h-10 rounded-xl px-3 text-sm font-medium text-kc-teal hover:bg-kc-teal/5"
+          (click)="clear()"
+        >
+          Clear all
+        </button>
       }
     </div>
 
@@ -81,67 +167,104 @@ const COLS =
       </p>
     }
 
-    <div class="kc-adm-card mt-4 overflow-hidden" [class.opacity-60]="list.loading()">
+    <div class="kc-adm-card mt-4 overflow-hidden transition-opacity" [class.opacity-60]="list.loading()">
       <div class="overflow-x-auto">
         <table class="kc-adm-table">
           <thead>
             <tr>
-              <th>ID</th>
-              <th>Booked</th>
-              <th>Pickup</th>
+              <th>Booking</th>
               <th>Trip</th>
               <th>Customer</th>
-              <th>Fare</th>
               <th>Driver</th>
+              <th class="!text-right">Fare</th>
               <th>Status</th>
-              <th>Advance</th>
             </tr>
           </thead>
           <tbody>
             @for (b of list.rows(); track b.id) {
-              <tr>
-                <td>
-                  <a class="font-medium text-kc-teal hover:underline" [routerLink]="[b.id]">#{{ b.id }}</a>
+              @let tag = pickupTag(b.pickup_date);
+              <tr class="cursor-pointer" [class.opacity-60]="b.status === 'cancelled'" (click)="open(b.id)">
+                <td class="whitespace-nowrap">
+                  <a
+                    class="font-semibold text-kc-ink tabular-nums hover:text-kc-teal"
+                    [routerLink]="[b.id]"
+                    (click)="$event.stopPropagation()"
+                    >#{{ b.id }}</a
+                  >
+                  <span class="mt-0.5 block text-xs text-kc-muted">{{ booked(b.created_at) }}</span>
                 </td>
-                <td class="whitespace-nowrap text-kc-muted">
-                  {{ stamp(b.created_at) }}
+                <td class="min-w-52">
+                  <span class="flex items-center gap-1.5 font-medium text-kc-ink">
+                    {{ b.pickup_location }}
+                    <svg
+                      viewBox="0 0 24 24"
+                      class="size-3.5 shrink-0 text-kc-muted"
+                      fill="none"
+                      stroke="currentColor"
+                      stroke-width="2.2"
+                      stroke-linecap="round"
+                      stroke-linejoin="round"
+                      aria-hidden="true"
+                    >
+                      <path d="M5 12h14m-5-5 5 5-5 5" />
+                    </svg>
+                    {{ b.drop_location || b.rental_package || '-' }}
+                  </span>
+                  <span class="mt-1 flex flex-wrap items-center gap-x-2 gap-y-1 text-xs text-kc-muted">
+                    <span class="rounded-md px-1.5 py-0.5 font-medium" [class]="tag.cls"
+                      >{{ tag.label }} · {{ b.pickup_time }}</span
+                    >
+                    <span>{{ typeLabel(b.booking_type) }} · {{ b.car_type }}</span>
+                  </span>
                 </td>
                 <td class="whitespace-nowrap">
-                  {{ day(b.pickup_date) }}<br /><span class="text-kc-muted">{{ b.pickup_time }}</span>
+                  <span class="block max-w-44 truncate font-medium text-kc-ink">{{ b.customer_name }}</span>
+                  <span class="mt-0.5 block"><kc-contact [mobile]="b.mobile" [compact]="true" /></span>
                 </td>
-                <td class="min-w-48">
-                  {{ b.pickup_location }} → {{ b.drop_location || b.rental_package || '-' }}<br /><span
-                    class="text-kc-muted"
-                    >{{ typeLabel(b.booking_type) }} · {{ b.car_type }}</span
-                  >
-                </td>
-                <td>
-                  <span class="block font-medium">{{ b.customer_name }}</span>
-                  <kc-contact [mobile]="b.mobile" />
-                </td>
-                <td class="whitespace-nowrap">{{ rs(b.fare) }}</td>
-                <td>
+                <td class="whitespace-nowrap">
                   @if (b.driver_name) {
-                    {{ b.driver_name }}
+                    <span class="inline-flex items-center gap-2">
+                      <span
+                        class="grid size-7 place-items-center rounded-full bg-kc-teal/10 text-xs font-semibold text-kc-teal"
+                        >{{ b.driver_name.charAt(0) }}</span
+                      >
+                      <span class="font-medium text-kc-ink">{{ b.driver_name }}</span>
+                    </span>
                   } @else if (b.status !== 'cancelled' && b.status !== 'completed') {
-                    <span class="text-sm font-medium text-red-700">Not assigned</span>
+                    <span
+                      class="inline-flex items-center gap-1.5 rounded-full bg-red-50 px-2.5 py-1 text-xs font-medium text-red-700 ring-1 ring-red-100"
+                    >
+                      <span class="size-1.5 rounded-full bg-red-500"></span>Assign driver
+                    </span>
                   } @else {
                     <span class="text-kc-muted">—</span>
                   }
                 </td>
-                <td><kc-badge [value]="b.status" /></td>
-                <td>
-                  @if (b.advance_status) {
-                    <kc-badge [value]="b.advance_status" />
-                  } @else {
-                    <span class="text-xs text-kc-muted">No link</span>
-                  }
+                <td class="text-right whitespace-nowrap">
+                  <span class="font-semibold text-kc-ink tabular-nums">{{ rs(b.fare) }}</span>
+                  <span class="mt-1 block text-xs">
+                    @if (b.advance_status === 'PAID') {
+                      <span class="font-medium text-emerald-700">✓ {{ rs(b.advance_amount) }} paid</span>
+                    } @else if (b.advance_status === 'PENDING') {
+                      <span class="text-amber-700">{{ rs(b.advance_amount) }} due</span>
+                    } @else if (b.advance_status) {
+                      <span class="text-kc-muted">Link {{ b.advance_status.toLowerCase() }}</span>
+                    } @else {
+                      <span class="text-kc-muted">No advance</span>
+                    }
+                  </span>
                 </td>
+                <td><kc-badge [value]="b.status" /></td>
               </tr>
             } @empty {
               <tr>
-                <td colspan="9" class="py-8 text-center text-kc-muted">
-                  {{ list.loading() ? 'Loading…' : 'No bookings match.' }}
+                <td colspan="6" class="py-14 text-center">
+                  @if (list.loading()) {
+                    <span class="text-kc-muted">Loading…</span>
+                  } @else {
+                    <span class="block font-medium text-kc-ink">No bookings found</span>
+                    <span class="mt-1 block text-sm text-kc-muted">Try another search or clear the filters.</span>
+                  }
                 </td>
               </tr>
             }
@@ -166,6 +289,15 @@ export class BookingsListComponent implements OnInit {
   protected readonly stamp = stamp;
   protected readonly typeLabel = typeLabel;
 
+  private readonly router = inject(Router);
+  protected readonly dot: Record<string, string> = {
+    new: 'bg-amber-500',
+    confirmed: 'bg-sky-500',
+    assigned: 'bg-violet-500',
+    completed: 'bg-emerald-500',
+    cancelled: 'bg-zinc-400',
+  };
+
   protected q = '';
   protected status = '';
   protected type = '';
@@ -180,6 +312,35 @@ export class BookingsListComponent implements OnInit {
     this.date = this.dateParam() ?? '';
     this.noDriver = this.driverParam() === 'none';
     void this.list.load();
+  }
+
+  protected filtered(): boolean {
+    return !!(this.q || this.status || this.type || this.date || this.noDriver);
+  }
+
+  protected setStatus(s: string): void {
+    this.status = s;
+    void this.list.reset();
+  }
+
+  protected open(id: number): void {
+    void this.router.navigate(['/admin/bookings', id]);
+  }
+
+  /** Booked time without the year when it is this year: "8 Nov, 12:54 PM". */
+  protected booked(ts: string): string {
+    return stamp(ts).replace(` ${new Date().getFullYear()},`, ',');
+  }
+
+  /** Pickup day as Today / Tomorrow / date, coloured by how soon it is (India time). */
+  protected pickupTag(d: string): { label: string; cls: string } {
+    const now = Date.now() + 330 * 60_000;
+    const today = new Date(now).toISOString().slice(0, 10);
+    const tomorrow = new Date(now + 86_400_000).toISOString().slice(0, 10);
+    if (d === today) return { label: 'Today', cls: 'bg-kc-teal text-white' };
+    if (d === tomorrow) return { label: 'Tomorrow', cls: 'bg-kc-teal/10 text-kc-teal' };
+    const label = day(d).replace(` ${new Date().getFullYear()}`, '');
+    return { label, cls: d < today ? 'bg-kc-surface text-kc-muted' : 'bg-kc-surface text-kc-ink' };
   }
 
   protected clear(): void {
