@@ -75,19 +75,42 @@ const TABS: { key: Tab; label: string }[] = [
 const COLS =
   'id,service_type,pickup,drop_or_package,mobile,customer_name,quoted_fare,status,attempts,next_follow_up_at,assigned_to,assigned_name,booking_id,source,past_bookings,lost_reason,created_at';
 const OPEN = ['new', 'contacted', 'follow_up'];
+const SOURCE_LABEL: Record<string, string> = {
+  website: 'Website',
+  phone: 'Phone call',
+  whatsapp: 'WhatsApp',
+  walk_in: 'Walk-in',
+  other: 'Other',
+};
 
 @Component({
   selector: 'kc-admin-enquiries',
   imports: [FormsModule, RouterLink, BadgeComponent, ContactActionsComponent, PagerComponent],
   template: `
-    <div class="flex flex-wrap items-center justify-between gap-3">
+    <div class="flex flex-wrap items-end justify-between gap-3">
       <div>
         <h1 class="kc-adm-h1">Enquiries / leads</h1>
-        <p class="text-sm text-kc-muted">Everyone who checked a fare. Call, log what happened, set the next call.</p>
+        <p class="mt-0.5 text-sm text-kc-muted">
+          Everyone who checked a fare. Call, log what happened, set the next call.
+        </p>
       </div>
       <div class="flex gap-2">
-        <button type="button" class="kc-adm-btn" (click)="exportCsv()">Export CSV</button>
-        <button type="button" class="kc-adm-btn-primary" (click)="adding.set(!adding())">+ Add lead</button>
+        <button type="button" class="kc-adm-btn h-10" (click)="exportCsv()">
+          <svg
+            viewBox="0 0 24 24"
+            class="size-4"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            aria-hidden="true"
+          >
+            <path d="M12 3v12m0 0-4-4m4 4 4-4M4 17v2a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2v-2" />
+          </svg>
+          Export CSV
+        </button>
+        <button type="button" class="kc-adm-btn-primary h-10" (click)="adding.set(!adding())">+ Add lead</button>
       </div>
     </div>
 
@@ -135,49 +158,96 @@ const OPEN = ['new', 'contacted', 'follow_up'];
       </form>
     }
 
-    <div class="mt-4 flex gap-1 overflow-x-auto border-b border-kc-line" role="tablist">
+    <div class="-mx-1 mt-5 flex gap-2 overflow-x-auto px-1 pb-1" role="tablist" aria-label="Lead status">
       @for (t of tabs; track t.key) {
+        @let n = counts()[t.key] ?? 0;
         <button
           type="button"
           role="tab"
+          class="kc-adm-chip shrink-0 !normal-case"
+          [class.kc-adm-chip-on]="tab() === t.key"
           [attr.aria-selected]="tab() === t.key"
           (click)="setTab(t.key)"
-          class="-mb-px flex shrink-0 items-center gap-1.5 border-b-2 px-3 py-2 text-sm font-medium"
-          [class]="
-            tab() === t.key ? 'border-kc-teal text-kc-teal' : 'border-transparent text-kc-muted hover:text-kc-ink'
-          "
         >
           {{ t.label }}
           @if (t.key !== 'all') {
             <span
-              class="rounded-full px-1.5 text-xs"
-              [class]="t.key === 'due' && counts()[t.key] ? 'bg-red-600 text-white' : 'bg-kc-surface text-kc-ink'"
-              >{{ counts()[t.key] ?? 0 }}</span
+              class="min-w-5 rounded-full px-1.5 text-center text-[11px] leading-5 font-semibold tabular-nums"
+              [class]="
+                t.key === 'due' && n
+                  ? 'bg-red-600 text-white'
+                  : tab() === t.key
+                    ? 'bg-white/20 text-white'
+                    : 'bg-kc-surface text-kc-muted'
+              "
+              >{{ n }}</span
             >
           }
         </button>
       }
     </div>
 
-    <div class="mt-3 flex flex-wrap items-center gap-2">
-      <input
-        class="kc-adm-input w-full sm:w-64"
-        type="search"
-        placeholder="Search mobile, name or place"
-        [(ngModel)]="q"
-        (ngModelChange)="list.debounce()"
-        aria-label="Search leads"
-      />
-      <select class="kc-adm-input" [(ngModel)]="type" (ngModelChange)="list.reset()" aria-label="Trip">
+    <div class="kc-adm-card mt-3 flex flex-wrap items-center gap-2 p-2">
+      <div class="relative min-w-56 flex-1">
+        <svg
+          viewBox="0 0 24 24"
+          class="pointer-events-none absolute top-1/2 left-3 size-4 -translate-y-1/2 text-kc-muted"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          aria-hidden="true"
+        >
+          <circle cx="11" cy="11" r="7" />
+          <path d="m20 20-3.5-3.5" />
+        </svg>
+        <input
+          class="h-10 w-full rounded-xl bg-kc-surface pr-3 pl-9 text-sm outline-none placeholder:text-kc-muted focus:bg-white focus:ring-2 focus:ring-kc-teal/20"
+          type="search"
+          placeholder="Search mobile, name or place"
+          [(ngModel)]="q"
+          (ngModelChange)="list.debounce()"
+          aria-label="Search leads"
+        />
+      </div>
+      <select
+        class="h-10 rounded-xl border-0 bg-kc-surface px-3 text-sm outline-none focus:ring-2 focus:ring-kc-teal/20"
+        [(ngModel)]="type"
+        (ngModelChange)="list.reset()"
+        aria-label="Trip"
+      >
         <option value="">All trips</option>
         @for (t of types; track t.value) {
           <option [value]="t.value">{{ t.label }}</option>
         }
       </select>
-      <label class="flex items-center gap-2 text-sm"
-        ><input type="checkbox" [(ngModel)]="mine" (ngModelChange)="list.reset()" /> Only mine</label
+      <label
+        class="flex h-10 cursor-pointer items-center gap-2 rounded-xl px-3 text-sm transition select-none"
+        [class]="mine ? 'bg-kc-teal/10 text-kc-teal' : 'bg-kc-surface text-kc-muted hover:text-kc-ink'"
+        ><input type="checkbox" class="accent-kc-teal" [(ngModel)]="mine" (ngModelChange)="list.reset()" /> Only
+        mine</label
       >
-      <button type="button" class="kc-adm-btn" (click)="refresh()">Refresh</button>
+      <button
+        type="button"
+        class="grid size-10 place-items-center rounded-xl bg-kc-surface text-kc-muted transition hover:text-kc-ink"
+        (click)="refresh()"
+        title="Refresh"
+        aria-label="Refresh"
+      >
+        <svg
+          viewBox="0 0 24 24"
+          class="size-4"
+          [class.animate-spin]="list.loading()"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+          stroke-linecap="round"
+          stroke-linejoin="round"
+          aria-hidden="true"
+        >
+          <path d="M21 12a9 9 0 1 1-2.6-6.4M21 4v5h-5" />
+        </svg>
+      </button>
     </div>
 
     <div class="mt-3 grid gap-4" [class.xl:grid-cols-[1fr_420px]]="!!sel()">
@@ -196,57 +266,115 @@ const OPEN = ['new', 'contacted', 'follow_up'];
             </thead>
             <tbody>
               @for (e of list.rows(); track e.id) {
-                <tr class="cursor-pointer" [class.!bg-sky-50]="sel()?.id === e.id" (click)="open(e)">
+                <tr
+                  class="cursor-pointer"
+                  [class.!bg-kc-teal/[0.06]]="sel()?.id === e.id"
+                  [class.opacity-60]="e.status === 'not_interested' || e.status === 'invalid'"
+                  (click)="open(e)"
+                >
                   <td class="whitespace-nowrap">
-                    <span class="font-medium">{{ ago(e.created_at) }}</span
-                    ><br /><span class="text-xs text-kc-muted">{{ e.source }}</span>
+                    <span class="font-medium text-kc-ink">{{ ago(e.created_at) }}</span>
+                    <span class="mt-1 block">
+                      <span class="rounded-md bg-kc-surface px-1.5 py-0.5 text-[11px] font-medium text-kc-muted">{{
+                        sourceLabel(e.source)
+                      }}</span>
+                    </span>
                   </td>
-                  <td class="min-w-44">
-                    {{ e.pickup }} → {{ e.drop_or_package || '…' }}<br /><span class="text-xs text-kc-muted"
+                  <td class="min-w-48">
+                    <span class="flex items-center gap-1.5 font-medium text-kc-ink">
+                      {{ e.pickup }}
+                      <svg
+                        viewBox="0 0 24 24"
+                        class="size-3.5 shrink-0 text-kc-muted"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2.2"
+                        stroke-linecap="round"
+                        stroke-linejoin="round"
+                        aria-hidden="true"
+                      >
+                        <path d="M5 12h14m-5-5 5 5-5 5" />
+                      </svg>
+                      {{ e.drop_or_package || '…' }}
+                    </span>
+                    <span class="mt-1 block text-xs text-kc-muted"
                       >{{ typeLabel(e.service_type) }}
                       @if (e.quoted_fare) {
-                        · from {{ rs(e.quoted_fare) }}
+                        · from <span class="font-medium text-kc-ink">{{ rs(e.quoted_fare) }}</span>
                       }
                     </span>
                   </td>
-                  <td>
-                    @if (e.customer_name) {
-                      <span class="block text-sm font-medium">{{ e.customer_name }}</span>
-                    }
-                    <kc-contact [mobile]="e.mobile" [text]="waText(e)" (used)="open(e)" />
-                    @if (e.past_bookings) {
-                      <span class="mt-0.5 block text-xs text-emerald-700">★ {{ e.past_bookings }} past booking(s)</span>
-                    }
+                  <td class="whitespace-nowrap">
+                    <span class="flex items-center gap-1.5">
+                      <span class="max-w-40 truncate font-medium text-kc-ink tabular-nums">{{
+                        e.customer_name || prettyMobile(e.mobile)
+                      }}</span>
+                      @if (e.past_bookings) {
+                        <span
+                          class="rounded-full bg-emerald-50 px-1.5 py-0.5 text-[11px] font-medium text-emerald-700 ring-1 ring-emerald-100"
+                          title="Past bookings"
+                          >★ {{ e.past_bookings }} {{ e.past_bookings === 1 ? 'trip' : 'trips' }}</span
+                        >
+                      }
+                    </span>
+                    <span class="mt-0.5 block"
+                      ><kc-contact
+                        [mobile]="e.mobile"
+                        [text]="waText(e)"
+                        [compact]="true"
+                        [showNumber]="!!e.customer_name"
+                        (used)="open(e)"
+                    /></span>
                   </td>
-                  <td>
+                  <td class="whitespace-nowrap">
                     <kc-badge [value]="'lead_' + e.status" [label]="leadLabel(e.status)" />
                     @if (e.attempts) {
-                      <span class="mt-0.5 block text-xs text-kc-muted">{{ e.attempts }} call(s)</span>
+                      <span class="mt-1 block text-xs text-kc-muted"
+                        >{{ e.attempts }} {{ e.attempts === 1 ? 'call' : 'calls' }}</span
+                      >
                     }
                   </td>
-                  <td class="whitespace-nowrap text-sm">
+                  <td class="whitespace-nowrap">
                     @if (isOpen(e)) {
-                      <span [class.font-semibold]="overdue(e)" [class.text-red-700]="overdue(e)">{{
-                        e.next_follow_up_at ? ago(e.next_follow_up_at) : 'Call now'
-                      }}</span>
+                      <span
+                        class="inline-flex items-center gap-1.5 rounded-full px-2.5 py-1 text-xs font-medium"
+                        [class]="
+                          overdue(e) || !e.next_follow_up_at ? 'bg-red-50 text-red-700' : 'bg-kc-surface text-kc-ink'
+                        "
+                        ><span
+                          class="size-1.5 rounded-full"
+                          [class]="overdue(e) || !e.next_follow_up_at ? 'bg-red-500' : 'bg-kc-muted'"
+                        ></span
+                        >{{ e.next_follow_up_at ? ago(e.next_follow_up_at) : 'Call now' }}</span
+                      >
                     } @else if (e.booking_id) {
                       <a
-                        class="text-kc-teal hover:underline"
+                        class="inline-flex items-center gap-1 rounded-full bg-kc-teal/10 px-2.5 py-1 text-xs font-semibold text-kc-teal tabular-nums hover:bg-kc-teal hover:text-white"
                         [routerLink]="['/admin/bookings', e.booking_id]"
                         (click)="$event.stopPropagation()"
-                        >#{{ e.booking_id }}</a
+                        >#{{ e.booking_id }} →</a
                       >
                     } @else {
                       <span class="text-kc-muted">—</span>
                     }
                   </td>
-                  <td class="text-sm text-kc-muted">
-                    {{ e.assigned_name || '—' }}
+                  <td class="whitespace-nowrap">
+                    @if (e.assigned_name) {
+                      <span class="inline-flex max-w-32 items-center gap-2 text-[13px] text-kc-ink">
+                        <span
+                          class="grid size-7 shrink-0 place-items-center rounded-full bg-kc-yellow/30 text-[11px] font-semibold text-kc-ink"
+                          >{{ initials(e.assigned_name) }}</span
+                        >
+                        <span class="truncate" [title]="e.assigned_name">{{ e.assigned_name.split(' ')[0] }}</span>
+                      </span>
+                    } @else {
+                      <span class="text-kc-muted">—</span>
+                    }
                   </td>
                 </tr>
               } @empty {
                 <tr>
-                  <td colspan="6" class="py-10 text-center text-kc-muted">
+                  <td colspan="6" class="py-14 text-center text-kc-muted">
                     {{ list.loading() ? 'Loading…' : tab() === 'due' ? 'Nobody to call right now.' : 'No leads here.' }}
                   </td>
                 </tr>
@@ -353,8 +481,7 @@ const OPEN = ['new', 'contacted', 'follow_up'];
             @for (h of history(); track h.id) {
               <li class="rounded-lg border border-kc-line p-2">
                 <div class="flex justify-between gap-2">
-                  <b>{{ outcomeLabel(h.outcome) }}</b
-                  ><span class="text-xs text-kc-muted">{{ ago(h.created_at) }}</span>
+                  <b>{{ outcomeLabel(h.outcome) }}</b><span class="text-xs text-kc-muted">{{ ago(h.created_at) }}</span>
                 </div>
                 <p class="text-xs text-kc-muted">
                   {{ h.channel }} · {{ staffName(h.staff_id) }}
@@ -470,6 +597,24 @@ export class EnquiriesComponent {
     return t === 'due'
       ? q.order('next_follow_up_at', { ascending: true, nullsFirst: true }).order('created_at', { ascending: false })
       : q.order('created_at', { ascending: false });
+  }
+
+  protected sourceLabel(s: string): string {
+    return SOURCE_LABEL[s] ?? s.replace(/_/g, ' ');
+  }
+
+  protected prettyMobile(m: string | null): string {
+    const d = (m ?? '').replace(/\D/g, '').slice(-10);
+    return d.length === 10 ? d.replace(/(\d{5})(\d{5})/, '$1 $2') : 'No name';
+  }
+
+  protected initials(name: string): string {
+    return name
+      .split(/\s+/)
+      .filter(Boolean)
+      .slice(0, 2)
+      .map((w) => w[0].toUpperCase())
+      .join('');
   }
 
   protected isOpen(e: Lead): boolean {
